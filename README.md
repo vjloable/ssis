@@ -1,4 +1,4 @@
-# ssis
+# SSIS
 
 A Simple Student Information System Project
 
