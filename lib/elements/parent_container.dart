@@ -93,23 +93,23 @@ class ParentContainer extends StatelessWidget {
                           const SizedBox(width: 8),
                           SizedBox(
                             height: 45,
-                            width: 100,
+                            width: 50,
                             child: Padding(
                               padding: const EdgeInsets.all(0),
                               child: TextField(
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      gapPadding: 0
-                                  ),
                                   filled: true,
                                   fillColor: Colors.white,
-                                  hintText: 'First Name',
+                                  hintText: 'M.I.',
                                   hintStyle: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 10,
                                     fontWeight: FontWeight.normal,
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      gapPadding: 0
                                   ),
                                 ),
                                 style: const TextStyle(
@@ -135,7 +135,7 @@ class ParentContainer extends StatelessWidget {
                                   ),
                                   filled: true,
                                   fillColor: Colors.white,
-                                  hintText: 'First Name',
+                                  hintText: 'Last Name',
                                   hintStyle: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 10,
