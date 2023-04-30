@@ -1,6 +1,6 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:ssis/misc/colors.dart';
+// import 'package:ssis/misc/colors.dart';
 import 'package:ssis/misc/window_button.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -26,15 +26,16 @@ class _ParentContainerState extends State<ParentContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          /*gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
                 CustomColors().backgroundStartColor,
                 CustomColors().backgroundEndColor
               ],
-              stops: const [0.0, 1.0]),
+              stops: const [0.0, 1.0]),*/
         ),
         child: Column(children: [
           Stack(
