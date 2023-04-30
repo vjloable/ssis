@@ -1,6 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-// import 'package:ssis/misc/colors.dart';
 import 'package:ssis/misc/window_button.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -14,7 +13,6 @@ class ParentContainer extends StatefulWidget {
 class _ParentContainerState extends State<ParentContainer> {
   String dropdownvalue = 'Item 1';
 
-  // List of items in our dropdown menu
   var items = [
     'Item 1',
     'Item 2',
@@ -28,14 +26,6 @@ class _ParentContainerState extends State<ParentContainer> {
     return Container(
         decoration: const BoxDecoration(
           color: Colors.white,
-          /*gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                CustomColors().backgroundStartColor,
-                CustomColors().backgroundEndColor
-              ],
-              stops: const [0.0, 1.0]),*/
         ),
         child: Column(children: [
           Stack(
@@ -69,7 +59,6 @@ class _ParentContainerState extends State<ParentContainer> {
                 const Padding(padding: EdgeInsets.all(20)),
                 Material(
                   elevation: 8,
-                  // color: Colors.white,
                   color: const Color(0xFF2F1176),
                   borderRadius: const BorderRadius.all(Radius.circular(50)),
                   child: SizedBox(
