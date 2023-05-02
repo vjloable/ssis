@@ -27,11 +27,13 @@ class _ParentContainerState extends State<ParentContainer> {
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
-        child: Column(children: [
-          Stack(
+        child:
+        Column(
+            children: [
+              Stack(
             children: [
               Container(
-                width: 860,
+                width: 1060,
                 height: 30,
                 color: const Color(0xFF221C49),
               ),
@@ -52,217 +54,246 @@ class _ParentContainerState extends State<ParentContainer> {
               ),
             ],
           ),
-          Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Padding(padding: EdgeInsets.all(20)),
-                Material(
-                  elevation: 8,
-                  color: const Color(0xFF2F1176),
-                  borderRadius: const BorderRadius.all(Radius.circular(50)),
-                  child: SizedBox(
-                    height: 50,
-                    width: 650,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 35,
-                              width: 160,
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'First Name',
-                                  hintStyle: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      gapPadding: 0
-                                  ),
-                                ),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            SizedBox(
-                              height: 35,
-                              width: 52,
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'M.I.',
-                                  hintStyle: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      gapPadding: 0,
-                                  ),
-                                ),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            SizedBox(
-                              height: 35,
-                              width: 120,
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Last Name',
-                                  hintStyle: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      gapPadding: 0
-                                  ),
-                                ),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            SizedBox(
-                              height: 35,
-                              width: 200,
-                              child: DropdownButtonFormField2(
-                                hint: const Padding(
-                                  padding: EdgeInsets.fromLTRB(10,0,0,0),
-                                  child: Text(
-                                    'Courses',
-                                    style: TextStyle(
+              Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Padding(padding: EdgeInsets.all(20)),
+                    Material(
+                      elevation: 8,
+                      color: const Color(0xFF2F1176),
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      child: SizedBox(
+                        height: 50,
+                        width: 850,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 35,
+                                  width: 52,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      hintText: 'M.I.',
+                                      hintStyle: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(50.0),
+                                        gapPadding: 0,
+                                      ),
+                                    ),
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
                                   ),
                                 ),
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
-                                  isDense: true,
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      gapPadding: 0
-                                  ),
-                                ),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                items: items
-                                    .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
+                                const SizedBox(width: 8),
+                                SizedBox(
+                                  height: 35,
+                                  width: 160,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      hintText: 'First Name',
+                                      hintStyle: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
                                       ),
-
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(50.0),
+                                          gapPadding: 0
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   ),
-                                ))
-                                    .toList(),
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Course';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {
-                                  //Do something when changing the item if you want.
-                                },
-                                onSaved: (value) {
-                                  dropdownvalue = value.toString();
-                                },
-                                buttonStyleData: ButtonStyleData(
-                                  height: 50,
+                                ),
+                                const SizedBox(width: 8),
+                                SizedBox(
+                                  height: 35,
+                                  width: 52,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      hintText: 'M.I.',
+                                      hintStyle: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(50.0),
+                                          gapPadding: 0,
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                SizedBox(
+                                  height: 35,
+                                  width: 120,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      hintText: 'Last Name',
+                                      hintStyle: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(50.0),
+                                          gapPadding: 0
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                SizedBox(
+                                  height: 35,
                                   width: 200,
-                                  padding: const EdgeInsets.fromLTRB(0,0,5,0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
+                                  child: DropdownButtonFormField2(
+                                    hint: const Padding(
+                                      padding: EdgeInsets.fromLTRB(10,0,0,0),
+                                      child: Text(
+                                        'Courses',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
+                                      isDense: true,
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(50.0),
+                                          gapPadding: 0
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    items: items
+                                        .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+
+                                        ),
+                                      ),
+                                    ))
+                                        .toList(),
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Course';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      //Do something when changing the item if you want.
+                                    },
+                                    onSaved: (value) {
+                                      dropdownvalue = value.toString();
+                                    },
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 50,
+                                      width: 200,
+                                      padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    iconStyleData: const IconStyleData(
+                                      icon: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black45,
+                                      ),
+                                      iconSize: 30,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 40,
+                                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                    ),
                                   ),
-                                ),
-                                iconStyleData: const IconStyleData(
-                                  icon: Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Colors.black45,
-                                  ),
-                                  iconSize: 30,
-                                ),
-                                dropdownStyleData: DropdownStyleData(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                menuItemStyleData: const MenuItemStyleData(
-                                  height: 40,
-                                  padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
+                    const Padding(padding: EdgeInsets.all(10)),
+                    const Material(
+                      elevation: 8,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        side: BorderSide(color: Color(0xFF2F1176), width: 0.5),
+                      ),
+                      child: SizedBox(
+                        height: 390,
+                        width: 820,
+                      ),
+                    ),
+                  ],
                 ),
-                const Padding(padding: EdgeInsets.all(10)),
-                const Material(
-                  elevation: 8,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    side: BorderSide(color: Color(0xFF2F1176), width: 0.5),
-                  ),
-                  child: SizedBox(
-                    height: 390,
-                    width: 650,
-                  ),
-                ),
-              ],
-            ),
-          )
-        ])
+              )
+            ]
+        )
     );
   }
 }
