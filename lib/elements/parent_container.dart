@@ -33,7 +33,7 @@ class _ParentContainerState extends State<ParentContainer> {
               Container(
                 width: 860,
                 height: 30,
-                color: const Color(0x9D221C49),
+                color: const Color(0xFF221C49),
               ),
               WindowTitleBarBox(
                 child: Row(children: [
@@ -250,11 +250,9 @@ class _ParentContainerState extends State<ParentContainer> {
                 const Material(
                   elevation: 8,
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(3),
-                    topRight: Radius.circular(3),
-                    bottomLeft: Radius.circular(3),
-                    bottomRight: Radius.circular(3),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    side: BorderSide(color: Color(0xFF2F1176), width: 0.5),
                   ),
                   child: SizedBox(
                     height: 390,
