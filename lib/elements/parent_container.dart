@@ -14,13 +14,7 @@ class ParentContainer extends StatefulWidget {
 class _ParentContainerState extends State<ParentContainer> {
   String dropdownvalue = 'Item 1';
 
-  var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
+  var items = [];
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +138,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.circular(5.0),
+                                          borderRadius: BorderRadius.circular(4.0),
                                           gapPadding: 0,
                                       ),
                                     ),
