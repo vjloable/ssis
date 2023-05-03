@@ -1,7 +1,8 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:ssis/misc/window_button.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:ssis/widgets/gradient_button.dart';
+import 'package:ssis/widgets/window_button.dart';
 
 class ParentContainer extends StatefulWidget {
   const ParentContainer({Key? key}) : super(key: key);
@@ -31,13 +32,13 @@ class _ParentContainerState extends State<ParentContainer> {
         Column(
             children: [
               Stack(
-            children: [
-              Container(
+                children: [
+                  Container(
                 width: 1060,
                 height: 30,
                 color: const Color(0xFF221C49),
               ),
-              WindowTitleBarBox(
+                  WindowTitleBarBox(
                 child: Row(children: [
                   Expanded(
                     child: SizedBox(
@@ -52,8 +53,8 @@ class _ParentContainerState extends State<ParentContainer> {
                   )
                 ]),
               ),
-            ],
-          ),
+                ],
+              ),
               Form(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,13 +75,13 @@ class _ParentContainerState extends State<ParentContainer> {
                               children: [
                                 SizedBox(
                                   height: 35,
-                                  width: 52,
+                                  width: 100,
                                   child: TextFormField(
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
                                       fillColor: Colors.white,
-                                      hintText: 'M.I.',
+                                      hintText: 'I.D Number',
                                       hintStyle: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 12,
@@ -270,15 +271,34 @@ class _ParentContainerState extends State<ParentContainer> {
                                     ),
                                   ),
                               ),
-                            ],
+                                const SizedBox(width: 8),
+                                GradientButton(
+                                  onPressed: (){},
+                                  height: 35,
+                                  width: 120,
+                                  elevation: 5,
+                                  borderRadius: BorderRadius.circular(20),
+                                  colors: const [ Color(0xff6433e8), Color(0xff6325e8) ],
+                                  child: const Center(
+                                    child: Text(
+                                      'ADD STUDENT',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
                     const Padding(padding: EdgeInsets.all(10)),
                     const Material(
-                      elevation: 8,
+                      elevation: 30,
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
