@@ -54,14 +54,27 @@ class _ParentContainerState extends State<ParentContainer> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 40),
+                    const Material(
+                      elevation: 30,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        side: BorderSide(color: Color(0xFF2F1176), width: 0.5),
+                      ),
+                      child: SizedBox(
+                        height: 340,
+                        width: 950,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
                     Material(
                       elevation: 8,
                       color: const Color(0xFF2F1176),
-                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30), bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4)),
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
                       child: SizedBox(
                         height: 50,
-                        width: 850,
+                        width: 950,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Center(
@@ -98,7 +111,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                 const SizedBox(width: 8),
                                 SizedBox(
                                   height: 35,
-                                  width: 160,
+                                  width: 130,
                                   child: TextFormField(
                                     decoration: const InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
@@ -138,9 +151,9 @@ class _ParentContainerState extends State<ParentContainer> {
                                         fontWeight: FontWeight.normal,
                                       ),
                                       border: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.circular(4.0),
-                                          gapPadding: 0,
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(4.0),
+                                        gapPadding: 0,
                                       ),
                                     ),
                                     style: const TextStyle(
@@ -180,7 +193,182 @@ class _ParentContainerState extends State<ParentContainer> {
                                 const SizedBox(width: 8),
                                 SizedBox(
                                   height: 35,
-                                  width: 200,
+                                  width: 80,
+                                  child: DropdownButtonFormField2(
+                                    hint: const Padding(
+                                      padding: EdgeInsets.fromLTRB(10,0,0,0),
+                                      child: Text(
+                                        'Age',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
+                                      isDense: true,
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(50.0),
+                                          gapPadding: 0
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    items: List<int>.generate(100, (i) => i + 1).toList()
+                                        .map((item) => DropdownMenuItem<String>(
+                                      value: item.toString(),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                                        child: Text(
+                                          item.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+
+                                        ),
+                                      ),
+                                    ))
+                                        .toList(),
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Courses';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      //Do something when changing the item if you want.
+                                    },
+                                    onSaved: (value) {
+                                      dropdownvalue = value.toString();
+                                    },
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 50,
+                                      width: 200,
+                                      padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    iconStyleData: const IconStyleData(
+                                      icon: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black45,
+                                      ),
+                                      iconSize: 30,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      maxHeight: 150,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 30,
+                                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                SizedBox(
+                                  height: 35,
+                                  width: 100,
+                                  child: DropdownButtonFormField2(
+                                    hint: const Padding(
+                                      padding: EdgeInsets.fromLTRB(10,0,0,0),
+                                      child: Text(
+                                        'Sex',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
+                                      isDense: true,
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(50.0),
+                                          gapPadding: 0
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    items: ['Male','Female','Intersex']
+                                        .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+
+                                        ),
+                                      ),
+                                    ))
+                                        .toList(),
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Course';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      //Do something when changing the item if you want.
+                                    },
+                                    onSaved: (value) {
+                                      dropdownvalue = value.toString();
+                                    },
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 50,
+                                      width: 200,
+                                      padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    iconStyleData: const IconStyleData(
+                                      icon: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black45,
+                                      ),
+                                      iconSize: 30,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 40,
+                                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                SizedBox(
+                                  height: 35,
+                                  width: 150,
                                   child: DropdownButtonFormField2(
                                     hint: const Padding(
                                       padding: EdgeInsets.fromLTRB(10,0,0,0),
@@ -263,7 +451,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                                     ),
                                   ),
-                              ),
+                                ),
                                 const SizedBox(width: 8),
                                 GradientButton(
                                   onPressed: (){},
@@ -290,27 +478,13 @@ class _ParentContainerState extends State<ParentContainer> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    // const SizedBox(height: 20),
-                    const Material(
-                      elevation: 30,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        side: BorderSide(color: Color(0xFF2F1176), width: 0.5),
-                      ),
-                      child: SizedBox(
-                        height: 340,
-                        width: 820,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
                     Material(
                       elevation: 8,
                       color: const Color(0xFF2F1176),
-                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(4), topRight: Radius.circular(4), bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
                       child: SizedBox(
                         height: 50,
-                        width: 850,
+                        width: 950,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Center(
@@ -418,7 +592,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                 ),
                                 SizedBox(
                                   height: 35,
-                                  width: 330,
+                                  width: 500,
                                   child: TextFormField(
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
@@ -446,7 +620,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                 const SizedBox(width: 8),
                                 SizedBox(
                                   height: 35,
-                                  width: 220,
+                                  width: 150,
                                   child: DropdownButtonFormField2(
                                     hint: const Padding(
                                       padding: EdgeInsets.fromLTRB(10,0,0,0),
@@ -475,7 +649,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
-                                    items: ['Computer Studies', 'Science and Mathematics']
+                                    items: ['CCS', 'CSM', 'COE', 'CASS', 'CEBA', 'CED', 'CHS']
                                         .map((item) => DropdownMenuItem<String>(
                                       value: item,
                                       child: Padding(
@@ -519,6 +693,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       iconSize: 30,
                                     ),
                                     dropdownStyleData: DropdownStyleData(
+                                      maxHeight: 130,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
                                       ),
