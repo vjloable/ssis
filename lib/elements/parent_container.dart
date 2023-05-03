@@ -71,7 +71,7 @@ class _ParentContainerState extends State<ParentContainer> {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Center(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 SizedBox(
                                   height: 35,
@@ -105,19 +105,19 @@ class _ParentContainerState extends State<ParentContainer> {
                                   height: 35,
                                   width: 160,
                                   child: TextFormField(
-                                    decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                    decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
                                       fillColor: Colors.white,
                                       hintText: 'First Name',
-                                      hintStyle: const TextStyle(
+                                      hintStyle: TextStyle(
                                         color: Colors.black,
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
                                       ),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.circular(50.0),
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(10), bottomLeft: Radius.circular(50), bottomRight: Radius.circular(10)),
                                           gapPadding: 0
                                       ),
                                     ),
@@ -128,7 +128,6 @@ class _ParentContainerState extends State<ParentContainer> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
                                 SizedBox(
                                   height: 35,
                                   width: 52,
@@ -145,7 +144,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.circular(50.0),
+                                          borderRadius: BorderRadius.circular(5.0),
                                           gapPadding: 0,
                                       ),
                                     ),
@@ -156,24 +155,23 @@ class _ParentContainerState extends State<ParentContainer> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
                                 SizedBox(
                                   height: 35,
-                                  width: 120,
+                                  width: 160,
                                   child: TextFormField(
-                                    decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                    decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
                                       fillColor: Colors.white,
                                       hintText: 'Last Name',
-                                      hintStyle: const TextStyle(
+                                      hintStyle: TextStyle(
                                         color: Colors.black,
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
                                       ),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.circular(50.0),
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(50), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(50)),
                                           gapPadding: 0
                                       ),
                                     ),
