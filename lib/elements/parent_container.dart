@@ -63,7 +63,7 @@ class _ParentContainerState extends State<ParentContainer> {
                         side: BorderSide(color: Color(0xFF2F1176), width: 0.5),
                       ),
                       child: SizedBox(
-                        height: 340,
+                        height: 400,
                         width: 1090,
                       ),
                     ),
@@ -329,7 +329,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                         .toList(),
                                     validator: (value) {
                                       if (value == null) {
-                                        return 'Course';
+                                        return 'Sex';
                                       }
                                       return null;
                                     },
@@ -634,14 +634,12 @@ class _ParentContainerState extends State<ParentContainer> {
                                             fontSize: 12,
                                             fontWeight: FontWeight.normal,
                                           ),
-
                                         ),
                                       ),
-                                    ))
-                                        .toList(),
+                                    )).toList(),
                                     validator: (value) {
                                       if (value == null) {
-                                        return 'BA or BS';
+                                        return 'Bachelor Type';
                                       }
                                       return null;
                                     },
