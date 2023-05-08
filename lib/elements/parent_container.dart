@@ -56,7 +56,7 @@ class _ParentContainerState extends State<ParentContainer> {
                   children: [
                     const SizedBox(height: 60),
                     const Material(
-                      elevation: 30,
+                      elevation: 6,
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
