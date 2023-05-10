@@ -19,7 +19,7 @@ class _ParentContainerState extends State<ParentContainer> {
   Widget build(BuildContext context) {
     return Container(
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: Color(0xFF202124),
         ),
         child:
         Column(
@@ -57,10 +57,10 @@ class _ParentContainerState extends State<ParentContainer> {
                     const SizedBox(height: 60),
                     const Material(
                       elevation: 6,
-                      color: Colors.white,
+                      color: Color(0xFF303134),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
-                        side: BorderSide(color: Color(0xFF2F1176), width: 0.5),
+                        side: BorderSide(color: Color(0xFFFFFFFF), width: 0.5),
                       ),
                       child: SizedBox(
                         height: 400,
@@ -88,10 +88,10 @@ class _ParentContainerState extends State<ParentContainer> {
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       hintText: 'I.D Number',
                                       hintStyle: const TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
                                       ),
@@ -102,7 +102,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -116,10 +116,10 @@ class _ParentContainerState extends State<ParentContainer> {
                                     decoration: const InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       hintText: 'First Name',
                                       hintStyle: TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
                                       ),
@@ -130,7 +130,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -143,10 +143,10 @@ class _ParentContainerState extends State<ParentContainer> {
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       hintText: 'M.I.',
                                       hintStyle: const TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
                                       ),
@@ -157,7 +157,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -170,10 +170,10 @@ class _ParentContainerState extends State<ParentContainer> {
                                     decoration: const InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       hintText: 'Last Name',
                                       hintStyle: TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
                                       ),
@@ -184,7 +184,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -195,12 +195,13 @@ class _ParentContainerState extends State<ParentContainer> {
                                   height: 35,
                                   width: 80,
                                   child: DropdownButtonFormField2(
+
                                     hint: const Padding(
                                       padding: EdgeInsets.fromLTRB(10,0,0,0),
                                       child: Text(
                                         'Age',
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -210,15 +211,16 @@ class _ParentContainerState extends State<ParentContainer> {
                                       contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
                                       isDense: true,
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius: BorderRadius.circular(50.0),
                                           gapPadding: 0
                                       ),
+                                      prefixIconColor: const Color(0xFF202124)
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -230,7 +232,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                         child: Text(
                                           item.toString(),
                                           style: const TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.white,
                                             fontSize: 12,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -262,7 +264,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                     iconStyleData: const IconStyleData(
                                       icon: Icon(
                                         Icons.arrow_drop_down,
-                                        color: Colors.black45,
+                                        color: Colors.white,
                                       ),
                                       iconSize: 30,
                                     ),
@@ -270,6 +272,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       maxHeight: 150,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
+                                        color: const Color(0xFF202124),
                                       ),
                                     ),
                                     menuItemStyleData: const MenuItemStyleData(
@@ -288,7 +291,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       child: Text(
                                         'Sex',
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -298,7 +301,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
                                       isDense: true,
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius: BorderRadius.circular(50.0),
@@ -306,7 +309,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -318,7 +321,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                         child: Text(
                                           item,
                                           style: const TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.white,
                                             fontSize: 12,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -350,13 +353,14 @@ class _ParentContainerState extends State<ParentContainer> {
                                     iconStyleData: const IconStyleData(
                                       icon: Icon(
                                         Icons.arrow_drop_down,
-                                        color: Colors.black45,
+                                        color: Colors.white,
                                       ),
                                       iconSize: 30,
                                     ),
                                     dropdownStyleData: DropdownStyleData(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
+                                        color: const Color(0xFF202124),
                                       ),
                                     ),
                                     menuItemStyleData: const MenuItemStyleData(
@@ -375,7 +379,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       child: Text(
                                         'Courses',
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -385,7 +389,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
                                       isDense: true,
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius: BorderRadius.circular(50.0),
@@ -393,7 +397,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -405,7 +409,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                         child: Text(
                                           item,
                                           style: const TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.white,
                                             fontSize: 12,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -437,13 +441,14 @@ class _ParentContainerState extends State<ParentContainer> {
                                     iconStyleData: const IconStyleData(
                                       icon: Icon(
                                         Icons.arrow_drop_down,
-                                        color: Colors.black45,
+                                        color: Colors.white,
                                       ),
                                       iconSize: 30,
                                     ),
                                     dropdownStyleData: DropdownStyleData(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
+                                        color: const Color(0xFF202124),
                                       ),
                                     ),
                                     menuItemStyleData: const MenuItemStyleData(
@@ -462,7 +467,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       child: Text(
                                         'Year Level',
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -472,7 +477,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
                                       isDense: true,
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius: BorderRadius.circular(50.0),
@@ -480,7 +485,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -492,7 +497,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                         child: Text(
                                           item,
                                           style: const TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.white,
                                             fontSize: 12,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -524,13 +529,14 @@ class _ParentContainerState extends State<ParentContainer> {
                                     iconStyleData: const IconStyleData(
                                       icon: Icon(
                                         Icons.arrow_drop_down,
-                                        color: Colors.black45,
+                                        color: Colors.white,
                                       ),
                                       iconSize: 30,
                                     ),
                                     dropdownStyleData: DropdownStyleData(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
+                                        color: const Color(0xFF202124),
                                       ),
                                     ),
                                     menuItemStyleData: const MenuItemStyleData(
@@ -600,7 +606,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       child: Text(
                                         'Bachelor Type',
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -610,7 +616,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
                                       isDense: true,
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius: BorderRadius.circular(50.0),
@@ -618,7 +624,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -630,7 +636,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                         child: Text(
                                           item,
                                           style: const TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.white,
                                             fontSize: 12,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -660,13 +666,14 @@ class _ParentContainerState extends State<ParentContainer> {
                                     iconStyleData: const IconStyleData(
                                       icon: Icon(
                                         Icons.arrow_drop_down,
-                                        color: Colors.black45,
+                                        color: Colors.white,
                                       ),
                                       iconSize: 30,
                                     ),
                                     dropdownStyleData: DropdownStyleData(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
+                                        color: const Color(0xFF202124),
                                       ),
                                     ),
                                     menuItemStyleData: const MenuItemStyleData(
@@ -695,10 +702,10 @@ class _ParentContainerState extends State<ParentContainer> {
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       hintText: 'Course',
                                       hintStyle: const TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
                                       ),
@@ -725,7 +732,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       child: Text(
                                         'College',
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -735,7 +742,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
                                       isDense: true,
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: const Color(0xFF202124),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius: BorderRadius.circular(50.0),
@@ -743,7 +750,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       ),
                                     ),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -755,7 +762,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                         child: Text(
                                           item,
                                           style: const TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.white,
                                             fontSize: 12,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -786,7 +793,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                     iconStyleData: const IconStyleData(
                                       icon: Icon(
                                         Icons.arrow_drop_down,
-                                        color: Colors.black45,
+                                        color: Colors.white,
                                       ),
                                       iconSize: 30,
                                     ),
@@ -794,6 +801,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       maxHeight: 90,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
+                                        color: const Color(0xFF202124),
                                       ),
                                     ),
                                     menuItemStyleData: const MenuItemStyleData(
