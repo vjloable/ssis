@@ -1,7 +1,10 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:ssis/services/course_service.dart';
+import 'package:ssis/services/student_service.dart';
 import 'package:ssis/widgets/gradient_button.dart';
+import 'package:ssis/widgets/list_panel.dart';
 import 'package:ssis/widgets/window_button.dart';
 
 class ParentContainer extends StatefulWidget {
@@ -12,8 +15,17 @@ class ParentContainer extends StatefulWidget {
 }
 
 class _ParentContainerState extends State<ParentContainer> {
-  String dropdownvalue = 'Item 1';
+  StudentService studentService = StudentService();
+  CourseService courseService = CourseService();
+  String valueDropdown = 'Item 1';
   var items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    studentService.init();
+    courseService.init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +43,8 @@ class _ParentContainerState extends State<ParentContainer> {
                     height: 30,
                     color: const Color(0xFF221C49),
                   ),
-                  WindowTitleBarBox(
+                  WindowTitleBarBox
+                    (
                     child: Row(
                         children: [
                           Expanded(
@@ -55,17 +68,29 @@ class _ParentContainerState extends State<ParentContainer> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 60),
-                    const Material(
-                      elevation: 6,
-                      color: Color(0xFF303134),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        side: BorderSide(color: Color(0xFFFFFFFF), width: 0.5),
-                      ),
-                      child: SizedBox(
-                        height: 400,
-                        width: 1090,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        ListPanel(
+                          elevation: 6,
+                          borderRadius: 5,
+                          headHeight: 40,
+                          bodyHeight: 360,
+                          width: 840,
+                          headerColor: Color(0xff6325e8),
+                          bodyColor: Color(0xFF303134),
+                        ),
+                        SizedBox(width: 10),
+                        ListPanel(
+                          elevation: 6,
+                          borderRadius: 5,
+                          headHeight: 40,
+                          bodyHeight: 360,
+                          width: 240,
+                          headerColor: Color(0xff6325e8),
+                          bodyColor: Color(0xFF303134),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 20),
                     Material(
@@ -116,7 +141,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                     decoration: const InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
-                                      fillColor: const Color(0xFF202124),
+                                      fillColor: Color(0xFF202124),
                                       hintText: 'First Name',
                                       hintStyle: TextStyle(
                                         color: Colors.white,
@@ -170,7 +195,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                     decoration: const InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                                       filled: true,
-                                      fillColor: const Color(0xFF202124),
+                                      fillColor: Color(0xFF202124),
                                       hintText: 'Last Name',
                                       hintStyle: TextStyle(
                                         color: Colors.white,
@@ -224,7 +249,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal,
                                     ),
-                                    items: List<int>.generate(100, (i) => i + 1).toList()
+                                    items: List<int>.generate(50, (i) => i + 1).toList()
                                         .map((item) => DropdownMenuItem<String>(
                                       value: item.toString(),
                                       child: Padding(
@@ -251,7 +276,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       //Do something when changing the item if you want.
                                     },
                                     onSaved: (value) {
-                                      dropdownvalue = value.toString();
+                                      valueDropdown = value.toString();
                                     },
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
@@ -340,7 +365,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       //Do something when changing the item if you want.
                                     },
                                     onSaved: (value) {
-                                      dropdownvalue = value.toString();
+                                      valueDropdown = value.toString();
                                     },
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
@@ -428,7 +453,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       //Do something when changing the item if you want.
                                     },
                                     onSaved: (value) {
-                                      dropdownvalue = value.toString();
+                                      valueDropdown = value.toString();
                                     },
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
@@ -516,7 +541,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       //Do something when changing the item if you want.
                                     },
                                     onSaved: (value) {
-                                      dropdownvalue = value.toString();
+                                      valueDropdown = value.toString();
                                     },
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
@@ -534,6 +559,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       iconSize: 30,
                                     ),
                                     dropdownStyleData: DropdownStyleData(
+                                      maxHeight: 90,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
                                         color: const Color(0xFF202124),
@@ -653,7 +679,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       //Do something when changing the item if you want.
                                     },
                                     onSaved: (value) {
-                                      dropdownvalue = value.toString();
+                                      valueDropdown = value.toString();
                                     },
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
@@ -780,7 +806,7 @@ class _ParentContainerState extends State<ParentContainer> {
                                       //Do something when changing the item if you want.
                                     },
                                     onSaved: (value) {
-                                      dropdownvalue = value.toString();
+                                      valueDropdown = value.toString();
                                     },
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
