@@ -3,20 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:ssis/services/course_service.dart';
 import 'package:ssis/services/student_service.dart';
+import 'package:ssis/widgets/card_row.dart';
 import 'package:ssis/widgets/gradient_button.dart';
 import 'package:ssis/widgets/list_panel.dart';
 import 'package:ssis/widgets/window_button.dart';
 
-class ParentContainer extends StatefulWidget {
-  const ParentContainer({Key? key}) : super(key: key);
+class ParentRoute extends StatefulWidget {
+  const ParentRoute({Key? key}) : super(key: key);
 
   @override
-  State<ParentContainer> createState() => _ParentContainerState();
+  State<ParentRoute> createState() => _ParentRouteState();
 }
 
-class _ParentContainerState extends State<ParentContainer> {
+class _ParentRouteState extends State<ParentRoute> {
   StudentService studentService = StudentService();
   CourseService courseService = CourseService();
+
   String valueDropdown = 'Item 1';
   var items = [];
 
@@ -70,8 +72,8 @@ class _ParentContainerState extends State<ParentContainer> {
                     const SizedBox(height: 60),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        ListPanel(
+                      children: [
+                        const ListPanel(
                           elevation: 6,
                           borderRadius: 5,
                           headHeight: 40,
@@ -80,15 +82,36 @@ class _ParentContainerState extends State<ParentContainer> {
                           headerColor: Color(0xff6325e8),
                           bodyColor: Color(0xFF303134),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         ListPanel(
                           elevation: 6,
                           borderRadius: 5,
                           headHeight: 40,
                           bodyHeight: 360,
                           width: 240,
-                          headerColor: Color(0xff6325e8),
-                          bodyColor: Color(0xFF303134),
+                          headerColor: const Color(0xff6325e8),
+                          bodyColor: const Color(0xFF303134),
+                          child: FutureBuilder(
+                              future: courseService.getList(),
+                              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                return snapshot.hasData ? ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return
+                                        CardRow(
+                                          data: snapshot.data.elementAt(index),
+                                          dataLength: snapshot.data.length,
+                                          color: const Color(0x00FFFFFF),
+                                          width: 200,
+                                          height: 18,
+                                          colorText: Colors.white,
+                                          fontSize: 12,
+                                        );
+                                    })
+                                    : Container();
+                              }
+                          ),
                         ),
                       ],
                     ),
@@ -220,7 +243,6 @@ class _ParentContainerState extends State<ParentContainer> {
                                   height: 35,
                                   width: 80,
                                   child: DropdownButtonFormField2(
-
                                     hint: const Padding(
                                       padding: EdgeInsets.fromLTRB(10,0,0,0),
                                       child: Text(
