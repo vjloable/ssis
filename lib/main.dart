@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:ssis/elements/parent_container.dart';
 import 'package:ssis/misc/colors.dart';
+import 'package:ssis/routes/parent_route.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         body: WindowBorder(
           color: CustomColors().borderColor,
           width: 0,
-          child: const ParentContainer(),
+          child: const ParentRoute(),
         ),
       ),
     );
