@@ -9,33 +9,26 @@ class CardRow extends StatelessWidget {
   final Widget? child;
   final List<dynamic> data;
   final int dataLength;
+  final String header;
+  final String Function(List<dynamic>, String) formatter;
 
   const CardRow({
     Key? key,
     required this.data,
     required this.dataLength,
+    required this.header,
+    required this.formatter,
     this.color = Colors.white,
     this.colorText = Colors.black,
     this.height = 25.0,
     this.width,
     this.child,
-    this.fontSize = 12,
+    this.fontSize = 12
   }) : super(key: key);
-
-  String sorter(List<dynamic> data){
-    String returnString = '';
-    if(data.elementAt(1) != 'Course'){
-      returnString += data.elementAt(0) == 'Arts'? 'BA' : 'BS';
-      returnString += ' ${data.elementAt(1)} (${data.elementAt(2)})';
-    }else{
-      returnString = 'COURSES';
-    }
-    return returnString;
-  }
 
   @override
   Widget build(BuildContext context) {
-    return sorter(data) != 'COURSES'
+    return formatter(data, header) != header
         ? Card(
       color: color,
       child: Row(
@@ -51,7 +44,7 @@ class CardRow extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.contain,
                 child: Text(
-                  sorter(data),
+                  formatter(data, header),
                   style: TextStyle(color: colorText, fontSize: fontSize),
                 ),
               ),
@@ -61,7 +54,7 @@ class CardRow extends StatelessWidget {
       ),
     )
         : Card(
-      color: Color(0xFF202124),
+      color: const Color(0x55FFFFFF),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -76,7 +69,7 @@ class CardRow extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.contain,
                   child: Text(
-                    sorter(data),
+                    formatter(data, header),
                     style: TextStyle(color: colorText, fontSize: fontSize, fontWeight: FontWeight.bold),
                   ),
                 ),
