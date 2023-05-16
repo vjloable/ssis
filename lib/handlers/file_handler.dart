@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
 
@@ -10,17 +9,19 @@ class FileHandler{
     String csvData = const ListToCsvConverter().convert(data);
     String directory = (await getApplicationSupportDirectory()).path;
     String filePath = "$directory\\$filename.csv";
-    if(File(filePath).existsSync()){
-      if (kDebugMode) {
-        print('The specified file in the $filePath already exists');
-      }
-    }else{
-      if (kDebugMode) {
-        print('The specified file in the $filePath does not yet exists');
-      }
-      File file = File(filePath);
-      await file.writeAsString(csvData);
-    }
+    File file = File(filePath);
+    await file.writeAsString(csvData);
+    // if(File(filePath).existsSync()){
+    //   if (kDebugMode) {
+    //     print('The specified file in the $filePath already exists');
+    //   }
+    // }else{
+    //   if (kDebugMode) {
+    //     print('The specified file in the $filePath does not yet exists');
+    //   }
+    //   File file = File(filePath);
+    //   await file.writeAsString(csvData);
+    // }
   }
 
   Future<List<List<dynamic>>> loadCSVFile(String filename) async {
@@ -33,8 +34,12 @@ class FileHandler{
         .toList();
   }
 
-  insertData(List<List<String>> data, ) async{
-
+  insertData(List<List<String>> data, String filename) async{
+    String csvData = const ListToCsvConverter().convert(data);
+    String directory = (await getApplicationSupportDirectory()).path;
+    String filePath = "$directory\\$filename.csv";
+    File file = File(filePath);
+    await file.writeAsString(csvData);
   }
 
   editData(List<List<String>> data) async{
