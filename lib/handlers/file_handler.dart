@@ -7,10 +7,12 @@ import 'package:csv/csv.dart';
 class FileHandler{
   void initCSVFile(List<List<String>> data, String filename) async{
     String csvData = const ListToCsvConverter().convert(data);
-    String directory = (await getApplicationSupportDirectory()).path;
-    String filePath = "$directory\\$filename.csv";
-    File file = File(filePath);
-    await file.writeAsString(csvData);
+    // String directory = (await getApplicationSupportDirectory()).path;
+    Directory dir = Directory.fromUri(Uri.directory('userdata'));
+    dir.createSync(recursive: true);
+    File file = File('${dir.absolute.path}$filename.csv');
+    print('initializing: ${file.absolute.path}');
+    file.writeAsStringSync(csvData);
     // if(File(filePath).existsSync()){
     //   if (kDebugMode) {
     //     print('The specified file in the $filePath already exists');
@@ -25,18 +27,17 @@ class FileHandler{
   }
 
   Future<List<List<dynamic>>> loadCSVFile(String filename) async {
-    String directory = (await getApplicationSupportDirectory()).path;
-    String filePath = "$directory\\$filename.csv";
-    final file = File(filePath).openRead();
-    return await file
-        .transform(utf8.decoder)
-        .transform(const CsvToListConverter())
-        .toList();
+    // String directory = (await getApplicationDocumentsDirectory()).path;
+    Directory dir = Directory.fromUri(Uri.directory('userdata'));
+    dir.createSync(recursive: true);
+    File file = File('${dir.absolute.path}$filename.csv');
+    print('loading: ${file.absolute.path}');
+    return await file.openRead().transform(utf8.decoder).transform(const CsvToListConverter()).toList();
   }
 
   insertData(List<List<String>> data, String filename) async{
     String csvData = const ListToCsvConverter().convert(data);
-    String directory = (await getApplicationSupportDirectory()).path;
+    String directory = (await getApplicationDocumentsDirectory()).path;
     String filePath = "$directory\\$filename.csv";
     File file = File(filePath);
     await file.writeAsString(csvData);
