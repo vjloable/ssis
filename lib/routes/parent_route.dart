@@ -60,7 +60,7 @@ class _ParentRouteState extends State<ParentRoute> {
                   Container(
                     width: 1260,
                     height: 30,
-                    color: const Color(0xFF221C49),
+                    color: const Color(0xFF221C49)
                   ),
                   WindowTitleBarBox(
                     child: Row(
