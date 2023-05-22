@@ -18,33 +18,42 @@ class ParentRoute extends StatefulWidget {
 }
 
 class _ParentRouteState extends State<ParentRoute> {
-  StudentRepository studentService = StudentRepository();
-  CourseRepository courseService = CourseRepository();
+  StudentRepository studentRepository = StudentRepository();
+  CourseRepository courseRepository = CourseRepository();
   late Future<List<List<dynamic>>> listCourses = [[]] as Future<List<List<dynamic>>>;
   late Future<List<List<dynamic>>> listStudents = [[]] as Future<List<List<dynamic>>>;
-
+  late List<String> listFormattedCourses = [];
   String valueDropdown = 'Item 1';
   var items = [];
 
   @override
   void initState() {
     super.initState();
-    studentService.init();
-    courseService.init();
+    studentRepository.init();
+    courseRepository.init();
     coursesGetList();
+    coursesUpdateFormattedList();
     studentGetList();
   }
 
   void coursesGetList() {
     setState(() {
-      listCourses = courseService.getList();
+      listCourses = courseRepository.getList();
     });
   }
 
   void studentGetList() {
     setState(() {
-      listStudents = studentService.getList();
+      listStudents = studentRepository.getList();
     });
+  }
+
+  Future<void> coursesUpdateFormattedList() async {
+    List<String> rawList = await CourseHandler().formattedCoursesList(courseRepository.getList());
+    setState(() {
+      listFormattedCourses = rawList;
+    });
+    print(rawList);
   }
 
   @override
@@ -87,7 +96,7 @@ class _ParentRouteState extends State<ParentRoute> {
                   children: [
                     const SizedBox(height: 60),
                     SizedBox(
-                      width: 1190,
+                      width: 1200,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -568,96 +577,97 @@ class _ParentRouteState extends State<ParentRoute> {
                                 const SizedBox(width: 8),
                                 SizedBox(
                                   height: 35,
-                                  width: 150,
+                                  width: 170,
                                   child: DropdownButtonFormField2(
-                                    decoration: InputDecoration(
-                                      focusedBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                                          borderSide: BorderSide(
-                                            color: Colors.white,
-                                            width: 1,
-                                          )
-                                      ),
-                                      contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
-                                      isDense: true,
-                                      filled: true,
-                                      fillColor: const Color(0xFF202124),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.circular(50.0),
-                                          gapPadding: 0
-                                      ),
-                                    ),
-                                    hint: const Padding(
-                                      padding: EdgeInsets.fromLTRB(10,0,0,0),
-                                      child: Text(
-                                        'Courses',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                    ),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                    items: items
-                                        .map((item) => DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                                        child: Text(
-                                          item,
+                                          decoration: InputDecoration(
+                                            focusedBorder: const OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                borderSide: BorderSide(
+                                                  color: Colors.white,
+                                                  width: 1,
+                                                )
+                                            ),
+                                            contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
+                                            isDense: true,
+                                            filled: true,
+                                            fillColor: const Color(0xFF202124),
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide.none,
+                                                borderRadius: BorderRadius.circular(50.0),
+                                                gapPadding: 0
+                                            ),
+                                          ),
+                                          hint: const Padding(
+                                            padding: EdgeInsets.fromLTRB(10,0,0,0),
+                                            child: Text(
+                                              'Courses',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ),
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,
                                             fontWeight: FontWeight.normal,
                                           ),
-                                        ),
-                                      ),
-                                    ))
-                                        .toList(),
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return 'Course';
-                                      }
-                                      return null;
-                                    },
-                                    onChanged: (value) {
-                                      //Do something when changing the item if you want.
-                                    },
-                                    onSaved: (value) {
-                                      valueDropdown = value.toString();
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 50,
-                                      width: 200,
-                                      padding: const EdgeInsets.fromLTRB(0,0,5,0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.white,
-                                      ),
-                                      iconSize: 30,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: const Color(0xFF202124),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                    ),
-                                  ),
+                                          items: listFormattedCourses
+                                              .map((item) => DropdownMenuItem<String>(
+                                            value: item,
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                                              child: Text(
+                                                item,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                              ),
+                                            ),
+                                          ))
+                                              .toList(),
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return 'Course';
+                                            }
+                                            return null;
+                                          },
+                                          onChanged: (value) {
+                                            //Do something when changing the item if you want.
+                                          },
+                                          onSaved: (value) {
+                                            valueDropdown = value.toString();
+                                          },
+                                          buttonStyleData: ButtonStyleData(
+                                            height: 50,
+                                            width: 200,
+                                            padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                            ),
+                                          ),
+                                          iconStyleData: const IconStyleData(
+                                            icon: Icon(
+                                              Icons.arrow_drop_down,
+                                              color: Colors.white,
+                                            ),
+                                            iconSize: 30,
+                                          ),
+                                          dropdownStyleData: DropdownStyleData(
+                                            maxHeight: 150,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              color: const Color(0xFF202124),
+                                            ),
+                                          ),
+                                          menuItemStyleData: const MenuItemStyleData(
+                                            height: 40,
+                                            padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                          ),
+                                        )
                                 ),
                                 const SizedBox(width: 8),
                                 SizedBox(
@@ -1044,7 +1054,9 @@ class _ParentRouteState extends State<ParentRoute> {
                                   ),
                                   const SizedBox(width: 8),
                                   GradientButton(
-                                    onPressed: (){},
+                                    onPressed: (){
+                                      coursesUpdateFormattedList();
+                                    },
                                     height: 35,
                                     width: 120,
                                     elevation: 5,
