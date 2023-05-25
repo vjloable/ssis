@@ -8,14 +8,12 @@ class CardRow extends StatelessWidget {
   final double fontSize;
   final Widget? child;
   final List<dynamic> data;
-  final int dataLength;
   final String header;
   final String Function(List<dynamic>, String) formatter;
 
   const CardRow({
     Key? key,
     required this.data,
-    required this.dataLength,
     required this.header,
     required this.formatter,
     this.color = Colors.white,
