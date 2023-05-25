@@ -1,9 +1,43 @@
+import 'package:ssis/repositories/course_repository.dart';
+
 class CourseHandler{
+  String? _validatorBachType;
+  String? _validatorCourse;
+
+  String? getBachType(){
+    return _validatorBachType;
+  }
+
+  void addBachType(String? bachType){
+    _validatorBachType = bachType;
+  }
+
+  void addCourse(String? course){
+    _validatorCourse = course;
+  }
+
+  void submit(){
+    CourseRepository courseRepository = CourseRepository();
+    if(_validatorBachType != null && _validatorCourse != null){
+      if(_validatorCourse.toString().trim() != ''){
+        courseRepository.add(_validatorBachType.toString(), _validatorCourse.toString());
+      }else{
+        print("Empty fields");
+      }
+    }else{
+      print("Null values found");
+    }
+  }
+
   String formatter(List<dynamic> data, String header){
     String returnString = header;
-    if(data.elementAt(1) != 'Course'){
+    if(data.elementAt(1) == '-'){
+      returnString = '-';
+    }else if(data.elementAt(1) == 'Course'){
+      returnString = header;
+    }else{
       returnString = data.elementAt(0) == 'Arts'? 'BA' : 'BS';
-      returnString += ' ${data.elementAt(1)} (${data.elementAt(2)})';
+      returnString += ' ${data.elementAt(1)}';
     }
     return returnString;
   }
@@ -18,7 +52,7 @@ class CourseHandler{
         }
       }
     }else{
-      filteredList = [''];
+      filteredList = [];
     }
     return filteredList.toSet().toList();
   }
