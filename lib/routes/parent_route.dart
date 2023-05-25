@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -5,6 +7,7 @@ import 'package:ssis/handlers/course_handler.dart';
 import 'package:ssis/handlers/student_handler.dart';
 import 'package:ssis/repositories/course_repository.dart';
 import 'package:ssis/repositories/student_repository.dart';
+import 'package:ssis/widgets/card_check_row.dart';
 import 'package:ssis/widgets/card_row.dart';
 import 'package:ssis/widgets/gradient_button.dart';
 import 'package:ssis/widgets/list_panel.dart';
@@ -20,11 +23,20 @@ class ParentRoute extends StatefulWidget {
 class _ParentRouteState extends State<ParentRoute> {
   StudentRepository studentRepository = StudentRepository();
   CourseRepository courseRepository = CourseRepository();
+  CourseHandler courseHandler = CourseHandler();
+  StudentHandler studentHandler = StudentHandler();
+  TextEditingController textControllerCourse = TextEditingController();
+  TextEditingController textControllerStudentID = TextEditingController();
+  TextEditingController textControllerStudentFirstName = TextEditingController();
+  TextEditingController textControllerStudentMiddleInitial = TextEditingController();
+  TextEditingController textControllerStudentLastName = TextEditingController();
+
   late Future<List<List<dynamic>>> listCourses = [[]] as Future<List<List<dynamic>>>;
   late Future<List<List<dynamic>>> listStudents = [[]] as Future<List<List<dynamic>>>;
   late List<String> listFormattedCourses = [];
-  String valueDropdown = 'Item 1';
-  var items = [];
+
+  bool enablerCourseButton = true;
+  bool enablerStudentButton = true;
 
   @override
   void initState() {
@@ -32,8 +44,8 @@ class _ParentRouteState extends State<ParentRoute> {
     studentRepository.init();
     courseRepository.init();
     coursesGetList();
-    coursesUpdateFormattedList();
     studentGetList();
+    coursesUpdateFormattedList();
   }
 
   void coursesGetList() {
@@ -49,11 +61,42 @@ class _ParentRouteState extends State<ParentRoute> {
   }
 
   Future<void> coursesUpdateFormattedList() async {
-    List<String> rawList = await CourseHandler().formattedCoursesList(courseRepository.getList());
+    List<String> rawList = await courseHandler.formattedCoursesList(courseRepository.getList());
     setState(() {
       listFormattedCourses = rawList;
     });
-    print(rawList);
+  }
+
+  void setCourseButton(bool toggle){
+    setState(() {
+      enablerCourseButton = toggle;
+    });
+  }
+
+  void setStudentButton(bool toggle){
+    setState(() {
+      enablerStudentButton = toggle;
+    });
+  }
+
+  void clearCoursePanel(){
+    setState(() {
+      courseHandler.addBachType(null);
+      textControllerCourse.clear();
+    });
+  }
+
+  void clearStudentPanel(){
+    setState(() {
+      studentHandler.addAge(null);
+      studentHandler.addSex(null);
+      studentHandler.addYearLevel(null);
+      studentHandler.addCourse(null);
+      textControllerStudentID.clear();
+      textControllerStudentFirstName.clear();
+      textControllerStudentMiddleInitial.clear();
+      textControllerStudentLastName.clear();
+    });
   }
 
   @override
@@ -111,6 +154,11 @@ class _ParentRouteState extends State<ParentRoute> {
                             child: FutureBuilder(
                                 future: listStudents,
                                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                  if(snapshot.hasData){
+                                    if(snapshot.data.length <= 1){
+                                      snapshot.data.add(['-','-','-','-','-','-','-','-']);
+                                    }
+                                  }
                                   return snapshot.hasData ? ListView.builder(
                                       shrinkWrap: false,
                                       itemCount: snapshot.data.length,
@@ -119,71 +167,73 @@ class _ParentRouteState extends State<ParentRoute> {
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
-                                              CardRow(
-                                                  data: snapshot.data.elementAt(index),
-                                                  dataLength: snapshot.data.length,
-                                                  color: const Color(0x00FFFFFF),
-                                                  width: 80,
-                                                  height: 18,
-                                                  colorText: Colors.white,
-                                                  fontSize: 12,
-                                                  header: 'ID NUMBER',
-                                                  formatter: StudentHandler().formatterIDNum
+                                              CardCheckRow(
+                                                data: snapshot.data.elementAt(index),
+                                                color: const Color(0x00FFFFFF),
+                                                colorCheckBox: Colors.white,
+                                                width: 18,
+                                                height: 18,
+                                                index: index,
                                               ),
                                               CardRow(
-                                                  data: snapshot.data.elementAt(index),
-                                                  dataLength: snapshot.data.length,
-                                                  color: const Color(0x00FFFFFF),
-                                                  width: 170,
-                                                  height: 18,
-                                                  colorText: Colors.white,
-                                                  fontSize: 12,
-                                                  header: 'FULL NAME',
-                                                  formatter: StudentHandler().formatterFullName
+                                                data: snapshot.data.elementAt(index),
+                                                color: const Color(0x00FFFFFF),
+                                                width: 100,
+                                                height: 18,
+                                                colorText: Colors.white,
+                                                fontSize: 12,
+                                                header: 'ID NUMBER',
+                                                formatter: StudentHandler().formatterIDNum
                                               ),
                                               CardRow(
-                                                  data: snapshot.data.elementAt(index),
-                                                  dataLength: snapshot.data.length,
-                                                  color: const Color(0x00FFFFFF),
-                                                  width: 30,
-                                                  height: 18,
-                                                  colorText: Colors.white,
-                                                  fontSize: 12,
-                                                  header: 'AGE',
-                                                  formatter: StudentHandler().formatterAge
+                                                data: snapshot.data.elementAt(index),
+                                                color: const Color(0x00FFFFFF),
+                                                width: 170,
+                                                height: 18,
+                                                colorText: Colors.white,
+                                                fontSize: 12,
+                                                header: 'FULL NAME',
+                                                formatter: StudentHandler().formatterFullName
                                               ),
                                               CardRow(
-                                                  data: snapshot.data.elementAt(index),
-                                                  dataLength: snapshot.data.length,
-                                                  color: const Color(0x00FFFFFF),
-                                                  width: 80,
-                                                  height: 18,
-                                                  colorText: Colors.white,
-                                                  fontSize: 12,
-                                                  header: 'SEX',
-                                                  formatter: StudentHandler().formatterSex
+                                                data: snapshot.data.elementAt(index),
+                                                color: const Color(0x00FFFFFF),
+                                                width: 30,
+                                                height: 18,
+                                                colorText: Colors.white,
+                                                fontSize: 12,
+                                                header: 'AGE',
+                                                formatter: StudentHandler().formatterAge
                                               ),
                                               CardRow(
-                                                  data: snapshot.data.elementAt(index),
-                                                  dataLength: snapshot.data.length,
-                                                  color: const Color(0x00FFFFFF),
-                                                  width: 160,
-                                                  height: 18,
-                                                  colorText: Colors.white,
-                                                  fontSize: 12,
-                                                  header: 'COURSES',
-                                                  formatter: StudentHandler().formatterCourse
+                                                data: snapshot.data.elementAt(index),
+                                                color: const Color(0x00FFFFFF),
+                                                width: 80,
+                                                height: 18,
+                                                colorText: Colors.white,
+                                                fontSize: 12,
+                                                header: 'SEX',
+                                                formatter: StudentHandler().formatterSex
                                               ),
                                               CardRow(
-                                                  data: snapshot.data.elementAt(index),
-                                                  dataLength: snapshot.data.length,
-                                                  color: const Color(0x00FFFFFF),
-                                                  width: 90,
-                                                  height: 18,
-                                                  colorText: Colors.white,
-                                                  fontSize: 12,
-                                                  header: 'YEAR LEVEL',
-                                                  formatter: StudentHandler().formatterYearLevel
+                                                data: snapshot.data.elementAt(index),
+                                                color: const Color(0x00FFFFFF),
+                                                width: 130,
+                                                height: 18,
+                                                colorText: Colors.white,
+                                                fontSize: 12,
+                                                header: 'COURSES',
+                                                formatter: StudentHandler().formatterCourse
+                                              ),
+                                              CardRow(
+                                                data: snapshot.data.elementAt(index),
+                                                color: const Color(0x00FFFFFF),
+                                                width: 90,
+                                                height: 18,
+                                                colorText: Colors.white,
+                                                fontSize: 12,
+                                                header: 'YEAR LEVEL',
+                                                formatter: StudentHandler().formatterYearLevel
                                               ),
                                             ],
                                           );
@@ -204,6 +254,11 @@ class _ParentRouteState extends State<ParentRoute> {
                             child: FutureBuilder(
                                 future: listCourses,
                                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                  if(snapshot.hasData){
+                                    if(snapshot.data.length <= 1){
+                                      snapshot.data.add(['-','-']);
+                                    }
+                                  }
                                   return snapshot.hasData ? ListView.builder(
                                       shrinkWrap: false,
                                       itemCount: snapshot.data.length,
@@ -214,14 +269,13 @@ class _ParentRouteState extends State<ParentRoute> {
                                             children: [
                                               CardRow(
                                                 data: snapshot.data.elementAt(index),
-                                                dataLength: snapshot.data.length,
                                                 color: const Color(0x00FFFFFF),
                                                 width: 150,
                                                 height: 18,
                                                 colorText: Colors.white,
                                                 fontSize: 12,
                                                 header: 'AVAILABLE COURSES',
-                                                formatter: CourseHandler().formatter,
+                                                formatter: courseHandler.formatter,
                                               ),
                                             ],
                                           );
@@ -251,6 +305,13 @@ class _ParentRouteState extends State<ParentRoute> {
                                   height: 35,
                                   width: 100,
                                   child: TextFormField(
+                                    onFieldSubmitted: (value) {
+                                      studentHandler.addIDNum(value);
+                                    },
+                                    onChanged: (value) {
+                                      studentHandler.addIDNum(value);
+                                    },
+                                    controller: textControllerStudentID,
                                     decoration: InputDecoration(
                                       focusedBorder: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -286,6 +347,13 @@ class _ParentRouteState extends State<ParentRoute> {
                                   height: 35,
                                   width: 130,
                                   child: TextFormField(
+                                    onFieldSubmitted: (value) {
+                                      studentHandler.addFName(value);
+                                    },
+                                    onChanged: (value) {
+                                      studentHandler.addFName(value);
+                                    },
+                                    controller: textControllerStudentFirstName,
                                     decoration: const InputDecoration(
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -320,6 +388,13 @@ class _ParentRouteState extends State<ParentRoute> {
                                   height: 35,
                                   width: 52,
                                   child: TextFormField(
+                                    onFieldSubmitted: (value) {
+                                      studentHandler.addMInitial(value);
+                                    },
+                                    onChanged: (value) {
+                                      studentHandler.addMInitial(value);
+                                    },
+                                    controller: textControllerStudentMiddleInitial,
                                     decoration: InputDecoration(
                                       focusedBorder: const OutlineInputBorder(
                                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -354,6 +429,13 @@ class _ParentRouteState extends State<ParentRoute> {
                                   height: 35,
                                   width: 160,
                                   child: TextFormField(
+                                    onFieldSubmitted: (value) {
+                                      studentHandler.addLName(value);
+                                    },
+                                    onChanged: (value) {
+                                      studentHandler.addLName(value);
+                                    },
+                                    controller: textControllerStudentLastName,
                                     decoration: const InputDecoration(
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -389,6 +471,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                   height: 35,
                                   width: 80,
                                   child: DropdownButtonFormField2(
+                                    value: studentHandler.getAge(),
                                     decoration: InputDecoration(
                                         focusedBorder: const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -447,10 +530,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                       return null;
                                     },
                                     onChanged: (value) {
-                                      //Do something when changing the item if you want.
-                                    },
-                                    onSaved: (value) {
-                                      valueDropdown = value.toString();
+                                      studentHandler.addAge(value);
                                     },
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
@@ -485,6 +565,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                   height: 35,
                                   width: 100,
                                   child: DropdownButtonFormField2(
+                                    value: studentHandler.getSex(),
                                     decoration: InputDecoration(
                                       focusedBorder: const OutlineInputBorder(
                                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -542,10 +623,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                       return null;
                                     },
                                     onChanged: (value) {
-                                      //Do something when changing the item if you want.
-                                    },
-                                    onSaved: (value) {
-                                      valueDropdown = value.toString();
+                                      studentHandler.addSex(value);
                                     },
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
@@ -579,101 +657,104 @@ class _ParentRouteState extends State<ParentRoute> {
                                   height: 35,
                                   width: 170,
                                   child: DropdownButtonFormField2(
-                                          decoration: InputDecoration(
-                                            focusedBorder: const OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                borderSide: BorderSide(
-                                                  color: Colors.white,
-                                                  width: 1,
-                                                )
-                                            ),
-                                            contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
-                                            isDense: true,
-                                            filled: true,
-                                            fillColor: const Color(0xFF202124),
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide.none,
-                                                borderRadius: BorderRadius.circular(50.0),
-                                                gapPadding: 0
-                                            ),
-                                          ),
-                                          hint: const Padding(
-                                            padding: EdgeInsets.fromLTRB(10,0,0,0),
-                                            child: Text(
-                                              'Courses',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                            ),
-                                          ),
+                                    value: studentHandler.getCourse(),
+                                    isExpanded: true,
+                                    decoration: InputDecoration(
+                                      focusedBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                            color: Colors.white,
+                                            width: 1,
+                                          )
+                                      ),
+                                      contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
+                                      isDense: true,
+                                      filled: true,
+                                      fillColor: const Color(0xFF202124),
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(50.0),
+                                          gapPadding: 0
+                                      ),
+                                    ),
+                                    hint: const Padding(
+                                      padding: EdgeInsets.fromLTRB(10,0,0,0),
+                                      child: Text(
+                                        'Courses',
+                                        overflow: TextOverflow.fade,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    items: listFormattedCourses
+                                        .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                                        child: Text(
+                                          item,
+                                          overflow: TextOverflow.fade,
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,
                                             fontWeight: FontWeight.normal,
                                           ),
-                                          items: listFormattedCourses
-                                              .map((item) => DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Padding(
-                                              padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                                              child: Text(
-                                                item,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                              ),
-                                            ),
-                                          ))
-                                              .toList(),
-                                          validator: (value) {
-                                            if (value == null) {
-                                              return 'Course';
-                                            }
-                                            return null;
-                                          },
-                                          onChanged: (value) {
-                                            //Do something when changing the item if you want.
-                                          },
-                                          onSaved: (value) {
-                                            valueDropdown = value.toString();
-                                          },
-                                          buttonStyleData: ButtonStyleData(
-                                            height: 50,
-                                            width: 200,
-                                            padding: const EdgeInsets.fromLTRB(0,0,5,0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(15),
-                                            ),
-                                          ),
-                                          iconStyleData: const IconStyleData(
-                                            icon: Icon(
-                                              Icons.arrow_drop_down,
-                                              color: Colors.white,
-                                            ),
-                                            iconSize: 30,
-                                          ),
-                                          dropdownStyleData: DropdownStyleData(
-                                            maxHeight: 150,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(15),
-                                              color: const Color(0xFF202124),
-                                            ),
-                                          ),
-                                          menuItemStyleData: const MenuItemStyleData(
-                                            height: 40,
-                                            padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                          ),
-                                        )
+                                        ),
+                                      ),
+                                    ))
+                                        .toList(),
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Course';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      studentHandler.addCourse(value);
+                                    },
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 50,
+                                      width: 200,
+                                      padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    iconStyleData: const IconStyleData(
+                                      icon: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.white,
+                                      ),
+                                      iconSize: 30,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      maxHeight: 150,
+                                      width: 170,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: const Color(0xFF202124),
+                                      ),
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 40,
+                                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                    ),
+                                  )
                                 ),
                                 const SizedBox(width: 8),
                                 SizedBox(
                                   height: 35,
                                   width: 110,
                                   child: DropdownButtonFormField2(
+                                    value: studentHandler.getYearLevel(),
                                     decoration: InputDecoration(
                                       focusedBorder: const OutlineInputBorder(
                                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -731,10 +812,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                       return null;
                                     },
                                     onChanged: (value) {
-                                      //Do something when changing the item if you want.
-                                    },
-                                    onSaved: (value) {
-                                      valueDropdown = value.toString();
+                                      studentHandler.addYearLevel(value);
                                     },
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
@@ -766,7 +844,16 @@ class _ParentRouteState extends State<ParentRoute> {
                                 ),
                                 const SizedBox(width: 8),
                                 GradientButton(
-                                  onPressed: (){},
+                                  onPressed: (){
+                                    setStudentButton(false);
+                                    studentHandler.submit();
+                                    Timer(const Duration(milliseconds: 300), () {
+                                      clearStudentPanel();
+                                      studentGetList();
+                                      setStudentButton(true);
+                                    });
+                                  },
+                                  isEnabled: enablerStudentButton,
                                   height: 35,
                                   width: 120,
                                   elevation: 5,
@@ -822,6 +909,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                     height: 35,
                                     width: 130,
                                     child: DropdownButtonFormField2(
+                                      value: courseHandler.getBachType(),
                                       decoration: InputDecoration(
                                         focusedBorder: const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -878,10 +966,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                         return null;
                                       },
                                       onChanged: (value) {
-                                        //Do something when changing the item if you want.
-                                      },
-                                      onSaved: (value) {
-                                        valueDropdown = value.toString();
+                                        courseHandler.addBachType(value);
                                       },
                                       buttonStyleData: ButtonStyleData(
                                         height: 50,
@@ -925,8 +1010,21 @@ class _ParentRouteState extends State<ParentRoute> {
                                   ),
                                   SizedBox(
                                     height: 35,
-                                    width: 500,
+                                    width: 700,
                                     child: TextFormField(
+                                      onFieldSubmitted: (value) {
+                                        courseHandler.addCourse(value);
+                                      },
+                                      onChanged: (value) {
+                                        courseHandler.addCourse(value);
+                                      },
+                                      controller: textControllerCourse,
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Course';
+                                        }
+                                        return null;
+                                      },
                                       decoration: InputDecoration(
                                         focusedBorder: const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -958,105 +1056,19 @@ class _ParentRouteState extends State<ParentRoute> {
                                     ),
                                   ),
                                   const SizedBox(width: 8),
-                                  SizedBox(
-                                    height: 35,
-                                    width: 150,
-                                    child: DropdownButtonFormField2(
-                                      decoration: InputDecoration(
-
-                                        focusedBorder: const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                                            borderSide: BorderSide(
-                                              color: Colors.white,
-                                              width: 1,
-                                            )
-                                        ),
-                                        contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
-                                        isDense: true,
-                                        filled: true,
-                                        fillColor: const Color(0xFF202124),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide.none,
-                                            borderRadius: BorderRadius.circular(50.0),
-                                            gapPadding: 0
-                                        ),
-                                      ),
-                                      hint: const Padding(
-                                        padding: EdgeInsets.fromLTRB(10,0,0,0),
-                                        child: Text(
-                                          'College',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                      ),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                      items: ['CASS', 'CEBA', 'CED', 'CCS', 'CHS', 'COE', 'CSM']
-                                          .map((item) => DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        ),
-                                      )).toList(),
-                                      validator: (value) {
-                                        if (value == null) {
-                                          return 'College';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        //Do something when changing the item if you want.
-                                      },
-                                      onSaved: (value) {
-                                        valueDropdown = value.toString();
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 50,
-                                        width: 200,
-                                        padding: const EdgeInsets.fromLTRB(0,0,5,0),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Colors.white,
-                                        ),
-                                        iconSize: 30,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 90,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(15),
-                                          color: const Color(0xFF202124),
-                                        ),
-                                      ),
-                                      menuItemStyleData: const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
                                   GradientButton(
                                     onPressed: (){
-                                      coursesUpdateFormattedList();
+                                      setCourseButton(false);
+                                      courseHandler.submit();
+                                      Timer(const Duration(milliseconds: 300), () {
+                                        clearCoursePanel();
+                                        coursesGetList();
+                                        coursesUpdateFormattedList();
+                                        setStudentButton(true);
+                                        setCourseButton(true);
+                                      });
                                     },
+                                    isEnabled: enablerCourseButton,
                                     height: 35,
                                     width: 120,
                                     elevation: 5,
