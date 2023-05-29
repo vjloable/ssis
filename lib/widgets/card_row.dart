@@ -10,18 +10,20 @@ class CardRow extends StatelessWidget {
   final List<dynamic> data;
   final String header;
   final String Function(List<dynamic>, String) formatter;
+  final ScrollController scrollController;
 
   const CardRow({
     Key? key,
     required this.data,
     required this.header,
     required this.formatter,
+    required this.scrollController,
     this.color = Colors.white,
     this.colorText = Colors.black,
     this.height = 25.0,
     this.width,
     this.child,
-    this.fontSize = 12
+    this.fontSize = 12,
   }) : super(key: key);
 
   @override
@@ -39,11 +41,19 @@ class CardRow extends StatelessWidget {
               alignment: Alignment.centerLeft,
               height: height,
               width: width,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text(
-                  formatter(data, header),
-                  style: TextStyle(color: colorText, fontSize: fontSize),
+              child: RawScrollbar(
+                controller: scrollController,
+                thickness: 2,
+                thumbColor: Colors.deepPurpleAccent,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    formatter(data, header),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: colorText, fontSize: fontSize),
+                  ),
                 ),
               ),
             ),
@@ -64,12 +74,10 @@ class CardRow extends StatelessWidget {
               height: height,
               width: width,
               child: Center(
-                child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: Text(
-                    formatter(data, header),
-                    style: TextStyle(color: colorText, fontSize: fontSize, fontWeight: FontWeight.bold),
-                  ),
+                child: Text(
+                  formatter(data, header),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: colorText, fontSize: fontSize, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
