@@ -42,21 +42,17 @@ class _CardCheckRowState extends State<CardCheckRow> {
   @override
   void didUpdateWidget(covariant CardCheckRow oldWidget) {
     widget.controller.initInstance(widget.index, widget.data);
-    // widget.controller.setNoNotify(widget.index, false, widget.data);
-    print('updated: ${oldWidget.controller.hashCode} =>\n${oldWidget.index}');
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void initState() {
-    print('init: ${widget.controller.hashCode} =>\n${widget.index}');
     widget.controller.initInstance(widget.index, widget.data);
     super.initState();
   }
 
   @override
   void dispose() {
-    print('${widget.hashCode}\n   => ${widget.data}');
     widget.controller.disposeInstance(widget.index);
     super.dispose();
   }
