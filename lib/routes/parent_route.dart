@@ -8,6 +8,8 @@ import 'package:ssis/handlers/course_handler.dart';
 import 'package:ssis/handlers/student_handler.dart';
 import 'package:ssis/repositories/course_repository.dart';
 import 'package:ssis/repositories/student_repository.dart';
+import 'package:ssis/routes/delete_route.dart';
+import 'package:ssis/routes/edit_route.dart';
 import 'package:ssis/widgets/card_check_row.dart';
 import 'package:ssis/widgets/card_row.dart';
 import 'package:ssis/widgets/gradient_button.dart';
@@ -40,14 +42,11 @@ class _ParentRouteState extends State<ParentRoute> {
   bool enablerCourseButton = true;
   bool enablerStudentButton = true;
 
-  @override
-  void initState() {
-    super.initState();
-    studentRepository.init();
-    courseRepository.init();
-    coursesGetList();
-    studentGetList();
-    coursesUpdateFormattedList();
+  Future<void> coursesUpdateFormattedList() async {
+    List<String> rawList = await courseHandler.formattedCoursesList(courseRepository.getList());
+    setState(() {
+      listFormattedCourses = rawList;
+    });
   }
 
   void coursesGetList() {
@@ -62,12 +61,6 @@ class _ParentRouteState extends State<ParentRoute> {
     });
   }
 
-  Future<void> coursesUpdateFormattedList() async {
-    List<String> rawList = await courseHandler.formattedCoursesList(courseRepository.getList());
-    setState(() {
-      listFormattedCourses = rawList;
-    });
-  }
 
   void setCourseButton(bool toggle) {
     setState(() {
@@ -99,6 +92,27 @@ class _ParentRouteState extends State<ParentRoute> {
       textControllerStudentMiddleInitial.clear();
       textControllerStudentLastName.clear();
     });
+  }
+
+  void update() {
+    cardCheckController.uncheckAll();
+    cardCheckController.resetSubmission();
+    Timer(const Duration(milliseconds: 100), () {
+      setState(() {
+        studentGetList();
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    studentRepository.init();
+    courseRepository.init();
+    print('init');
+    coursesGetList();
+    studentGetList();
+    coursesUpdateFormattedList();
   }
 
   @override
@@ -153,7 +167,17 @@ class _ParentRouteState extends State<ParentRoute> {
                                       firstChild: SizedBox(
                                           height: 40,
                                           child: ElevatedButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => EditRoute(
+                                                        cardCheckController: cardCheckController,
+                                                        callbackFunction: update,
+                                                      ),
+                                                  )
+                                                );
+                                              },
                                               style: ButtonStyle(
                                                   padding: const MaterialStatePropertyAll(
                                                       EdgeInsets.zero),
@@ -227,7 +251,17 @@ class _ParentRouteState extends State<ParentRoute> {
                                       firstChild: SizedBox(
                                           height: 40,
                                           child: ElevatedButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => DeleteRoute(
+                                                        cardCheckController: cardCheckController,
+                                                        callbackFunction: update,
+                                                      ),
+                                                    )
+                                                );
+                                              },
                                               style: ButtonStyle(
                                                   padding: const MaterialStatePropertyAll(
                                                       EdgeInsets.zero),
@@ -307,96 +341,98 @@ class _ParentRouteState extends State<ParentRoute> {
                                 }
                               }
                               return snapshot.hasData
-                                  ? ListView.builder(
+                                  ? snapshot.data.elementAt(1).contains('-')
+                                  ? const Column(
+                                    children: [
+                                      Card(color: Color(0x00FFFFFF), child: Padding(
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Center(child: Text('< List is empty >', style: TextStyle(color: Colors.white))),
+                                      )),
+                                    ],
+                                  )
+                                  : ListView.builder(
                                       shrinkWrap: false,
                                       itemCount: snapshot.data.length,
                                       itemBuilder: (BuildContext context, int index) {
-                                        Color test = Colors.green.withOpacity(0.1);
-                                        if(index != 3){
-                                          test = Colors.transparent;
-                                        }
-                                        return Container(
-                                          color: test,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              CardCheckRow(
-                                                data: snapshot.data.elementAt(index),
-                                                color: const Color(0x00FFFFFF),
-                                                colorCheckBox: Colors.white,
-                                                width: 18,
-                                                height: 18,
-                                                index: index,
-                                                controller: cardCheckController,
-                                              ),
-                                              CardRow(
-                                                data: snapshot.data.elementAt(index),
-                                                color: const Color(0x00FFFFFF),
-                                                width: 80,
-                                                height: 18,
-                                                colorText: Colors.white,
-                                                fontSize: 12,
-                                                header: 'ID NUMBER',
-                                                formatter: StudentHandler().formatterIDNum,
-                                                scrollController: ScrollController(),
-                                              ),
-                                              CardRow(
-                                                data: snapshot.data.elementAt(index),
-                                                color: const Color(0x00FFFFFF),
-                                                width: 160,
-                                                height: 18,
-                                                colorText: Colors.white,
-                                                fontSize: 12,
-                                                header: 'FULL NAME',
-                                                formatter: StudentHandler().formatterFullName,
-                                                scrollController: ScrollController(),
-                                              ),
-                                              CardRow(
-                                                data: snapshot.data.elementAt(index),
-                                                color: const Color(0x00FFFFFF),
-                                                width: 30,
-                                                height: 18,
-                                                colorText: Colors.white,
-                                                fontSize: 12,
-                                                header: 'AGE',
-                                                formatter: StudentHandler().formatterAge,
-                                                scrollController: ScrollController(),
-                                              ),
-                                              CardRow(
-                                                data: snapshot.data.elementAt(index),
-                                                color: const Color(0x00FFFFFF),
-                                                width: 50,
-                                                height: 18,
-                                                colorText: Colors.white,
-                                                fontSize: 12,
-                                                header: 'SEX',
-                                                formatter: StudentHandler().formatterSex,
-                                                scrollController: ScrollController(),
-                                              ),
-                                              CardRow(
-                                                data: snapshot.data.elementAt(index),
-                                                color: const Color(0x00FFFFFF),
-                                                width: 160,
-                                                height: 18,
-                                                colorText: Colors.white,
-                                                fontSize: 12,
-                                                header: 'COURSES',
-                                                formatter: StudentHandler().formatterCourse,
-                                                scrollController: ScrollController(),
-                                              ),
-                                              CardRow(
-                                                data: snapshot.data.elementAt(index),
-                                                color: const Color(0x00FFFFFF),
-                                                width: 70,
-                                                height: 18,
-                                                colorText: Colors.white,
-                                                fontSize: 12,
-                                                header: 'YEAR LEVEL',
-                                                formatter: StudentHandler().formatterYearLevel,
-                                                scrollController: ScrollController(),
-                                              ),
-                                            ],
-                                          ),
+                                        return Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            CardCheckRow(
+                                              data: snapshot.data.elementAt(index),
+                                              color: const Color(0x00FFFFFF),
+                                              colorCheckBox: Colors.white,
+                                              width: 18,
+                                              height: 18,
+                                              index: index,
+                                              controller: cardCheckController,
+                                            ),
+                                            CardRow(
+                                              data: snapshot.data.elementAt(index),
+                                              color: const Color(0x00FFFFFF),
+                                              width: 80,
+                                              height: 18,
+                                              colorText: Colors.white,
+                                              fontSize: 12,
+                                              header: 'ID NUMBER',
+                                              formatter: StudentHandler().formatterIDNum,
+                                              scrollController: ScrollController(),
+                                            ),
+                                            CardRow(
+                                              data: snapshot.data.elementAt(index),
+                                              color: const Color(0x00FFFFFF),
+                                              width: 160,
+                                              height: 18,
+                                              colorText: Colors.white,
+                                              fontSize: 12,
+                                              header: 'FULL NAME',
+                                              formatter: StudentHandler().formatterFullName,
+                                              scrollController: ScrollController(),
+                                            ),
+                                            CardRow(
+                                              data: snapshot.data.elementAt(index),
+                                              color: const Color(0x00FFFFFF),
+                                              width: 30,
+                                              height: 18,
+                                              colorText: Colors.white,
+                                              fontSize: 12,
+                                              header: 'AGE',
+                                              formatter: StudentHandler().formatterAge,
+                                              scrollController: ScrollController(),
+                                            ),
+                                            CardRow(
+                                              data: snapshot.data.elementAt(index),
+                                              color: const Color(0x00FFFFFF),
+                                              width: 50,
+                                              height: 18,
+                                              colorText: Colors.white,
+                                              fontSize: 12,
+                                              header: 'SEX',
+                                              formatter: StudentHandler().formatterSex,
+                                              scrollController: ScrollController(),
+                                            ),
+                                            CardRow(
+                                              data: snapshot.data.elementAt(index),
+                                              color: const Color(0x00FFFFFF),
+                                              width: 160,
+                                              height: 18,
+                                              colorText: Colors.white,
+                                              fontSize: 12,
+                                              header: 'COURSES',
+                                              formatter: StudentHandler().formatterCourse,
+                                              scrollController: ScrollController(),
+                                            ),
+                                            CardRow(
+                                              data: snapshot.data.elementAt(index),
+                                              color: const Color(0x00FFFFFF),
+                                              width: 70,
+                                              height: 18,
+                                              colorText: Colors.white,
+                                              fontSize: 12,
+                                              header: 'YEAR LEVEL',
+                                              formatter: StudentHandler().formatterYearLevel,
+                                              scrollController: ScrollController(),
+                                            ),
+                                          ],
                                         );
                                       })
                                   : Container();
@@ -1003,7 +1039,7 @@ class _ParentRouteState extends State<ParentRoute> {
                             GradientButton(
                               onPressed: () {
                                 setStudentButton(false);
-                                studentHandler.submit();
+                                studentHandler.submitAdd();
                                 Timer(const Duration(milliseconds: 300), () {
                                   clearStudentPanel();
                                   studentGetList();
@@ -1250,6 +1286,19 @@ class _ParentRouteState extends State<ParentRoute> {
                 ),
               ],
             ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(right: 90, top: 15),
+            child: Align(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                    'v0.2.0 build',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                    ),
+                )
+            ),
           )
         ]));
   }
@@ -1261,6 +1310,7 @@ class _ParentRouteState extends State<ParentRoute> {
     textControllerStudentFirstName.dispose();
     textControllerStudentMiddleInitial.dispose();
     textControllerStudentLastName.dispose();
+    cardCheckController.dispose();
     super.dispose();
   }
 }
