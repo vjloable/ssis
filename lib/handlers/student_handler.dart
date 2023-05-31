@@ -58,7 +58,7 @@ class StudentHandler{
     _validatorYearLevel = yearLevel;
   }
 
-  void submit(){
+  void submitAdd(){
     StudentRepository studentRepository = StudentRepository();
     if(_validatorIDNum != null && _validatorFName != null && _validatorMInitial != null && _validatorLName != null && _validatorAge != null && _validatorSex != null && _validatorCourse != null && _validatorYearLevel != null){
       if(_validatorIDNum.toString().trim() != '' && _validatorFName.toString().trim() != '' && _validatorMInitial.toString().trim() != '' && _validatorLName.toString().trim() != ''){
@@ -78,6 +78,40 @@ class StudentHandler{
     }else{
       print("Null values found");
     }
+  }
+
+  Future<bool> submitEdit(String prevID) async {
+    bool isSuccess = false;
+    StudentRepository studentRepository = StudentRepository();
+    if(_validatorIDNum != null && _validatorFName != null && _validatorMInitial != null && _validatorLName != null && _validatorAge != null && _validatorSex != null && _validatorCourse != null && _validatorYearLevel != null){
+      if(_validatorIDNum.toString().trim() != '' && _validatorFName.toString().trim() != '' && _validatorMInitial.toString().trim() != '' && _validatorLName.toString().trim() != ''){
+        isSuccess = await studentRepository.edit(
+          prevID.trim(),
+          _validatorIDNum.toString(),
+          _validatorFName.toString(),
+          _validatorMInitial.toString(),
+          _validatorLName.toString(),
+          _validatorAge.toString(),
+          _validatorSex.toString(),
+          _validatorCourse.toString(),
+          _validatorYearLevel.toString(),
+        );
+      }else{
+        isSuccess = false;
+        print("Empty fields");
+      }
+    }else{
+      isSuccess = false;
+      print("Null values found");
+    }
+    return isSuccess;
+  }
+
+  Future<bool> submitDelete(List<List<dynamic>> listData) async {
+    bool isSuccess = false;
+    StudentRepository studentRepository = StudentRepository();
+    isSuccess = await studentRepository.delete(listData);
+    return isSuccess;
   }
 
   String formatterFullName(List<dynamic> data, String header){
