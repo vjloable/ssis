@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 class CardCheckController extends ChangeNotifier {
   final Map<int, bool> _mapCardCheckSubHeads = {};
   final Map<int, bool> _mapCardCheckHead = {};
+  final Map<int, List<dynamic>> _submissionData = {};
+  final Map<int, List<dynamic>> _completeData = {};
 
   /// Private condition validation method
   /// to check if [index] is the head
@@ -22,6 +24,24 @@ class CardCheckController extends ChangeNotifier {
     return _mapCardCheckHead.values.first == true;
   }
 
+  List<dynamic> getSubmissionData() {
+    return _submissionData.values.first;
+  }
+
+  List<List<dynamic>> getSubmissionListData() {
+    return _submissionData.values.toList();
+  }
+
+  void uncheckAll () {
+    _mapCardCheckSubHeads.forEach((key, value) {
+      _mapCardCheckSubHeads[key] = false;
+    });
+    _mapCardCheckHead.forEach((key, value) {
+      _mapCardCheckHead[key] = false;
+    });
+    notifyListeners();
+  }
+
   /// Method that counts all checked sub head checkboxes
   int countChecks() {
     int counter = 0;
@@ -39,12 +59,18 @@ class CardCheckController extends ChangeNotifier {
   }
 
   /// Instance initializer method
-  void initInstance(int index) {
+  void initInstance(int index, List<dynamic> item) {
     if (_isHead(index)) {
       _mapCardCheckHead[index] = false;
     } else {
       _mapCardCheckSubHeads[index] = false;
+      _completeData[index] = item;
     }
+  }
+
+  void resetSubmission() {
+    _submissionData.clear();
+    _mapCardCheckSubHeads.clear();
   }
 
   /// Instance disposer method
@@ -54,14 +80,8 @@ class CardCheckController extends ChangeNotifier {
     } else {
       _mapCardCheckSubHeads.remove(index);
     }
-  }
-
-  /// Class instance disposer method
-  @override
-  void dispose() {
-    _mapCardCheckHead.clear();
-    _mapCardCheckSubHeads.clear();
-    super.dispose();
+    _submissionData.remove(index);
+    _completeData.remove(index);
   }
 
   /// Getter method
@@ -80,20 +100,26 @@ class CardCheckController extends ChangeNotifier {
   }
 
   /// Setter method
-  void set(int index, bool value) {
+  void set(int index, bool value, List<dynamic> item) {
     if (_isHead(index)) {
       _mapCardCheckHead[index] = value;
       if (_isHeadChecked()) {
         _mapCardCheckSubHeads.forEach((key, value) {
           _mapCardCheckSubHeads[key] = true;
         });
+        _submissionData.clear();
+        _completeData.forEach((key, value) {
+          _submissionData[key] = value;
+        });
       } else {
         _mapCardCheckSubHeads.forEach((key, value) {
           _mapCardCheckSubHeads[key] = false;
         });
+        _submissionData.clear();
       }
     } else {
       _mapCardCheckSubHeads[index] = value;
+      value ? _submissionData[index] = item : _submissionData.remove(index);
       if (_areSubHeadsChecked()) {
         _mapCardCheckHead.forEach((key, value) {
           _mapCardCheckHead[key] = true;
@@ -106,4 +132,5 @@ class CardCheckController extends ChangeNotifier {
     }
     notifyListeners();
   }
+
 }
