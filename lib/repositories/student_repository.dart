@@ -15,35 +15,28 @@ class StudentRepository{
     return handler.loadCSVFile("students");
   }
 
-  void add(String idNum, String firstName, String mi, String lastName, String age, String sex, String course, String yearLevel) async{
+  Future<bool> add(String idNum, String firstName, String mi, String lastName, String age, String sex, String course, String yearLevel) async{
+    bool isSuccess = false;
     List<List<dynamic>> dataList = await getList();
-    print(dataList);
-    // List<dynamic> dataHead = dataList.first;
     List<List<String>> studentsData = [];
     bool passed = false;
-    int x = 0;
     if (dataList.length > 1){
       int index = 0;
       for (final dataItem in dataList){
-        print('index: $index');
         String idNumSrc = idNum.toString().trim();
         String idNumDes = dataItem.elementAt(0).toString().trim();
         if(index > 0){
           if (idNumSrc == idNumDes){
             passed = false;
-            x = 100;
             break;
           }else{
             passed = true;
-            x = 3;
           }
         }
         index++;
       }
     }else{
       passed = true;
-      x = 4;
-      print('Appended student of id ${idNum.trim()}');
     }
     if(passed){
       FileHandler handler = FileHandler();
@@ -61,12 +54,85 @@ class StudentRepository{
       }
       studentsData.add([idNum.trim(), firstName.trim(), mi.trim(), lastName.trim(), age.trim(), sex.trim(), course.trim(), '${yearLevel.trim()} Year']);
       handler.appendData(studentsData, "students");
+      isSuccess = true;
       print('Appended student of id ${idNum.trim()}');
-      print(x);
     }else{
+      isSuccess = false;
       print('Student already exists.');
-      print(x);
     }
+    return isSuccess;
   }
 
+  Future<bool> edit(String prevID, String idNum, String firstName, String mi, String lastName, String age, String sex, String course, String yearLevel) async{
+    bool isSuccess = false;
+    List<List<dynamic>> dataList = await getList();
+    List<List<String>> studentsData = [];
+    bool passed = false;
+    int index = 0;
+    if (dataList.length > 1){
+      for (final dataItem in dataList){
+        String idNumSrc = prevID;
+        String idNumDes = dataItem.elementAt(0).toString().trim();
+        if(index > 0){
+          print('src: $idNumSrc, des: $idNumDes');
+          if (idNumSrc == idNumDes){
+            passed = true;
+            break;
+          }else{
+            passed = false;
+          }
+        }
+        index++;
+      }
+    }
+    if(passed){
+      FileHandler handler = FileHandler();
+      for (final dataItem in dataList) {
+        studentsData.add([
+          dataItem.elementAt(0).toString(),
+          dataItem.elementAt(1).toString(),
+          dataItem.elementAt(2).toString(),
+          dataItem.elementAt(3).toString(),
+          dataItem.elementAt(4).toString(),
+          dataItem.elementAt(5).toString(),
+          dataItem.elementAt(6).toString(),
+          dataItem.elementAt(7).toString(),
+        ]);
+      }
+      studentsData.insert(index, [idNum.trim(), firstName.trim(), mi.trim(), lastName.trim(), age.trim(), sex.trim(), course.trim(), '${yearLevel.trim()} Year']);
+      studentsData.removeAt(index+1);
+      handler.appendData(studentsData, "students");
+      isSuccess = true;
+      print('Edited student of id ${prevID.trim()} to ${idNum.trim()}');
+    }else{
+      isSuccess = false;
+      print('Unable to edit.');
+    }
+    return isSuccess;
+  }
+
+  Future<bool> delete(List<List<dynamic>> listData) async {
+    bool isSuccess = false;
+    List<List<dynamic>> dataList = await getList();
+    List<List<String>> studentsData = [];
+    for (final listItem in listData) {
+      dataList.removeWhere((element) => element.first == listItem.first);
+    }
+    FileHandler handler = FileHandler();
+    for (final dataItem in dataList) {
+      studentsData.add([
+        dataItem.elementAt(0).toString(),
+        dataItem.elementAt(1).toString(),
+        dataItem.elementAt(2).toString(),
+        dataItem.elementAt(3).toString(),
+        dataItem.elementAt(4).toString(),
+        dataItem.elementAt(5).toString(),
+        dataItem.elementAt(6).toString(),
+        dataItem.elementAt(7).toString(),
+      ]);
+    }
+    handler.appendData(studentsData, "students");
+    isSuccess = true;
+    return isSuccess;
+  }
 }
