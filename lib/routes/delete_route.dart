@@ -3,24 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:ssis/controllers/card_check_controller.dart';
 import 'package:ssis/handlers/course_handler.dart';
 import 'package:ssis/handlers/student_handler.dart';
+import 'package:ssis/misc/scope.dart';
 import 'package:ssis/repositories/course_repository.dart';
 import 'package:ssis/widgets/gradient_button.dart';
 import 'package:ssis/widgets/window_button.dart';
 
-class DeleteRoute extends StatefulWidget {
+class DeleteStudentRoute extends StatefulWidget {
   final CardCheckController cardCheckController;
   final Function callbackFunction;
-  const DeleteRoute({
+  final Scope scope;
+  const DeleteStudentRoute({
     Key? key,
     required this.cardCheckController,
-    required this.callbackFunction
+    required this.callbackFunction,
+    required this.scope
   }) : super(key: key);
 
   @override
-  State<DeleteRoute> createState() => _DeleteRouteState();
+  State<DeleteStudentRoute> createState() => _DeleteStudentRouteState();
 }
 
-class _DeleteRouteState extends State<DeleteRoute> {
+class _DeleteStudentRouteState extends State<DeleteStudentRoute> {
   CourseRepository courseRepository = CourseRepository();
   CourseHandler courseHandler = CourseHandler();
   StudentHandler studentHandler = StudentHandler();
@@ -59,10 +62,11 @@ class _DeleteRouteState extends State<DeleteRoute> {
           Form(
             child: Material(
               elevation: 8,
-              color: const Color(0xFF2F1176),
+              // color: const Color(0xFF2F1176),
+              color: Colors.red,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
               child: SizedBox(
-                width: 600,
+                width: 550,
                 height: 430,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50.0),
@@ -77,9 +81,9 @@ class _DeleteRouteState extends State<DeleteRoute> {
                           'SELECTED ROWS WILL BE',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xff444444),
                             fontSize: 12,
-                            fontWeight: FontWeight.normal,
+                            fontWeight: FontWeight.bold,
                             letterSpacing: 1,
                             wordSpacing: 5,
                           ),
@@ -90,7 +94,7 @@ class _DeleteRouteState extends State<DeleteRoute> {
                           'PERMANENTLY DELETED',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.red,
+                            color: Color(0xff444444),
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1,
@@ -103,7 +107,7 @@ class _DeleteRouteState extends State<DeleteRoute> {
                       Flexible(
                         fit: FlexFit.loose,
                         child: Container(
-                          color: Colors.red,
+                          color: const Color(0xffFF9999),
                           height: 200,
                           child: ListView.builder(
                             itemCount: widget.cardCheckController.getSubmissionListData().length,
@@ -120,12 +124,12 @@ class _DeleteRouteState extends State<DeleteRoute> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 20, bottom: 10),
                                       child: Text(
-                                        widget.cardCheckController.getSubmissionListData().elementAt(index).join('   |  '),
+                                        '[ ${widget.cardCheckController.getSubmissionListData().elementAt(index).join("   |   ")} ]',
                                         textAlign: TextAlign.start,
                                         style: const TextStyle(
                                           overflow: TextOverflow.fade,
                                           fontSize: 12,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         )
                                       ),
                                     ),
@@ -138,32 +142,80 @@ class _DeleteRouteState extends State<DeleteRoute> {
                       ),
                       Divider(color: Colors.white.withOpacity(0.3)),
                       const SizedBox(height: 20),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     GradientButton(
+                      //       onPressed: () {
+                      //         Navigator.pop(context);
+                      //       },
+                      //       isEnabled: enablerCancelButton,
+                      //       height: 40,
+                      //       width: 130,
+                      //       elevation: 5,
+                      //       borderRadius: BorderRadius.circular(20),
+                      //       colors: const [Color(0xFFFF0000), Color(0xFFFF2121)],
+                      //       child: const Center(
+                      //         child: Text(
+                      //           'CANCEL',
+                      //           style: TextStyle(
+                      //             color: Color(0xFFFFFFFF),
+                      //             fontSize: 13,
+                      //             fontWeight: FontWeight.bold,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     const SizedBox(width: 35),
+                      //     GradientButton(
+                      //       onPressed: () {
+                      //         setDeleteButton(false);
+                      //         studentHandler.submitDelete(widget.cardCheckController.getSubmissionListData()).then((value) {
+                      //           if(value){
+                      //             setDeleteButton(true);
+                      //             widget.callbackFunction();
+                      //             Navigator.pop(context);
+                      //             print('exiting');
+                      //           }else{
+                      //             print('STUCK');
+                      //           }
+                      //         });
+                      //       },
+                      //       isEnabled: enablerDeleteButton,
+                      //       height: 40,
+                      //       width: 130,
+                      //       elevation: 5,
+                      //       borderRadius: BorderRadius.circular(20),
+                      //       colors: const [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
+                      //       child: const Center(
+                      //         child: Text(
+                      //           'DELETE',
+                      //           style: TextStyle(
+                      //             color: Colors.red,
+                      //             fontSize: 13,
+                      //             fontWeight: FontWeight.bold,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GradientButton(
                             onPressed: () {
-                              setDeleteButton(false);
-                              studentHandler.submitDelete(widget.cardCheckController.getSubmissionListData()).then((value) {
-                                if(value){
-                                  setDeleteButton(true);
-                                  widget.callbackFunction();
-                                  Navigator.pop(context);
-                                  print('exiting');
-                                }else{
-                                  print('STUCK');
-                                }
-                              });
+                              Navigator.pop(context);
                             },
-                            isEnabled: enablerDeleteButton,
+                            isEnabled: enablerCancelButton,
                             height: 40,
-                            width: 130,
+                            width: 90,
                             elevation: 5,
                             borderRadius: BorderRadius.circular(20),
-                            colors: const [Color(0xFFFF0000), Color(0xFFFF2121)],
+                            colors: const [Color(0xff444444), Color(0xff333333)],
                             child: const Center(
                               child: Text(
-                                'DELETE',
+                                'BACK',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 13,
@@ -172,22 +224,45 @@ class _DeleteRouteState extends State<DeleteRoute> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 35),
+                          const SizedBox(width: 20),
                           GradientButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              setDeleteButton(false);
+                              if (widget.scope == Scope.student) {
+                                studentHandler.submitDelete(widget.cardCheckController.getSubmissionListData()).then((value) {
+                                  if (value) {
+                                    setDeleteButton(true);
+                                    widget.callbackFunction();
+                                    Navigator.pop(context);
+                                    print('exiting');
+                                  } else {
+                                    print('STUCK');
+                                  }
+                                });
+                              } else if (widget.scope == Scope.course) {
+                                courseHandler.submitDelete(widget.cardCheckController.getSubmissionListData()).then((value) {
+                                  if (value) {
+                                    setDeleteButton(true);
+                                    widget.callbackFunction();
+                                    Navigator.pop(context);
+                                    print('exiting');
+                                  } else {
+                                    print('STUCK');
+                                  }
+                                });
+                              }
                             },
-                            isEnabled: enablerCancelButton,
+                            isEnabled: enablerDeleteButton,
                             height: 40,
-                            width: 130,
+                            width: 140,
                             elevation: 5,
                             borderRadius: BorderRadius.circular(20),
                             colors: const [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
                             child: const Center(
                               child: Text(
-                                'CANCEL',
+                                'SUBMIT',
                                 style: TextStyle(
-                                  color: Color(0xFFFF0000),
+                                  color: Color(0xff444444),
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -195,7 +270,7 @@ class _DeleteRouteState extends State<DeleteRoute> {
                             ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
