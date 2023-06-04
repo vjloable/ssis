@@ -1,100 +1,92 @@
+import 'dart:async';
+
 import 'package:ssis/repositories/student_repository.dart';
 
 class StudentHandler{
   String? _validatorIDNum;
-  String? _validatorFName;
-  String? _validatorMInitial;
-  String? _validatorLName;
-  String? _validatorAge;
-  String? _validatorSex;
-  String? _validatorCourse;
+  String? _validatorFullName;
+  String? _validatorGender;
+  String? _validatorCourseCode;
   String? _validatorYearLevel;
+  List<String> comparisonList = ["IDNum", "FullN", "Gender", "Year Level",  "CourseCode"];
 
-  String? getAge(){
-    return _validatorAge;
+
+  String? getGender() {
+    return _validatorGender;
   }
 
-  String? getSex(){
-    return _validatorSex;
+  String? getCourseCode() {
+    return _validatorCourseCode;
   }
 
-  String? getCourse(){
-    return _validatorCourse;
-  }
-
-  String? getYearLevel(){
+  String? getYearLevel() {
     return _validatorYearLevel;
   }
 
-  void addIDNum(String? idNum){
+  void addIDNum(String? idNum) {
+    print(idNum);
     _validatorIDNum = idNum;
   }
 
-  void addFName(String? firstName){
-    _validatorFName = firstName;
+  void addFullName(String? fullName) {
+    print(fullName);
+    _validatorFullName = fullName;
   }
 
-  void addMInitial(String? middleInitial){
-    _validatorMInitial = middleInitial;
+  void addGender(String? gender) {
+    print(gender);
+    _validatorGender = gender;
   }
 
-  void addLName(String? lastName){
-    _validatorLName = lastName;
+  void addCourseCode(String? courseCode){
+    print(courseCode);
+    _validatorCourseCode = courseCode;
   }
 
-  void addAge(String? age){
-    _validatorAge = age;
-  }
-
-  void addSex(String? sex){
-    _validatorSex = sex;
-  }
-
-  void addCourse(String? course){
-    _validatorCourse = course;
-  }
-
-  void addYearLevel(String? yearLevel){
+  void addYearLevel(String? yearLevel) {
+    print(yearLevel);
     _validatorYearLevel = yearLevel;
   }
 
-  void submitAdd(){
+  Future<bool> submitAdd() async {
+    bool isSuccess = false;
     StudentRepository studentRepository = StudentRepository();
-    if(_validatorIDNum != null && _validatorFName != null && _validatorMInitial != null && _validatorLName != null && _validatorAge != null && _validatorSex != null && _validatorCourse != null && _validatorYearLevel != null){
-      if(_validatorIDNum.toString().trim() != '' && _validatorFName.toString().trim() != '' && _validatorMInitial.toString().trim() != '' && _validatorLName.toString().trim() != ''){
-        studentRepository.add(
+    print('_validatorIDNum != null && _validatorFullName != null = ${_validatorIDNum != null && _validatorFullName != null}');
+    print('_validatorGender != null && _validatorCourseCode != null = ${_validatorGender != null && _validatorCourseCode != null}');
+    print(_validatorGender);
+    print('_validatorYearLevel != null = ${_validatorYearLevel != null}');
+    if(_validatorIDNum != null && _validatorFullName != null && _validatorGender != null && _validatorCourseCode != null && _validatorYearLevel != null){
+      if(_validatorIDNum.toString().trim() != '' && _validatorFullName.toString().trim() != ''){
+        isSuccess = await studentRepository.add(
           _validatorIDNum.toString(),
-          _validatorFName.toString(),
-          _validatorMInitial.toString(),
-          _validatorLName.toString(),
-          _validatorAge.toString(),
-          _validatorSex.toString(),
-          _validatorCourse.toString(),
+          _validatorFullName.toString(),
+          _validatorGender.toString(),
           _validatorYearLevel.toString(),
+          _validatorCourseCode.toString(),
         );
       }else{
+        isSuccess = false;
         print("Empty fields");
       }
     }else{
+      isSuccess = false;
       print("Null values found");
     }
+    return isSuccess;
   }
 
   Future<bool> submitEdit(String prevID) async {
     bool isSuccess = false;
     StudentRepository studentRepository = StudentRepository();
-    if(_validatorIDNum != null && _validatorFName != null && _validatorMInitial != null && _validatorLName != null && _validatorAge != null && _validatorSex != null && _validatorCourse != null && _validatorYearLevel != null){
-      if(_validatorIDNum.toString().trim() != '' && _validatorFName.toString().trim() != '' && _validatorMInitial.toString().trim() != '' && _validatorLName.toString().trim() != ''){
+    if(_validatorIDNum != null && _validatorGender != null && _validatorCourseCode != null && _validatorYearLevel != null){
+      if(_validatorIDNum.toString().trim() != ''){
         isSuccess = await studentRepository.edit(
           prevID.trim(),
           _validatorIDNum.toString(),
-          _validatorFName.toString(),
-          _validatorMInitial.toString(),
-          _validatorLName.toString(),
-          _validatorAge.toString(),
-          _validatorSex.toString(),
-          _validatorCourse.toString(),
+          _validatorFullName.toString(),
+          _validatorGender.toString(),
           _validatorYearLevel.toString(),
+          _validatorCourseCode.toString(),
         );
       }else{
         isSuccess = false;
@@ -114,66 +106,11 @@ class StudentHandler{
     return isSuccess;
   }
 
-  String formatterFullName(List<dynamic> data, String header){
-    String returnString = header;
-    if(data.elementAt(1) == '-'){
-      returnString = '-';
-    }else if(data.elementAt(1) == 'FirstN'){
-      returnString = header;
-    }else{
-      returnString = '${data.elementAt(1).toString().trim()} ${data.elementAt(2).toString().trim()} ${data.elementAt(3).toString().trim()}';
-    }
-    return returnString;
-  }
-
-  String formatterIDNum(List<dynamic> data, String header){
-    List<String> comparisonList = ["IDNum", "FirstN", "MI", "LastN", "Age", "Sex", "Courses", "Year Level"];
-    int index = 0;
+  String formatter(List<dynamic> data, String header, int index){
     String returnString = header;
     if(data.elementAt(index) != comparisonList[index]){
       returnString = data.elementAt(index).toString().trim();
     }
     return returnString;
   }
-
-  String formatterAge(List<dynamic> data, String header){
-    List<String> comparisonList = ["IDNum", "FirstN", "MI", "LastN", "Age", "Sex", "Courses", "Year Level"];
-    int index = 4;
-    String returnString = header;
-    if(data.elementAt(index) != comparisonList[index]){
-      returnString = data.elementAt(index).toString().trim();
-    }
-    return returnString;
-  }
-
-  String formatterSex(List<dynamic> data, String header){
-    List<String> comparisonList = ["IDNum", "FirstN", "MI", "LastN", "Age", "Sex", "Courses", "Year Level"];
-    int index = 5;
-    String returnString = header;
-    if(data.elementAt(index) != comparisonList[index]){
-      returnString = data.elementAt(index).toString().trim();
-    }
-    return returnString;
-  }
-
-  String formatterCourse(List<dynamic> data, String header){
-    List<String> comparisonList = ["IDNum", "FirstN", "MI", "LastN", "Age", "Sex", "Courses", "Year Level"];
-    int index = 6;
-    String returnString = header;
-    if(data.elementAt(index) != comparisonList[index]){
-      returnString = data.elementAt(index).toString().trim();
-    }
-    return returnString;
-  }
-
-  String formatterYearLevel(List<dynamic> data, String header){
-    List<String> comparisonList = ["IDNum", "FirstN", "MI", "LastN", "Age", "Sex", "Courses", "Year Level"];
-    int index = 7;
-    String returnString = header;
-    if(data.elementAt(index) != comparisonList[index]){
-      returnString = data.elementAt(index).toString().trim();
-    }
-    return returnString;
-  }
-
 }
