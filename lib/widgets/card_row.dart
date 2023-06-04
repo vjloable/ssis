@@ -9,8 +9,9 @@ class CardRow extends StatelessWidget {
   final Widget? child;
   final List<dynamic> data;
   final String header;
-  final String Function(List<dynamic>, String) formatter;
+  final String Function(List<dynamic>, String, int) formatter;
   final ScrollController scrollController;
+  final int index;
 
   const CardRow({
     Key? key,
@@ -18,6 +19,7 @@ class CardRow extends StatelessWidget {
     required this.header,
     required this.formatter,
     required this.scrollController,
+    required this.index,
     this.color = Colors.white,
     this.colorText = Colors.black,
     this.height = 25.0,
@@ -28,12 +30,12 @@ class CardRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return formatter(data, header) != header
+    return formatter(data, header, index) != header
         ? Card(
       color: color,
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
@@ -50,7 +52,7 @@ class CardRow extends StatelessWidget {
                   physics: const AlwaysScrollableScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    formatter(data, header),
+                    formatter(data, header, index),
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(color: colorText, fontSize: fontSize),
                   ),
@@ -65,7 +67,7 @@ class CardRow extends StatelessWidget {
       color: const Color(0x55FFFFFF),
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
@@ -75,7 +77,7 @@ class CardRow extends StatelessWidget {
               width: width,
               child: Center(
                 child: Text(
-                  formatter(data, header),
+                  formatter(data, header, index),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: colorText, fontSize: fontSize, fontWeight: FontWeight.bold),
                 ),
