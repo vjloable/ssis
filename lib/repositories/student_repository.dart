@@ -4,8 +4,7 @@ class StudentRepository{
   void init() async{
     FileHandler handler = FileHandler();
     List<List<String>> studentsData = [
-      ["IDNum", "FirstN", "MI", "LastN", "Age", "Sex", "Courses", "Year Level"],
-      // ["2021-1910", "Vince Japheth", "F.", "Loable", "21", "Male", "BS Computer Science", "2nd Year"],
+      ["IDNum", "FullN", "Gender", "CourseCode", "Year Level"],
     ];
     handler.initData(studentsData, "students");
   }
@@ -15,7 +14,7 @@ class StudentRepository{
     return handler.loadCSVFile("students");
   }
 
-  Future<bool> add(String idNum, String firstName, String mi, String lastName, String age, String sex, String course, String yearLevel) async{
+  Future<bool> add(String idNum, String fullName, String sex, String yearLevel, String courseCode) async{
     bool isSuccess = false;
     List<List<dynamic>> dataList = await getList();
     List<List<String>> studentsData = [];
@@ -47,12 +46,9 @@ class StudentRepository{
           dataItem.elementAt(2).toString(),
           dataItem.elementAt(3).toString(),
           dataItem.elementAt(4).toString(),
-          dataItem.elementAt(5).toString(),
-          dataItem.elementAt(6).toString(),
-          dataItem.elementAt(7).toString(),
         ]);
       }
-      studentsData.add([idNum.trim(), firstName.trim(), mi.trim(), lastName.trim(), age.trim(), sex.trim(), course.trim(), '${yearLevel.trim()} Year']);
+      studentsData.add([idNum.trim(), fullName.trim(), sex.trim(), '${yearLevel.trim()} Year', courseCode]);
       handler.appendData(studentsData, "students");
       isSuccess = true;
       print('Appended student of id ${idNum.trim()}');
@@ -63,7 +59,7 @@ class StudentRepository{
     return isSuccess;
   }
 
-  Future<bool> edit(String prevID, String idNum, String firstName, String mi, String lastName, String age, String sex, String course, String yearLevel) async{
+  Future<bool> edit(String prevID, String idNum, String fullName, String sex, String yearLevel, String courseCode) async{
     bool isSuccess = false;
     List<List<dynamic>> dataList = await getList();
     List<List<String>> studentsData = [];
@@ -94,12 +90,9 @@ class StudentRepository{
           dataItem.elementAt(2).toString(),
           dataItem.elementAt(3).toString(),
           dataItem.elementAt(4).toString(),
-          dataItem.elementAt(5).toString(),
-          dataItem.elementAt(6).toString(),
-          dataItem.elementAt(7).toString(),
         ]);
       }
-      studentsData.insert(index, [idNum.trim(), firstName.trim(), mi.trim(), lastName.trim(), age.trim(), sex.trim(), course.trim(), '${yearLevel.trim()} Year']);
+      studentsData.insert(index, [idNum.trim(), fullName.trim(), sex.trim(), '${yearLevel.trim()} Year', courseCode]);
       studentsData.removeAt(index+1);
       handler.appendData(studentsData, "students");
       isSuccess = true;
@@ -126,9 +119,6 @@ class StudentRepository{
         dataItem.elementAt(2).toString(),
         dataItem.elementAt(3).toString(),
         dataItem.elementAt(4).toString(),
-        dataItem.elementAt(5).toString(),
-        dataItem.elementAt(6).toString(),
-        dataItem.elementAt(7).toString(),
       ]);
     }
     handler.appendData(studentsData, "students");
