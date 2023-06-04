@@ -47,7 +47,9 @@ class _GradientButtonState extends State<GradientButton> {
       child: ElevatedButton(
         onPressed: widget.isEnabled ? widget.onPressed : null ,
         style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.zero,
           backgroundColor: Colors.transparent,
+          disabledBackgroundColor: Colors.grey,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(borderRadius: borderRadius),
         ),
