@@ -59,7 +59,7 @@ class _CardCheckRowState extends State<CardCheckRow> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.data.elementAt(widget.index) == '-') {
+    if (widget.data.elementAt(0) == '-') {
       return widget.index > 0
           ? Card(
               color: widget.color,
