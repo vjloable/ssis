@@ -4,14 +4,14 @@ class StudentRepository{
   void init() async{
     FileHandler handler = FileHandler();
     List<List<String>> studentsData = [
-      ["IDNum", "FullN", "Gender", "CourseCode", "Year Level"],
+      ["IDNum", "FullN", "Gender", "Year Level", "CourseCode"],
     ];
     handler.initData(studentsData, "students");
   }
 
   Future<List<List<dynamic>>> getList() async {
     FileHandler handler = FileHandler();
-    return handler.loadCSVFile("students");
+    return await handler.loadCSVFile("students");
   }
 
   Future<bool> add(String idNum, String fullName, String sex, String yearLevel, String courseCode) async{
