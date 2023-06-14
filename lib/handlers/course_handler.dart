@@ -3,19 +3,10 @@ import 'package:ssis/repositories/course_repository.dart';
 class CourseHandler{
   String? _validatorCourseCode;
   String? _validatorCourse;
-  bool _readyClear = false;
   List<String> comparisonList = ['CourseCode','Course'];
 
   String? getCourseCode(){
     return _validatorCourseCode;
-  }
-
-  bool getClearFlag() {
-    return _readyClear;
-  }
-
-  void setClearFlag(bool flag) {
-    _readyClear = flag;
   }
 
   void addCourseCode(String? courseCode){
@@ -32,14 +23,11 @@ class CourseHandler{
     if(_validatorCourseCode != null && _validatorCourse != null){
       if(_validatorCourse.toString().trim() != ''){
         isSuccess = await courseRepository.add(_validatorCourseCode.toString(), _validatorCourse.toString());
-        _readyClear = true;
       }else{
         isSuccess = false;
-        print("Empty fields");
       }
     }else{
       isSuccess = false;
-      print("Null values found");
     }
     return isSuccess;
   }
@@ -56,11 +44,9 @@ class CourseHandler{
         );
       }else{
         isSuccess = false;
-        print("Empty fields");
       }
     }else{
       isSuccess = false;
-      print("Null values found");
     }
     return isSuccess;
   }
@@ -82,7 +68,6 @@ class CourseHandler{
 
   Future<Map<String,String>> formattedCoursesMap(Future<List<List<dynamic>>> futureList) async {
     List<List<dynamic>> rawList = await futureList;
-    print('rawList: $rawList');
     Map<String, String> filteredMap = {};
     if(rawList.length > 1){
       for(var i = 1 ; i < rawList.length; i++) {
@@ -96,7 +81,6 @@ class CourseHandler{
 
   Future<Map<String, String>> formattedCoursesMapInverted(Future<List<List<dynamic>>> futureList) async {
     List<List<dynamic>> rawList = await futureList;
-    print('rawList: $rawList');
     Map<String, String> filteredMap = {};
     if(rawList.length > 1){
       for(var i = 1 ; i < rawList.length; i++) {
