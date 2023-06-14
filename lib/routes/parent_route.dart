@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:ssis/controllers/card_check_controller.dart';
+import 'package:ssis/controllers/progressbar_controller.dart';
 import 'package:ssis/handlers/course_handler.dart';
+import 'package:ssis/handlers/search_handler.dart';
 import 'package:ssis/handlers/student_handler.dart';
+import 'package:ssis/misc/progressbar_states.dart';
 import 'package:ssis/misc/scope.dart';
 import 'package:ssis/repositories/course_repository.dart';
 import 'package:ssis/repositories/student_repository.dart';
@@ -29,19 +32,24 @@ class _ParentRouteState extends State<ParentRoute> {
   CourseRepository courseRepository = CourseRepository();
   CourseHandler courseHandler = CourseHandler();
   StudentHandler studentHandler = StudentHandler();
+  SearchHandler searchHandler = SearchHandler();
   TextEditingController textControllerCourse = TextEditingController();
   TextEditingController textControllerCourseCode = TextEditingController();
   TextEditingController textControllerStudentID = TextEditingController();
   TextEditingController textControllerStudentName = TextEditingController();
+  TextEditingController searchControllerStudent = TextEditingController();
+  TextEditingController searchControllerCourse = TextEditingController();
   CardCheckController cardCheckControllerStudent = CardCheckController();
   CardCheckController cardCheckControllerCourse = CardCheckController();
+  ProgressBarController progressBarControllerStudent = ProgressBarController();
+  ProgressBarController progressBarControllerCourse = ProgressBarController();
 
   late Future<List<List<dynamic>>> listCourses = [[]] as Future<List<List<dynamic>>>;
   late Future<List<List<dynamic>>> listStudents = [[]] as Future<List<List<dynamic>>>;
   late List<String> listFormattedCourseCodes = [];
   late List<String> listFormattedCourses = [];
 
-  String buildVersion = '0.3.0';
+  String buildVersion = '0.4.0';
 
   Future<void> coursesUpdateFormattedList() async {
     Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
@@ -54,7 +62,6 @@ class _ParentRouteState extends State<ParentRoute> {
   void coursesGetList() {
     setState(() {
       listCourses = courseRepository.getList();
-      print(listCourses);
     });
   }
 
@@ -63,12 +70,6 @@ class _ParentRouteState extends State<ParentRoute> {
       listStudents = studentRepository.getList();
     });
   }
-
-  // void setAddStudentButton(bool toggle) {
-  //   setState(() {
-  //     enablerAddStudentButton = toggle;
-  //   });
-  // }
 
   void clearCoursePanel() {
     setState(() {
@@ -153,55 +154,141 @@ class _ParentRouteState extends State<ParentRoute> {
                     children: [
                       ListPanel(
                         elevation: 6,
-                        borderRadius: 5,
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(5),
+                          topLeft: Radius.circular(5),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(0),
+                        ),
                         width: 740,
                         headHeight: 40,
-                        bodyHeight: 360,
+                        bodyHeight: 410,
                         headerColor: const Color(0xFF6325E8),
                         bodyColor: const Color(0xFF303134),
                         headerChild: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              AnimatedBuilder(
-                                  animation: cardCheckControllerStudent,
-                                  builder: (context, child) {
-                                    print('maxcheck: ${cardCheckControllerStudent.maxCheck()}');
-                                    return AnimatedCrossFade(
-                                      firstChild: SizedBox(
-                                          height: 40,
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                                              child: Text(
-                                                  cardCheckControllerStudent.countChecks() > 0
-                                                      ?
-                                                  cardCheckControllerStudent.countChecks() == cardCheckControllerStudent.maxCheck()
-                                                      ?  'ALL ITEMS SELECTED'
-                                                      : '${cardCheckControllerStudent.countChecks()} ITEMS SELECTED'
-                                                      : '1 ITEM SELECTED',
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.bold)
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          child: Form(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 35,
+                                  height: 35,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(50),
+                                      bottomLeft: Radius.circular(50),
+                                    ),
+                                    color: Color(0xFF202124),
+                                  ),
+                                  child: AnimatedBuilder(
+                                    animation: progressBarControllerStudent,
+                                    builder: (context, child) {
+                                      switch (progressBarControllerStudent.getState()) {
+                                        case ProgressBarStates.idle:
+                                          return const Icon(
+                                              Icons.search,
+                                              size: 16,
+                                              color: Colors.white
+                                          );
+                                        case ProgressBarStates.searching:
+                                          return const Padding(
+                                            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                                            child: SizedBox(
+                                              width: 5,
+                                              height: 5,
+                                              child: CircularProgressIndicator(
+                                                value: null,
+                                                color: Colors.white,
+                                                strokeWidth: 2,
                                               ),
                                             ),
-                                          )
+                                          );
+                                        case ProgressBarStates.searched:
+                                          return const Icon(
+                                              Icons.search,
+                                              size: 16,
+                                              color: Colors.deepPurple
+                                          );
+                                      }
+                                    }
+                                  ),
+                                ),
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: SizedBox(
+                                    height: 35,
+                                    child: TextFormField(
+                                      onFieldSubmitted: (value) {
+                                        setState(() {
+                                          listStudents = searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                        });
+                                        progressBarControllerStudent.setState(ProgressBarStates.searched);
+                                      },
+                                      onChanged: (value) {
+                                        setState(() {
+                                          listStudents = searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                        });
+                                        progressBarControllerStudent.setState(ProgressBarStates.searching);
+                                      },
+                                      controller: searchControllerStudent,
+                                      decoration: InputDecoration(
+                                        focusedBorder: const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(Radius.zero),
+                                            borderSide: BorderSide(
+                                              color: Colors.white,
+                                              width: 1,
+                                            ),
+                                        ),
+                                        contentPadding:
+                                        const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                        filled: true,
+                                        fillColor: const Color(0xDE2A2B2E),
+                                        hintText: 'Search',
+                                        hintStyle: TextStyle(
+                                          color: Colors.white.withOpacity(0.4),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                        border: const OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.all(Radius.zero),
+                                          gapPadding: 0,
+                                        ),
                                       ),
-                                      secondChild:  SizedBox(
-                                          height: 40,
-                                          child: Container(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
                                       ),
-                                      crossFadeState: cardCheckControllerStudent.countChecks() > 0
-                                          ? CrossFadeState.showFirst
-                                          : CrossFadeState.showSecond,
-                                      duration: const Duration(milliseconds: 200),
-                                      sizeCurve: Curves.fastOutSlowIn,
-                                    );
-                                  }),
-                            ],
+                                    ),
+                                  ),
+                                ),
+                                GradientButton(
+                                  onPressed: () {
+
+                                  },
+                                  isEnabled: true,
+                                  height: 35,
+                                  width: 70,
+                                  elevation: 5,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.zero,
+                                    topRight: Radius.circular(50),
+                                    bottomRight: Radius.circular(50),
+                                    bottomLeft: Radius.zero,
+                                  ),
+                                  colors: const [Color(0xFF202124), Color(0xFF1A1C1E)],
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                    child: FittedBox(
+                                      fit: BoxFit.fitHeight,
+                                      child: Text('Search', style: TextStyle(fontWeight: FontWeight.w600)),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         child: FutureBuilder(
@@ -218,7 +305,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                     children: [
                                       Card(color: Color(0x00FFFFFF), child: Padding(
                                         padding: EdgeInsets.all(5.0),
-                                        child: Center(child: Text('- Student list is empty -', style: TextStyle(color: Colors.white30))),
+                                        child: Center(child: Text('- Student list is empty -', style: TextStyle(color: Colors.white30, fontSize: 12, fontStyle: FontStyle.italic, letterSpacing: 1.3, fontWeight: FontWeight.w100))),
                                       )),
                                     ],
                                   )
@@ -226,8 +313,6 @@ class _ParentRouteState extends State<ParentRoute> {
                                       shrinkWrap: false,
                                       itemCount: snapshot.data.length,
                                       itemBuilder: (BuildContext context, int index) {
-                                        print('index: $index');
-                                        print('snapshot: ${snapshot.data.elementAt(index)}');
                                         return Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
@@ -309,53 +394,138 @@ class _ParentRouteState extends State<ParentRoute> {
                       const SizedBox(width: 10),
                       ListPanel(
                         elevation: 6,
-                        borderRadius: 5,
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(5),
+                          topLeft: Radius.circular(5),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(0),
+                        ),
                         headHeight: 40,
-                        bodyHeight: 360,
-                        width: 380,
+                        bodyHeight: 410,
+                        width: 395,
                         headerColor: const Color(0xff6325e8),
                         bodyColor: const Color(0xFF303134),
                         headerChild: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              AnimatedBuilder(
-                                  animation: cardCheckControllerCourse,
-                                  builder: (context, child) {
-                                    return AnimatedCrossFade(
-                                      firstChild: SizedBox(
-                                          height: 40,
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                                              child: Text(
-                                                  cardCheckControllerCourse.countChecks() > 0
-                                                      ?
-                                                  cardCheckControllerCourse.countChecks() == cardCheckControllerCourse.maxCheck()
-                                                      ?  'ALL ITEMS SELECTED'
-                                                      : '${cardCheckControllerCourse.countChecks()} ITEMS SELECTED'
-                                                      : '1 ITEM SELECTED',
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.bold)
+                              Container(
+                                width: 35,
+                                height: 35,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(50),
+                                    bottomLeft: Radius.circular(50),
+                                  ),
+                                  color: Color(0xFF202124),
+                                ),
+                                child: AnimatedBuilder(
+                                    animation: progressBarControllerCourse,
+                                    builder: (context, child) {
+                                      switch (progressBarControllerCourse.getState()) {
+                                        case ProgressBarStates.idle:
+                                          return const Icon(
+                                              Icons.search,
+                                              size: 16,
+                                              color: Colors.white
+                                          );
+                                        case ProgressBarStates.searching:
+                                          return const Padding(
+                                            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                                            child: SizedBox(
+                                              width: 5,
+                                              height: 5,
+                                              child: CircularProgressIndicator(
+                                                value: null,
+                                                color: Colors.white,
+                                                strokeWidth: 2,
                                               ),
                                             ),
-                                          )
+                                          );
+                                        case ProgressBarStates.searched:
+                                          return const Icon(
+                                              Icons.search,
+                                              size: 16,
+                                              color: Colors.deepPurple
+                                          );
+                                      }
+                                    }
+                                ),
+                              ),
+                              Flexible(
+                                fit: FlexFit.loose,
+                                child: SizedBox(
+                                  height: 35,
+                                  child: TextFormField(
+                                    onFieldSubmitted: (value) {
+                                      setState(() {
+                                        listCourses = searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                      });
+                                      progressBarControllerCourse.setState(ProgressBarStates.searched);
+                                    },
+                                    onChanged: (value) {
+                                      setState(() {
+                                        listCourses = searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                      });
+                                      progressBarControllerCourse.setState(ProgressBarStates.searching);
+                                    },
+                                    controller: searchControllerCourse,
+                                    decoration: InputDecoration(
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.zero),
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: 1,
+                                        ),
                                       ),
-                                      secondChild:  SizedBox(
-                                        height: 40,
-                                        child: Container(),
+                                      contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                      filled: true,
+                                      fillColor: const Color(0xDE2A2B2E),
+                                      hintText: 'Search',
+                                      hintStyle: TextStyle(
+                                        color: Colors.white.withOpacity(0.4),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
                                       ),
-                                      crossFadeState: cardCheckControllerCourse.countChecks() > 0
-                                          ? CrossFadeState.showFirst
-                                          : CrossFadeState.showSecond,
-                                      duration: const Duration(milliseconds: 200),
-                                      sizeCurve: Curves.fastOutSlowIn,
-                                    );
-                                  }),
+                                      border: const OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.all(Radius.zero),
+                                        gapPadding: 0,
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              GradientButton(
+                                onPressed: () {
+
+                                },
+                                isEnabled: true,
+                                height: 35,
+                                width: 70,
+                                elevation: 5,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.zero,
+                                  topRight: Radius.circular(50),
+                                  bottomRight: Radius.circular(50),
+                                  bottomLeft: Radius.zero,
+                                ),
+                                colors: const [Color(0xFF202124), Color(0xFF1A1C1E)],
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: FittedBox(
+                                    fit: BoxFit.fitHeight,
+                                    child: Text('Search', style: TextStyle(fontWeight: FontWeight.w600)),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -373,7 +543,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                 children: [
                                   Card(color: Color(0x00FFFFFF), child: Padding(
                                     padding: EdgeInsets.all(5.0),
-                                    child: Center(child: Text('- Courses list is empty -', style: TextStyle(color: Colors.white30))),
+                                    child: Center(child: Text('- Courses list is empty -', style: TextStyle(color: Colors.white30, fontSize: 12, fontStyle: FontStyle.italic, letterSpacing: 1.3, fontWeight: FontWeight.w100))),
                                   )),
                                 ],
                               )
@@ -381,9 +551,6 @@ class _ParentRouteState extends State<ParentRoute> {
                                       shrinkWrap: false,
                                       itemCount: snapshot.data.length,
                                       itemBuilder: (BuildContext context, int index) {
-                                        print(snapshot.data.elementAt(index));
-                                        print(snapshot.data);
-                                        print(index);
                                         return Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
@@ -411,11 +578,11 @@ class _ParentRouteState extends State<ParentRoute> {
                                             CardRow(
                                               data: snapshot.data.elementAt(index),
                                               color: const Color(0x00FFFFFF),
-                                              width: 72,
+                                              width: 90,
                                               height: 18,
                                               colorText: Colors.white,
                                               fontSize: 12,
-                                              header: 'CODE',
+                                              header: 'COURSE CODE',
                                               formatter: courseHandler.formatter,
                                               scrollController: ScrollController(),
                                               index: 0,
@@ -429,14 +596,18 @@ class _ParentRouteState extends State<ParentRoute> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Material(
                       elevation: 8,
                       color: const Color(0xFF2F1176),
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(0),
+                        topLeft: Radius.circular(0),
+                        bottomLeft: Radius.circular(5),
+                        bottomRight: Radius.circular(5),
+                      ),
                       child: SizedBox(
                         height: 50,
                         width: 740,
@@ -444,8 +615,48 @@ class _ParentRouteState extends State<ParentRoute> {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Center(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: AnimatedBuilder(
+                                    animation: cardCheckControllerStudent,
+                                    builder: (context, child) {
+                                      return AnimatedCrossFade(
+                                        firstChild: SizedBox(
+                                            height: 40,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                child: Text(
+                                                    cardCheckControllerStudent.countChecks() > 1
+                                                        ?
+                                                    cardCheckControllerStudent.countChecks() == cardCheckControllerStudent.maxCheck()
+                                                        ?  'ALL ITEMS SELECTED'
+                                                        : '${cardCheckControllerStudent.countChecks()} ITEMS SELECTED'
+                                                        : cardCheckControllerStudent.countChecks() == 1 && cardCheckControllerStudent.maxCheck() == 1
+                                                        ? 'ALL ITEMS SELECTED' : '1 ITEM SELECTED',
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.bold)
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                        secondChild:  SizedBox(
+                                          height: 40,
+                                          child: Container(),
+                                        ),
+                                        crossFadeState: cardCheckControllerStudent.countChecks() > 0
+                                            ? CrossFadeState.showFirst
+                                            : CrossFadeState.showSecond,
+                                        duration: const Duration(milliseconds: 200),
+                                        sizeCurve: Curves.fastOutSlowIn,
+                                      );
+                                    }),
+                                ),
                                 GradientButton(
                                   onPressed: () {
                                     Navigator.push(
@@ -530,48 +741,55 @@ class _ParentRouteState extends State<ParentRoute> {
                                 AnimatedBuilder(
                                   animation: cardCheckControllerStudent,
                                   builder: (BuildContext context, Widget? child) {
-                                    return GradientButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => DeleteStudentRoute(
-                                                cardCheckController: cardCheckControllerStudent,
-                                                callbackFunction: update,
-                                                scope: Scope.student,
-                                              ),
-                                            )
-                                        );
-                                      },
-                                      isEnabled: cardCheckControllerStudent.countChecks() > 0,
-                                      height: 35,
-                                      width: cardCheckControllerStudent.countChecks() == cardCheckControllerStudent.maxCheck() && cardCheckControllerStudent.countChecks() > 1 ? 80 : 70,
-                                      elevation: 5,
-                                      borderRadius: BorderRadius.circular(20),
-                                      colors: const [Color(0xFFFF0000), Color(0xFFFF2121)],
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                                        child: FittedBox(
-                                          fit: BoxFit.scaleDown,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                Icons.delete_rounded,
-                                                size: 18,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                  cardCheckControllerStudent.countChecks() == cardCheckControllerStudent.maxCheck() && cardCheckControllerStudent.    countChecks() > 1 ?
-                                                  'Delete all' : 'Delete',
-                                                  style: const TextStyle(
-                                                      fontWeight: FontWeight.w600
+                                    return Row(
+                                      children: [
+                                        GradientButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => DeleteStudentRoute(
+                                                    cardCheckController: cardCheckControllerStudent,
+                                                    callbackFunction: update,
+                                                    scope: Scope.student,
+                                                  ),
+                                                )
+                                            );
+                                          },
+                                          isEnabled: cardCheckControllerStudent.countChecks() > 0,
+                                          height: 35,
+                                          width: cardCheckControllerStudent.countChecks() == cardCheckControllerStudent.maxCheck() && cardCheckControllerStudent.countChecks() > 1 ? 80 : 70,
+                                          elevation: 5,
+                                          borderRadius: BorderRadius.circular(20),
+                                          colors: const [Color(0xFFFF0000), Color(0xFFFF2121)],
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.delete_rounded,
+                                                    size: 18,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                      cardCheckControllerStudent.countChecks() == cardCheckControllerStudent.maxCheck() && cardCheckControllerStudent.countChecks() > 1 ?
+                                                      'Delete all' : 'Delete',
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight.w600
+                                                      )
                                                   )
-                                              )
-                                            ],
+                                                ],
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        SizedBox(
+                                          width: cardCheckControllerStudent.countChecks() == cardCheckControllerStudent.maxCheck() && cardCheckControllerStudent.countChecks() > 1 ? 0 : 10,
+                                        ),
+                                      ],
                                     );
                                   },
                                 ),
@@ -585,16 +803,61 @@ class _ParentRouteState extends State<ParentRoute> {
                     Material(
                       elevation: 8,
                       color: const Color(0xFF2F1176),
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(0),
+                        topLeft: Radius.circular(0),
+                        bottomLeft: Radius.circular(5),
+                        bottomRight: Radius.circular(5),
+                      ),
                       child: SizedBox(
                         height: 50,
-                        width: 380,
+                        width: 395,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Center(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: AnimatedBuilder(
+                                      animation: cardCheckControllerCourse,
+                                      builder: (context, child) {
+                                        return AnimatedCrossFade(
+                                          firstChild: SizedBox(
+                                              height: 40,
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                  child: Text(
+                                                      cardCheckControllerCourse.countChecks() > 0
+                                                          ?
+                                                      cardCheckControllerCourse.countChecks() == cardCheckControllerCourse.maxCheck()
+                                                          ?  'ALL ITEMS SELECTED'
+                                                          : '${cardCheckControllerCourse.countChecks()} ITEMS SELECTED'
+                                                          : cardCheckControllerStudent.countChecks() == 1 && cardCheckControllerStudent.maxCheck() == 1
+                                                          ? 'ALL ITEMS SELECTED' : '1 ITEM SELECTED',
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.bold)
+                                                  ),
+                                                ),
+                                              )
+                                          ),
+                                          secondChild:  SizedBox(
+                                            height: 40,
+                                            child: Container(),
+                                          ),
+                                          crossFadeState: cardCheckControllerCourse.countChecks() > 0
+                                              ? CrossFadeState.showFirst
+                                              : CrossFadeState.showSecond,
+                                          duration: const Duration(milliseconds: 200),
+                                          sizeCurve: Curves.fastOutSlowIn,
+                                        );
+                                      }),
+                                ),
                                 GradientButton(
                                   onPressed: () {
                                     Navigator.push(
@@ -679,48 +942,55 @@ class _ParentRouteState extends State<ParentRoute> {
                                 AnimatedBuilder(
                                   animation: cardCheckControllerCourse,
                                   builder: (BuildContext context, Widget? child) {
-                                    return GradientButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => DeleteStudentRoute(
-                                                cardCheckController: cardCheckControllerCourse,
-                                                callbackFunction: update,
-                                                scope: Scope.course,
+                                    return Row(
+                                      children: [
+                                        GradientButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => DeleteStudentRoute(
+                                                    cardCheckController: cardCheckControllerCourse,
+                                                    callbackFunction: update,
+                                                    scope: Scope.course,
+                                                  ),
+                                                )
+                                            );
+                                          },
+                                          isEnabled: cardCheckControllerCourse.countChecks() > 0,
+                                          height: 35,
+                                          width: cardCheckControllerCourse.countChecks() == cardCheckControllerCourse.maxCheck() && cardCheckControllerCourse.countChecks() > 1 ? 80 : 70,
+                                          elevation: 5,
+                                          borderRadius: BorderRadius.circular(20),
+                                          colors: const [Color(0xFFFF0000), Color(0xFFFF2121)],
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.delete_rounded,
+                                                    size: 18,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                      cardCheckControllerCourse.countChecks() == cardCheckControllerCourse.maxCheck() && cardCheckControllerCourse.countChecks() > 1 ?
+                                                      'Delete all' : 'Delete',
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight.w600
+                                                      )
+                                                  ),
+                                                ],
                                               ),
-                                            )
-                                        );
-                                      },
-                                      isEnabled: cardCheckControllerCourse.countChecks() > 0,
-                                      height: 35,
-                                      width: cardCheckControllerCourse.countChecks() == cardCheckControllerCourse.maxCheck() && cardCheckControllerCourse.countChecks() > 1 ? 80 : 70,
-                                      elevation: 5,
-                                      borderRadius: BorderRadius.circular(20),
-                                      colors: const [Color(0xFFFF0000), Color(0xFFFF2121)],
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                                        child: FittedBox(
-                                          fit: BoxFit.scaleDown,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                Icons.delete_rounded,
-                                                size: 18,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                  cardCheckControllerCourse.countChecks() == cardCheckControllerCourse.maxCheck() && cardCheckControllerCourse.countChecks() > 1 ?
-                                                  'Delete all' : 'Delete',
-                                                  style: const TextStyle(
-                                                      fontWeight: FontWeight.w600
-                                                  )
-                                              )
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        SizedBox(
+                                          width: cardCheckControllerCourse.countChecks() == cardCheckControllerCourse.maxCheck() && cardCheckControllerCourse.countChecks() > 1 ? 0 : 10,
+                                        ),
+                                      ],
                                     );
                                   },
                                 ),
