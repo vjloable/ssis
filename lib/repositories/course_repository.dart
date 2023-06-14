@@ -12,8 +12,7 @@ class CourseRepository{
   
   Future<List<List<dynamic>>> getList() async {
     FileHandler handler = FileHandler();
-    print('getlist: ${ await handler.loadCSVFile("courses")}');
-    return handler.loadCSVFile("courses");
+    return await handler.loadCSVFile("courses");
   }
 
   Future<bool> add(String courseCode, String course) async{
