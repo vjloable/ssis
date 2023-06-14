@@ -6,7 +6,7 @@ class ListPanel extends StatelessWidget {
   final double? width;
   final Color bodyColor;
   final double bodyHeight;
-  final double borderRadius;
+  final BorderRadius borderRadius;
   final Widget? child;
   final Widget? headerChild;
   final double elevation;
@@ -18,7 +18,7 @@ class ListPanel extends StatelessWidget {
     this.width,
     this.child,
     this.headerChild,
-    this.borderRadius = 0.0,
+    this.borderRadius = BorderRadius.zero,
     this.headerColor = Colors.grey,
     this.bodyColor = Colors.white,
     this.elevation = 0.0,
@@ -34,8 +34,9 @@ class ListPanel extends StatelessWidget {
           color: headerColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(borderRadius),
-                topLeft: Radius.circular(borderRadius)),
+                topRight: borderRadius.topRight,
+                topLeft: borderRadius.topLeft,
+            ),
           ),
           child: SizedBox(
             height: headHeight,
@@ -48,8 +49,9 @@ class ListPanel extends StatelessWidget {
           color: bodyColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(borderRadius),
-                bottomLeft: Radius.circular(borderRadius)),
+                bottomRight: borderRadius.bottomRight,
+                bottomLeft: borderRadius.bottomLeft,
+            ),
           ),
           child: SizedBox(height: bodyHeight, width: width, child: child),
         ),
