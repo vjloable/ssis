@@ -27,6 +27,7 @@ class AddRoute extends StatefulWidget {
 }
 
 class _AddRouteState extends State<AddRoute> {
+  final _addFormKey = GlobalKey<FormState>();
   CourseRepository courseRepository = CourseRepository();
   CourseHandler courseHandler = CourseHandler();
   StudentHandler studentHandler = StudentHandler();
@@ -97,6 +98,7 @@ class _AddRouteState extends State<AddRoute> {
           ),
           SizedBox(height: widget.scope == Scope.student ? 60 : widget.scope == Scope.course ? 140 : 0),
           Form(
+            key: _addFormKey,
             child: Material(
               elevation: 8,
               color: const Color(0xFF2F1176),
@@ -160,7 +162,20 @@ class _AddRouteState extends State<AddRoute> {
                                   studentHandler.addIDNum(value);
                                 },
                                 controller: textControllerStudentID,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return '';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
+                                  errorStyle: const TextStyle(height: 0),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                        width: 1,
+                                      )),
                                   focusedBorder: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                       borderSide: BorderSide(
@@ -221,7 +236,20 @@ class _AddRouteState extends State<AddRoute> {
                                   studentHandler.addFullName(value);
                                 },
                                 controller: textControllerStudentFullName,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return '';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
+                                  errorStyle: const TextStyle(height: 0),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                        width: 1,
+                                      )),
                                   focusedBorder: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                       borderSide: BorderSide(
@@ -278,6 +306,13 @@ class _AddRouteState extends State<AddRoute> {
                                   value: studentHandler.getGender(),
                                   isExpanded: true,
                                   decoration: InputDecoration(
+                                    errorStyle: const TextStyle(height: 0),
+                                    errorBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                                        borderSide: BorderSide(
+                                          color: Colors.red,
+                                          width: 1,
+                                        )),
                                     focusedBorder: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(10)),
                                         borderSide: BorderSide(
@@ -329,7 +364,7 @@ class _AddRouteState extends State<AddRoute> {
                                       .toList(),
                                   validator: (value) {
                                     if (value == null) {
-                                      return 'Gender';
+                                      return '';
                                     }
                                     return null;
                                   },
@@ -393,6 +428,13 @@ class _AddRouteState extends State<AddRoute> {
                                           value: studentHandler.getCourseCode(),
                                           isExpanded: true,
                                           decoration: InputDecoration(
+                                            errorStyle: const TextStyle(height: 0),
+                                            errorBorder: const OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                borderSide: BorderSide(
+                                                  color: Colors.red,
+                                                  width: 1,
+                                                )),
                                             focusedBorder: const OutlineInputBorder(
                                                 borderRadius: BorderRadius.all(Radius.circular(10)),
                                                 borderSide: BorderSide(
@@ -444,7 +486,7 @@ class _AddRouteState extends State<AddRoute> {
                                               .toList(),
                                           validator: (value) {
                                             if (value == null) {
-                                              return 'Course Code';
+                                              return '';
                                             }
                                             return null;
                                           },
@@ -507,6 +549,13 @@ class _AddRouteState extends State<AddRoute> {
                                       child: DropdownButtonFormField2(
                                         value: studentHandler.getYearLevel(),
                                         decoration: InputDecoration(
+                                          errorStyle: const TextStyle(height: 0),
+                                          errorBorder: const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                              borderSide: BorderSide(
+                                                color: Colors.red,
+                                                width: 1,
+                                              )),
                                           focusedBorder: const OutlineInputBorder(
                                               borderRadius: BorderRadius.all(Radius.circular(10)),
                                               borderSide: BorderSide(
@@ -556,7 +605,7 @@ class _AddRouteState extends State<AddRoute> {
                                             .toList(),
                                         validator: (value) {
                                           if (value == null) {
-                                            return 'Year Level';
+                                            return '';
                                           }
                                           return null;
                                         },
@@ -626,17 +675,17 @@ class _AddRouteState extends State<AddRoute> {
                               const SizedBox(width: 20),
                               GradientButton(
                                 onPressed: () {
-                                  setEditButton(false);
-                                  studentHandler.submitAdd().then((value) {
-                                    if(value){
-                                      setEditButton(true);
-                                      clearStudentPanel();
-                                      widget.callbackFunction();
-                                      Navigator.pop(context);
-                                    }else{
-                                      print('STUCK');
-                                    }
-                                  });
+                                  if (_addFormKey.currentState!.validate()) {
+                                    setEditButton(false);
+                                    studentHandler.submitAdd().then((value) {
+                                      if(value){
+                                        setEditButton(true);
+                                        clearStudentPanel();
+                                        widget.callbackFunction();
+                                        Navigator.pop(context);
+                                      }
+                                    });
+                                  }
                                 },
                                 isEnabled: enablerEditButton,
                                 height: 40,
@@ -710,7 +759,20 @@ class _AddRouteState extends State<AddRoute> {
                                   courseHandler.addCourseCode(value);
                                 },
                                 controller: textControllerCourseCode,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return '';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
+                                  errorStyle: const TextStyle(height: 0),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                        width: 1,
+                                      )),
                                   focusedBorder: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                       borderSide: BorderSide(
@@ -771,7 +833,20 @@ class _AddRouteState extends State<AddRoute> {
                                   courseHandler.addCourse(value);
                                 },
                                 controller: textControllerCourse,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return '';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
+                                  errorStyle: const TextStyle(height: 0),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                        width: 1,
+                                      )),
                                   focusedBorder: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                       borderSide: BorderSide(
@@ -832,17 +907,19 @@ class _AddRouteState extends State<AddRoute> {
                               const SizedBox(width: 20),
                               GradientButton(
                                 onPressed: () {
-                                  setEditButton(false);
-                                  courseHandler.submitAdd().then((value) {
-                                    if(value){
-                                      setEditButton(true);
-                                      clearStudentPanel();
-                                      widget.callbackFunction();
-                                      Navigator.pop(context);
-                                    }else{
-                                      print('STUCK');
-                                    }
-                                  });
+                                  if (_addFormKey.currentState!.validate()) {
+                                    setEditButton(false);
+                                    courseHandler.submitAdd().then((value) {
+                                      if(value){
+                                        setEditButton(true);
+                                        clearStudentPanel();
+                                        widget.callbackFunction();
+                                        Navigator.pop(context);
+                                      }else{
+                                        print('STUCK');
+                                      }
+                                    });
+                                  }
                                 },
                                 isEnabled: enablerEditButton,
                                 height: 40,

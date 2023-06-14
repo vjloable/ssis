@@ -27,6 +27,7 @@ class EditRoute extends StatefulWidget {
 }
 
 class _EditRouteState extends State<EditRoute> {
+  final _editFormKey = GlobalKey<FormState>();
   CourseRepository courseRepository = CourseRepository();
   CourseHandler courseHandler = CourseHandler();
   StudentHandler studentHandler = StudentHandler();
@@ -104,6 +105,7 @@ class _EditRouteState extends State<EditRoute> {
           ),
           SizedBox(height: widget.scope == Scope.student ? 60 : widget.scope == Scope.course ? 140 : 0),
           Form(
+            key: _editFormKey,
             child: Material(
               elevation: 8,
               color: const Color(0xFF2F1176),
@@ -167,7 +169,20 @@ class _EditRouteState extends State<EditRoute> {
                                   studentHandler.addIDNum(value);
                                 },
                                 controller: textControllerStudentID,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return '';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
+                                  errorStyle: const TextStyle(height: 0),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                        width: 1,
+                                      )),
                                   focusedBorder: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                       borderSide: BorderSide(
@@ -228,7 +243,20 @@ class _EditRouteState extends State<EditRoute> {
                                   studentHandler.addFullName(value);
                                 },
                                 controller: textControllerStudentFullName,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return '';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
+                                  errorStyle: const TextStyle(height: 0),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                        width: 1,
+                                      )),
                                   focusedBorder: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                       borderSide: BorderSide(
@@ -284,7 +312,20 @@ class _EditRouteState extends State<EditRoute> {
                               child: DropdownButtonFormField2(
                                 value: studentHandler.getGender(),
                                 isExpanded: true,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return '';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
+                                  errorStyle: const TextStyle(height: 0),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                        width: 1,
+                                      )),
                                   focusedBorder: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                       borderSide: BorderSide(
@@ -334,12 +375,6 @@ class _EditRouteState extends State<EditRoute> {
                                   ),
                                 ))
                                     .toList(),
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Gender';
-                                  }
-                                  return null;
-                                },
                                 onChanged: (value) {
                                   studentHandler.addGender(value.toString());
                                 },
@@ -633,17 +668,19 @@ class _EditRouteState extends State<EditRoute> {
                               const SizedBox(width: 20),
                               GradientButton(
                                 onPressed: () {
-                                  setEditButton(false);
-                                  studentHandler.submitEdit(widget.cardCheckController.getSubmissionData().first.toString()).then((value) {
-                                    if(value){
-                                      setEditButton(true);
-                                      widget.callbackFunction();
-                                      Navigator.pop(context);
-                                      print('exiting');
-                                    }else{
-                                      print('STUCK');
-                                    }
-                                  });
+                                  if (_editFormKey.currentState!.validate()) {
+                                    setEditButton(false);
+                                    studentHandler.submitEdit(widget.cardCheckController.getSubmissionData().first.toString()).then((value) {
+                                      if(value){
+                                        setEditButton(true);
+                                        widget.callbackFunction();
+                                        Navigator.pop(context);
+                                        print('exiting');
+                                      }else{
+                                        print('STUCK');
+                                      }
+                                    });
+                                  }
                                 },
                                 isEnabled: enablerEditButton,
                                 height: 40,
@@ -717,7 +754,20 @@ class _EditRouteState extends State<EditRoute> {
                                   courseHandler.addCourseCode(value);
                                 },
                                 controller: textControllerCourseCode,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return '';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
+                                  errorStyle: const TextStyle(height: 0),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                        width: 1,
+                                      )),
                                   focusedBorder: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                       borderSide: BorderSide(
@@ -778,7 +828,20 @@ class _EditRouteState extends State<EditRoute> {
                                   courseHandler.addCourse(value);
                                 },
                                 controller: textControllerCourse,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return '';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
+                                  errorStyle: const TextStyle(height: 0),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                        width: 1,
+                                      )),
                                   focusedBorder: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                       borderSide: BorderSide(
@@ -839,17 +902,18 @@ class _EditRouteState extends State<EditRoute> {
                               const SizedBox(width: 20),
                               GradientButton(
                                 onPressed: () {
-                                  setEditButton(false);
-                                  courseHandler.submitEdit(widget.cardCheckController.getSubmissionData().first.toString()).then((value) {
-                                    if(value){
-                                      setEditButton(true);
-                                      widget.callbackFunction();
-                                      Navigator.pop(context);
-                                      print('exiting');
-                                    }else{
-                                      print('STUCK');
-                                    }
-                                  });
+                                  if (_editFormKey.currentState!.validate()) {
+                                    courseHandler.submitEdit(widget.cardCheckController.getSubmissionData().first.toString()).then((value) {
+                                      if(value){
+                                        setEditButton(true);
+                                        widget.callbackFunction();
+                                        Navigator.pop(context);
+                                        print('exiting');
+                                      }else{
+                                        print('STUCK');
+                                      }
+                                    });
+                                  }
                                 },
                                 isEnabled: enablerEditButton,
                                 height: 40,
