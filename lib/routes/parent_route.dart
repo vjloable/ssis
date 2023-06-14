@@ -49,7 +49,7 @@ class _ParentRouteState extends State<ParentRoute> {
   late List<String> listFormattedCourseCodes = [];
   late List<String> listFormattedCourses = [];
 
-  String buildVersion = '0.4.0';
+  String buildVersion = '1.0.0';
 
   Future<void> coursesUpdateFormattedList() async {
     Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
