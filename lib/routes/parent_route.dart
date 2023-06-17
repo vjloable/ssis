@@ -49,7 +49,7 @@ class _ParentRouteState extends State<ParentRoute> {
   late List<String> listFormattedCourseCodes = [];
   late List<String> listFormattedCourses = [];
 
-  String buildVersion = '1.0.0';
+  String buildVersion = '1.0.1';
 
   Future<void> coursesUpdateFormattedList() async {
     Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
@@ -539,14 +539,26 @@ class _ParentRouteState extends State<ParentRoute> {
                               }
                               return snapshot.hasData
                                   ? snapshot.data.elementAt(1).contains('-')
-                                  ? const Column(
-                                children: [
-                                  Card(color: Color(0x00FFFFFF), child: Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Center(child: Text('- Courses list is empty -', style: TextStyle(color: Colors.white30, fontSize: 12, fontStyle: FontStyle.italic, letterSpacing: 1.3, fontWeight: FontWeight.w100))),
-                                  )),
-                                ],
-                              )
+                                  ? const Column(children: [
+                                      Card(
+                                        color: Color(0x00FFFFFF),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(5.0),
+                                          child: Center(
+                                            child: Text(
+                                              '- Courses list is empty -',
+                                              style: TextStyle(
+                                                color: Colors.white30,
+                                                fontSize: 12,
+                                                fontStyle: FontStyle.italic,
+                                                letterSpacing: 1.3,
+                                                fontWeight: FontWeight.w100,
+                                            ),
+                                          ),
+                                        ),
+                                      ),),
+                                    ],
+                                  )
                                   : ListView.builder(
                                       shrinkWrap: false,
                                       itemCount: snapshot.data.length,
@@ -566,18 +578,6 @@ class _ParentRouteState extends State<ParentRoute> {
                                             CardRow(
                                               data: snapshot.data.elementAt(index),
                                               color: const Color(0x00FFFFFF),
-                                              width: 180,
-                                              height: 18,
-                                              colorText: Colors.white,
-                                              fontSize: 12,
-                                              header: 'AVAILABLE COURSE',
-                                              formatter: courseHandler.formatter,
-                                              scrollController: ScrollController(),
-                                              index: 1,
-                                            ),
-                                            CardRow(
-                                              data: snapshot.data.elementAt(index),
-                                              color: const Color(0x00FFFFFF),
                                               width: 90,
                                               height: 18,
                                               colorText: Colors.white,
@@ -586,6 +586,18 @@ class _ParentRouteState extends State<ParentRoute> {
                                               formatter: courseHandler.formatter,
                                               scrollController: ScrollController(),
                                               index: 0,
+                                            ),
+                                            CardRow(
+                                              data: snapshot.data.elementAt(index),
+                                              color: const Color(0x00FFFFFF),
+                                              width: 180,
+                                              height: 18,
+                                              colorText: Colors.white,
+                                              fontSize: 12,
+                                              header: 'AVAILABLE COURSE',
+                                              formatter: courseHandler.formatter,
+                                              scrollController: ScrollController(),
+                                              index: 1,
                                             ),
                                           ],
                                         );
