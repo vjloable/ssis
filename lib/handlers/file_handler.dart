@@ -8,7 +8,7 @@ class FileHandler{
     Directory dir = Directory.fromUri(Uri.directory('userdata'));
     dir.createSync(recursive: true);
     File file = File('${dir.absolute.path}$filename.csv');
-    print('loading: ${file.absolute.path}');
+    // print('loading: ${file.absolute.path}');
     return await file.openRead().transform(utf8.decoder).transform(const CsvToListConverter()).toList();
   }
 
@@ -19,11 +19,11 @@ class FileHandler{
     File file = File('${dir.absolute.path}$filename.csv');
     if(file.existsSync()){
       if (kDebugMode) {
-        print('The specified file in the ${file.absolute.path} already exists');
+        // print('The specified file in the ${file.absolute.path} already exists');
       }
     }else{
       if (kDebugMode) {
-        print('initializing: ${file.absolute.path}');
+        // print('initializing: ${file.absolute.path}');
       }
       file.writeAsStringSync(csvData);
     }

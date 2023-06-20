@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -42,14 +40,14 @@ class _EditRouteState extends State<EditRoute> {
   bool enablerCancelButton = true;
   bool enablerEditButton = true;
 
-  Future<void> coursesUpdateFormattedList() async {
-    Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
-    setState(() {
-      listFormattedCourseCodes = rawMap.keys.toList();
-      listFormattedCourses = rawMap.values.toList();
-    });
-    print('listFormattedCourses: $listFormattedCourses');
-  }
+  // Future<void> coursesUpdateFormattedList() async {
+  //   Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
+  //   setState(() {
+  //     listFormattedCourseCodes = rawMap.keys.toList();
+  //     listFormattedCourses = rawMap.values.toList();
+  //   });
+  //   print('listFormattedCourses: $listFormattedCourses');
+  // }
 
   void setEditButton(bool toggle) {
     setState(() {
@@ -76,7 +74,7 @@ class _EditRouteState extends State<EditRoute> {
 
   @override
   void initState() {
-    coursesUpdateFormattedList();
+    // coursesUpdateFormattedList();
     assignUnedited();
     super.initState();
   }
@@ -903,16 +901,16 @@ class _EditRouteState extends State<EditRoute> {
                               GradientButton(
                                 onPressed: () {
                                   if (_editFormKey.currentState!.validate()) {
-                                    courseHandler.submitEdit(widget.cardCheckController.getSubmissionData().first.toString()).then((value) {
-                                      if(value){
-                                        setEditButton(true);
-                                        widget.callbackFunction();
-                                        Navigator.pop(context);
-                                        print('exiting');
-                                      }else{
-                                        print('STUCK');
-                                      }
-                                    });
+                                    // courseHandler.submitEdit(widget.cardCheckController.getSubmissionData().first.toString()).then((value) {
+                                    //   if(value){
+                                    //     setEditButton(true);
+                                    //     widget.callbackFunction();
+                                    //     Navigator.pop(context);
+                                    //     print('exiting');
+                                    //   }else{
+                                    //     print('STUCK');
+                                    //   }
+                                    // });
                                   }
                                 },
                                 isEnabled: enablerEditButton,

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -44,14 +42,14 @@ class _AddRouteState extends State<AddRoute> {
   bool enablerEditButton = true;
 
 
-  Future<void> coursesUpdateFormattedList() async {
-    Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
-    setState(() {
-      listFormattedCourseCodes = rawMap.keys.toList();
-      listFormattedCourses = rawMap.values.toList();
-    });
-    print('listFormattedCourses: $listFormattedCourses');
-  }
+  // Future<void> coursesUpdateFormattedList() async {
+  //   Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
+  //   setState(() {
+  //     listFormattedCourseCodes = rawMap.keys.toList();
+  //     listFormattedCourses = rawMap.values.toList();
+  //   });
+  //   print('listFormattedCourses: $listFormattedCourses');
+  // }
 
   void clearStudentPanel() {
     setState(() {
@@ -71,7 +69,7 @@ class _AddRouteState extends State<AddRoute> {
 
   @override
   void initState() {
-    coursesUpdateFormattedList();
+    // coursesUpdateFormattedList();
     super.initState();
   }
 
@@ -907,19 +905,19 @@ class _AddRouteState extends State<AddRoute> {
                               const SizedBox(width: 20),
                               GradientButton(
                                 onPressed: () {
-                                  if (_addFormKey.currentState!.validate()) {
-                                    setEditButton(false);
-                                    courseHandler.submitAdd().then((value) {
-                                      if(value){
-                                        setEditButton(true);
-                                        clearStudentPanel();
-                                        widget.callbackFunction();
-                                        Navigator.pop(context);
-                                      }else{
-                                        print('STUCK');
-                                      }
-                                    });
-                                  }
+                                  // if (_addFormKey.currentState!.validate()) {
+                                  //   setEditButton(false);
+                                  //   courseHandler.submitAdd().then((value) {
+                                  //     if(value){
+                                  //       setEditButton(true);
+                                  //       clearStudentPanel();
+                                  //       widget.callbackFunction();
+                                  //       Navigator.pop(context);
+                                  //     }else{
+                                  //       print('STUCK');
+                                  //     }
+                                  //   });
+                                  // }
                                 },
                                 isEnabled: enablerEditButton,
                                 height: 40,

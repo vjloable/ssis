@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ssis/misc/colors.dart';
 import 'package:ssis/routes/parent_route.dart';
+import 'package:ssis/services/database_service.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  sqfliteFfiInit();
+  await DatabaseService().open();
+  // await DatabaseService().insert();
+  // await db.query();
+  // await db.close();
   runApp(const MyApp());
   doWhenWindowReady(() {
     final window = appWindow;

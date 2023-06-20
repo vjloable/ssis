@@ -1,7 +1,7 @@
 import 'package:ssis/controllers/progressbar_controller.dart';
 import 'package:ssis/misc/progressbar_states.dart';
 import 'package:ssis/misc/scope.dart';
-import 'package:ssis/repositories/course_repository.dart';
+// import 'package:ssis/repositories/course_repository.dart';
 import 'package:ssis/repositories/student_repository.dart';
 
 class SearchHandler {
@@ -33,7 +33,7 @@ class SearchHandler {
     List<List<dynamic>> rawList = [['-']];
     switch (scope) {
       case Scope.course:
-        rawList = await CourseRepository().getList();
+        // rawList = await CourseRepository().getList();
         break;
       case Scope.student:
         rawList = await StudentRepository().getList();
