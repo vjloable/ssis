@@ -905,19 +905,19 @@ class _AddRouteState extends State<AddRoute> {
                               const SizedBox(width: 20),
                               GradientButton(
                                 onPressed: () {
-                                  // if (_addFormKey.currentState!.validate()) {
-                                  //   setEditButton(false);
-                                  //   courseHandler.submitAdd().then((value) {
-                                  //     if(value){
-                                  //       setEditButton(true);
-                                  //       clearStudentPanel();
-                                  //       widget.callbackFunction();
-                                  //       Navigator.pop(context);
-                                  //     }else{
-                                  //       print('STUCK');
-                                  //     }
-                                  //   });
-                                  // }
+                                  if (_addFormKey.currentState!.validate()) {
+                                    setEditButton(false);
+                                    courseHandler.submitAdd().then((value) {
+                                      if(value){
+                                        setEditButton(true);
+                                        clearStudentPanel();
+                                        widget.callbackFunction();
+                                        Navigator.pop(context);
+                                      }else{
+                                        print('STUCK');
+                                      }
+                                    });
+                                  }
                                 },
                                 isEnabled: enablerEditButton,
                                 height: 40,
