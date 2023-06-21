@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
+// import 'package:ssis/models/course_model.dart';
 
 class CardCheckController extends ChangeNotifier {
   final Map<int, bool> _mapCardCheckSubHeads = {};
   final Map<int, bool> _mapCardCheckHead = {};
-  final Map<int, List<dynamic>> _submissionData = {};
-  final Map<int, List<dynamic>> _completeData = {};
+  final Map<int, dynamic> _submissionData = {};
+  final Map<int, dynamic> _completeData = {};
 
   /// Private condition validation method
   /// to check if [index] is the head
@@ -24,11 +25,12 @@ class CardCheckController extends ChangeNotifier {
     return _mapCardCheckHead.values.first == true;
   }
 
-  List<dynamic> getSubmissionData() {
+  dynamic getSubmissionData() {
+    print(_submissionData.values.first);
     return _submissionData.values.first;
   }
 
-  List<List<dynamic>> getSubmissionListData() {
+  List<dynamic> getSubmissionListData() {
     return _submissionData.values.toList();
   }
 
@@ -59,7 +61,7 @@ class CardCheckController extends ChangeNotifier {
   }
 
   /// Instance initializer method
-  void initInstance(int index, List<dynamic> item) {
+  void initInstance(int index, dynamic item) {
     if (_isHead(index)) {
       _mapCardCheckHead[index] = false;
     } else {
@@ -100,7 +102,7 @@ class CardCheckController extends ChangeNotifier {
   }
 
   /// Setter method
-  void set(int index, bool value, List<dynamic> item) {
+  void set(int index, bool value, dynamic item) {
     if (_isHead(index)) {
       _mapCardCheckHead[index] = value;
       if (_isHeadChecked()) {
