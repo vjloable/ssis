@@ -101,10 +101,10 @@ packages:
     dependency: "direct main"
     description:
       name: dropdown_button2
-      sha256: c41fb30e75544a7c13d3fc56be49cc2dff57a41626c3dd4695dd7099a388d40a
+      sha256: "193e97bfe9fd3d89317bddb6129653781fa9b62d99811d49f633e67ea449a62c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -121,14 +121,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
-  file:
-    dependency: transitive
-    description:
-      name: file
-      sha256: "5fc22d7c25582e38ad9a8515372cd9a93834027aacf1801cf01164dac0ffa08c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -195,14 +187,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.3"
-  platform:
-    dependency: transitive
-    description:
-      name: platform
-      sha256: "4a451831508d7d6ca779f7ac6e212b4023dd5a7d08a27a63da33756410e32b76"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   plugin_platform_interface:
     dependency: transitive
     description:
