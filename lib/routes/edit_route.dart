@@ -65,7 +65,11 @@ class _EditRouteState extends State<EditRoute> {
       studentHandler.addFullName(widget.cardCheckController.getSubmissionData().elementAt(1).toString());
       studentHandler.addGender(widget.cardCheckController.getSubmissionData().elementAt(2).toString());
       studentHandler.addYearLevel(widget.cardCheckController.getSubmissionData().elementAt(3).toString().split(' ').first.toString());
-      studentHandler.addCourseCode(widget.cardCheckController.getSubmissionData().elementAt(4).toString());
+      if (widget.cardCheckController.getSubmissionData().elementAt(4).toString() == 'NO COURSE') {
+        studentHandler.addCourseCode(null);
+      } else {
+        studentHandler.addCourseCode(widget.cardCheckController.getSubmissionData().elementAt(4).toString());
+      }
     } else if (widget.scope == Scope.course) {
       textControllerCourseCode.text = widget.cardCheckController.getSubmissionData().elementAt(0).toString();
       textControllerCourse.text = widget.cardCheckController.getSubmissionData().elementAt(1).toString();
