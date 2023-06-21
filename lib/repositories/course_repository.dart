@@ -1,4 +1,5 @@
 import 'package:ssis/handlers/file_handler.dart';
+import 'package:ssis/repositories/student_repository.dart';
 
 class CourseRepository{
   void init() async{
@@ -113,9 +114,32 @@ class CourseRepository{
   }
 
   Future<bool> delete(List<List<dynamic>> listData) async {
+    StudentRepository studentRepository = StudentRepository();
     bool isSuccess = false;
     List<List<dynamic>> dataList = await getList();
+    List<List<dynamic>> studentDataList = await studentRepository.getList();
     List<List<String>> coursesData = [];
+    List<List<String>> studentsData = [];
+    for (final studentData in studentDataList) {
+      print('1st Loop: $studentData');
+      List<String> replacement = studentData.map((e) => e.toString()).toList();
+      if (studentData.first != 'IDNum') {
+        print('-   : ${studentData.first != 'IDNum'}');
+        for (var listItem in listData) {
+          print('2nd Loop: $listItem');
+          if(studentData.elementAt(4) == listItem.first) {
+            print('--   : ${studentData.elementAt(4)}');
+            replacement = [studentData[0].toString(),studentData[1].toString(),studentData[2].toString(),studentData[3].toString(),'NO COURSE'];
+            break;
+          } else {
+            replacement = studentData.map((e) => e.toString()).toList();
+            // else if (studentData.elementAt(4) != 'NO COURSE') {
+          }
+        }
+      }
+      print(replacement);
+      studentsData.add(replacement);
+    }
     for (final listItem in listData) {
       dataList.removeWhere((element) => element.first == listItem.first);
     }
@@ -127,6 +151,7 @@ class CourseRepository{
       ]);
     }
     handler.appendData(coursesData, "courses");
+    handler.appendData(studentsData, "students");
     isSuccess = true;
     return isSuccess;
   }
