@@ -1,4 +1,6 @@
+///TODO: depecrating in 2.0.0
 import 'package:flutter/material.dart';
+// import 'package:ssis/models/course_model.dart';
 
 class CardRow extends StatelessWidget {
   final Color color;
@@ -7,7 +9,7 @@ class CardRow extends StatelessWidget {
   final double? width;
   final double fontSize;
   final Widget? child;
-  final List<dynamic> data;
+  final dynamic data;
   final String header;
   final String Function(List<dynamic>, String, int) formatter;
   final ScrollController scrollController;
