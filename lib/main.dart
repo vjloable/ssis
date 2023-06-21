@@ -4,6 +4,7 @@ import 'package:ssis/misc/colors.dart';
 import 'package:ssis/routes/parent_route.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
   doWhenWindowReady(() {
     final window = appWindow;
