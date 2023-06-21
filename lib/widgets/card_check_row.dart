@@ -1,12 +1,15 @@
+/// TODO: Depecrating in version 2.1
 import 'package:flutter/material.dart';
 import 'package:ssis/controllers/card_check_controller.dart';
+// import 'package:ssis/models/course_model.dart';
+// import 'package:ssis/models/student_model.dart';
 
 class CardCheckRow extends StatefulWidget {
   final Color color;
   final Color colorCheckBox;
   final double height;
   final double? width;
-  final List<dynamic> data;
+  final dynamic data;
   final int index;
   final CardCheckController controller;
 
@@ -59,91 +62,244 @@ class _CardCheckRowState extends State<CardCheckRow> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.data.elementAt(0) == '-') {
-      return widget.index > 0
-          ? Card(
-              color: widget.color,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  height: widget.height,
-                  width: widget.width,
-                ),
-              ),
-            )
-          : Card(
-              color: const Color(0x55FFFFFF),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  height: widget.height,
-                  width: widget.width,
-                ),
-              ),
-            );
-    } else {
-      return widget.index > 0
-          ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                height: widget.height,
-                width: widget.width,
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: AnimatedBuilder(
-                    animation: widget.controller,
-                    builder: (context, child) {
-                      checkState = widget.controller.get(widget.index);
-                      return Checkbox(
-                        checkColor: Colors.deepPurpleAccent,
-                        fillColor: MaterialStateProperty.resolveWith((states) {
-                          if (states.contains(MaterialState.selected)) {
-                            return Colors.black45;
-                          }
-                          return Colors.white;
-                        }),
-                        value: checkState,
-                        onChanged: (value) {
-                          _onChanged(value!);
-                        },
-                      );
+    return widget.index > 0
+        ?
+    Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        height: widget.height,
+        width: widget.width,
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: AnimatedBuilder(
+            animation: widget.controller,
+            builder: (context, child) {
+              checkState = widget.controller.get(widget.index);
+              return Checkbox(
+                checkColor: Colors.deepPurpleAccent,
+                fillColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return Colors.black45;
+                  }
+                  return Colors.white;
+                }),
+                value: checkState,
+                onChanged: (value) {
+                  _onChanged(value!);
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    )
+        :
+    Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        height: widget.height,
+        width: widget.width,
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: AnimatedBuilder(
+              animation: widget.controller,
+              builder: (context, child) {
+                checkState = widget.controller.get(widget.index);
+                return Checkbox(
+                  checkColor: Colors.white,
+                  fillColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return Colors.deepPurpleAccent;
+                    }
+                    return Colors.white;
+                  }),
+                  value: checkState,
+                  onChanged: (value) {
+                    _onChanged(value!);
+                  },
+                );
+              }),
+        ),
+      ),
+    );
+    /*if (model.runtimeType == CourseModel) {
+      CourseModel courseModel = model;
+      if (courseModel.courseCode == '-') {
+        return widget.index > 0
+            ? Card(
+          color: widget.color,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              height: widget.height,
+              width: widget.width,
+            ),
+          ),
+        )
+            : Card(
+          color: const Color(0x55FFFFFF),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              height: widget.height,
+              width: widget.width,
+            ),
+          ),
+        );
+      } else {
+        return widget.index > 0
+            ? Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            height: widget.height,
+            width: widget.width,
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: AnimatedBuilder(
+                animation: widget.controller,
+                builder: (context, child) {
+                  checkState = widget.controller.get(widget.index);
+                  return Checkbox(
+                    checkColor: Colors.deepPurpleAccent,
+                    fillColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Colors.black45;
+                      }
+                      return Colors.white;
+                    }),
+                    value: checkState,
+                    onChanged: (value) {
+                      _onChanged(value!);
                     },
-                  ),
-                ),
+                  );
+                },
               ),
-            )
-          : Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                height: widget.height,
-                width: widget.width,
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: AnimatedBuilder(
-                      animation: widget.controller,
-                      builder: (context, child) {
-                        checkState = widget.controller.get(widget.index);
-                        return Checkbox(
-                          checkColor: Colors.white,
-                          fillColor: MaterialStateProperty.resolveWith((states) {
-                            if (states.contains(MaterialState.selected)) {
-                              return Colors.deepPurpleAccent;
-                            }
-                            return Colors.white;
-                          }),
-                          value: checkState,
-                          onChanged: (value) {
-                            _onChanged(value!);
-                          },
-                        );
+            ),
+          ),
+        )
+            : Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            height: widget.height,
+            width: widget.width,
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: AnimatedBuilder(
+                  animation: widget.controller,
+                  builder: (context, child) {
+                    checkState = widget.controller.get(widget.index);
+                    return Checkbox(
+                      checkColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith((states) {
+                        if (states.contains(MaterialState.selected)) {
+                          return Colors.deepPurpleAccent;
+                        }
+                        return Colors.white;
                       }),
-                ),
+                      value: checkState,
+                      onChanged: (value) {
+                        _onChanged(value!);
+                      },
+                    );
+                  }),
+            ),
+          ),
+        );
+      }
+    } else if (model.runtimeType == StudentModel) {
+      StudentModel studentModel = model;
+      if (studentModel.studentId == '-') {
+        return widget.index > 0
+            ? Card(
+          color: widget.color,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              height: widget.height,
+              width: widget.width,
+            ),
+          ),
+        )
+            : Card(
+          color: const Color(0x55FFFFFF),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              height: widget.height,
+              width: widget.width,
+            ),
+          ),
+        );
+      } else {
+        return widget.index > 0
+            ? Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            height: widget.height,
+            width: widget.width,
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: AnimatedBuilder(
+                animation: widget.controller,
+                builder: (context, child) {
+                  checkState = widget.controller.get(widget.index);
+                  return Checkbox(
+                    checkColor: Colors.deepPurpleAccent,
+                    fillColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Colors.black45;
+                      }
+                      return Colors.white;
+                    }),
+                    value: checkState,
+                    onChanged: (value) {
+                      _onChanged(value!);
+                    },
+                  );
+                },
               ),
-            );
-    }
+            ),
+          ),
+        )
+            : Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            height: widget.height,
+            width: widget.width,
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: AnimatedBuilder(
+                  animation: widget.controller,
+                  builder: (context, child) {
+                    checkState = widget.controller.get(widget.index);
+                    return Checkbox(
+                      checkColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith((states) {
+                        if (states.contains(MaterialState.selected)) {
+                          return Colors.deepPurpleAccent;
+                        }
+                        return Colors.white;
+                      }),
+                      value: checkState,
+                      onChanged: (value) {
+                        _onChanged(value!);
+                      },
+                    );
+                  }),
+            ),
+          ),
+        );
+      }
+    }*/
   }
 }
