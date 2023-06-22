@@ -16,6 +16,19 @@ class StudentRepository {
     return listStudentModel;
   }
 
+  Future<List<StudentModel>> searchList(String search) async {
+    DatabaseService dbService = DatabaseService();
+    List<Map<String, Object?>> mapListStudents = await dbService.search(search, Scope.student);
+    List<StudentModel> listStudentModel = [];
+    listStudentModel.add(StudentModel(studentId: 'ID NUMBER', name: 'FULL NAME', gender: 'GENDER', yearLevel: 'YEAR LEVEL', courseCode: 'COURSE CODE'));
+    if (mapListStudents.isNotEmpty) {
+      for (Map<String, Object?> mapStudents in mapListStudents) {
+        listStudentModel.add(StudentModel.fromMap(mapStudents));
+      }
+    }
+    return listStudentModel;
+  }
+
   Future<bool> add(String studentId, String name, String gender, String yearLevel, String courseCode) async {
     bool isSuccess = false;
     DatabaseService dbService = DatabaseService();

@@ -16,6 +16,19 @@ class CourseRepository{
     return listCourseModel;
   }
 
+  Future<List<CourseModel>> searchList(String search) async {
+    DatabaseService dbService = DatabaseService();
+    List<Map<String, Object?>> mapListCourses = await dbService.search(search, Scope.course);
+    List<CourseModel> listCourseModel = [];
+    listCourseModel.add(CourseModel(courseCode: 'COURSE CODE', course: 'AVAILABLE COURSE'));
+    if (mapListCourses.isNotEmpty) {
+      for (Map<String, Object?> mapCourses in mapListCourses) {
+        listCourseModel.add(CourseModel.fromMap(mapCourses));
+      }
+    }
+    return listCourseModel;
+  }
+
   Future<bool> add(String courseCode, String course) async {
     bool isSuccess = false;
     DatabaseService dbService = DatabaseService();
