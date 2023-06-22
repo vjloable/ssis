@@ -9,15 +9,20 @@ import 'package:ssis/handlers/search_handler.dart';
 import 'package:ssis/handlers/student_handler.dart';
 import 'package:ssis/misc/progressbar_states.dart';
 import 'package:ssis/misc/scope.dart';
+import 'package:ssis/models/course_model.dart';
+import 'package:ssis/models/student_model.dart';
 import 'package:ssis/repositories/course_repository.dart';
 import 'package:ssis/repositories/student_repository.dart';
 import 'package:ssis/routes/add_route.dart';
 import 'package:ssis/routes/delete_route.dart';
 import 'package:ssis/routes/edit_route.dart';
-import 'package:ssis/widgets/card_check_row.dart';
-import 'package:ssis/widgets/card_row.dart';
+import 'package:ssis/services/database_service.dart';
+// import 'package:ssis/widgets/card_check_row.dart';
+// import 'package:ssis/widgets/card_row.dart';
+import 'package:ssis/widgets/course_card_row.dart';
 import 'package:ssis/widgets/gradient_button.dart';
 import 'package:ssis/widgets/list_panel.dart';
+import 'package:ssis/widgets/student_card_row.dart';
 import 'package:ssis/widgets/window_button.dart';
 
 class ParentRoute extends StatefulWidget {
@@ -28,6 +33,7 @@ class ParentRoute extends StatefulWidget {
 }
 
 class _ParentRouteState extends State<ParentRoute> {
+  DatabaseService databaseService = DatabaseService();
   StudentRepository studentRepository = StudentRepository();
   CourseRepository courseRepository = CourseRepository();
   CourseHandler courseHandler = CourseHandler();
@@ -44,30 +50,42 @@ class _ParentRouteState extends State<ParentRoute> {
   ProgressBarController progressBarControllerStudent = ProgressBarController();
   ProgressBarController progressBarControllerCourse = ProgressBarController();
 
-  late Future<List<List<dynamic>>> listCourses = [[]] as Future<List<List<dynamic>>>;
-  late Future<List<List<dynamic>>> listStudents = [[]] as Future<List<List<dynamic>>>;
+  late List<CourseModel> listCourses = [CourseModel(courseCode: 'COURSE CODE', course: 'AVAILABLE COURSE')];
+  late List<StudentModel> listStudents = [StudentModel(studentId: 'ID NUMBER', name: 'FULL NAME', gender: 'GENDER', yearLevel: 'YEAR LEVEL', courseCode: 'COURSE CODE')];
   late List<String> listFormattedCourseCodes = [];
   late List<String> listFormattedCourses = [];
 
-  String buildVersion = '1.0.0';
+  String buildVersion = '1.1.0';
 
-  Future<void> coursesUpdateFormattedList() async {
-    Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
+  @override
+  void initState() {
+    super.initState();
+    // studentRepository.init();
+    // courseRepository.init();
+    coursesGetList();
+    studentGetList();
+    // coursesUpdateFormattedList();
+  }
+
+  // Future<void> coursesUpdateFormattedList() async {
+  //   Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
+  //   setState(() {
+  //     listFormattedCourseCodes = rawMap.keys.toList();
+  //     listFormattedCourses = rawMap.values.toList();
+  //   });
+  // }
+
+  Future<void> coursesGetList() async {
+    var courseList = await courseRepository.getList();
     setState(() {
-      listFormattedCourseCodes = rawMap.keys.toList();
-      listFormattedCourses = rawMap.values.toList();
+      listCourses = courseList;
     });
   }
 
-  void coursesGetList() {
+  Future<void> studentGetList() async {
+    var studentsList = await studentRepository.getList();
     setState(() {
-      listCourses = courseRepository.getList();
-    });
-  }
-
-  void studentGetList() {
-    setState(() {
-      listStudents = studentRepository.getList();
+      listStudents = studentsList;
     });
   }
 
@@ -221,13 +239,13 @@ class _ParentRouteState extends State<ParentRoute> {
                                     child: TextFormField(
                                       onFieldSubmitted: (value) {
                                         setState(() {
-                                          listStudents = searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                          /// TODO: listStudents = searchHandler.search(value, Scope.student, progressBarControllerStudent);
                                         });
                                         progressBarControllerStudent.setState(ProgressBarStates.searched);
                                       },
                                       onChanged: (value) {
                                         setState(() {
-                                          listStudents = searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                          /// TODO: listStudents = searchHandler.search(value, Scope.student, progressBarControllerStudent);
                                         });
                                         progressBarControllerStudent.setState(ProgressBarStates.searching);
                                       },
@@ -291,7 +309,23 @@ class _ParentRouteState extends State<ParentRoute> {
                             ),
                           ),
                         ),
-                        child: FutureBuilder(
+                        child: ListView.builder(
+                          itemCount: listStudents.length,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                StudentCardRow(
+                                  data: listStudents.elementAt(index),
+                                  scrollController: ScrollController(),
+                                  index: index,
+                                  controller: cardCheckControllerStudent,
+                                )
+                              ],
+                            );
+                          },
+                        )
+                        /*child: FutureBuilder(
                             future: listStudents,
                             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                               if (snapshot.hasData) {
@@ -389,7 +423,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                         );
                                       })
                                   : Container();
-                            }),
+                            }),*/
                       ),
                       const SizedBox(width: 10),
                       ListPanel(
@@ -460,13 +494,13 @@ class _ParentRouteState extends State<ParentRoute> {
                                   child: TextFormField(
                                     onFieldSubmitted: (value) {
                                       setState(() {
-                                        listCourses = searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                        // listCourses = searchHandler.search(value, Scope.course, progressBarControllerCourse);
                                       });
                                       progressBarControllerCourse.setState(ProgressBarStates.searched);
                                     },
                                     onChanged: (value) {
                                       setState(() {
-                                        listCourses = searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                        // listCourses = searchHandler.search(value, Scope.course, progressBarControllerCourse);
                                       });
                                       progressBarControllerCourse.setState(ProgressBarStates.searching);
                                     },
@@ -529,7 +563,65 @@ class _ParentRouteState extends State<ParentRoute> {
                             ],
                           ),
                         ),
-                        child: FutureBuilder(
+                        child: ListView.builder(
+                          itemCount: listCourses.length,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                /*CardCheckRow(
+                                  data: listCourses.elementAt(index),
+                                  color: const Color(0x00FFFFFF),
+                                  colorCheckBox: Colors.white,
+                                  width: 18,
+                                  height: 18,
+                                  index: index,
+                                  controller: cardCheckControllerCourse,
+                                ),
+                                CardRow(
+                                  data: listCourses.elementAt(index),
+                                  color: const Color(0x00FFFFFF),
+                                  width: 180,
+                                  height: 18,
+                                  colorText: Colors.white,
+                                  fontSize: 12,
+                                  header: 'AVAILABLE COURSE',
+                                  formatter: courseHandler.formatter,
+                                  scrollController: ScrollController(),
+                                  index: 1,
+                                ),
+                                CardRow(
+                                  data: listCourses.elementAt(index),
+                                  color: const Color(0x00FFFFFF),
+                                  width: 90,
+                                  height: 18,
+                                  colorText: Colors.white,
+                                  fontSize: 12,
+                                  header: 'COURSE CODE',
+                                  formatter: courseHandler.formatter,
+                                  scrollController: ScrollController(),
+                                  index: 0,
+                                ),*/
+                                // CardCheckRow(
+                                //   data: listCourses.elementAt(index),
+                                //   color: const Color(0x00FFFFFF),
+                                //   colorCheckBox: Colors.white,
+                                //   width: 18,
+                                //   height: 18,
+                                //   index: index,
+                                //   controller: cardCheckControllerCourse,
+                                // ),
+                                CourseCardRow(
+                                  data: listCourses.elementAt(index),
+                                  scrollController: ScrollController(),
+                                  index: index,
+                                  controller: cardCheckControllerCourse,
+                                )
+                              ],
+                            );
+                          },
+                        )
+                        /*FutureBuilder(
                             future: listCourses,
                             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                               if (snapshot.hasData) {
@@ -548,51 +640,52 @@ class _ParentRouteState extends State<ParentRoute> {
                                 ],
                               )
                                   : ListView.builder(
-                                      shrinkWrap: false,
-                                      itemCount: snapshot.data.length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            CardCheckRow(
-                                              data: snapshot.data.elementAt(index),
-                                              color: const Color(0x00FFFFFF),
-                                              colorCheckBox: Colors.white,
-                                              width: 18,
-                                              height: 18,
-                                              index: index,
-                                              controller: cardCheckControllerCourse,
-                                            ),
-                                            CardRow(
-                                              data: snapshot.data.elementAt(index),
-                                              color: const Color(0x00FFFFFF),
-                                              width: 180,
-                                              height: 18,
-                                              colorText: Colors.white,
-                                              fontSize: 12,
-                                              header: 'AVAILABLE COURSE',
-                                              formatter: courseHandler.formatter,
-                                              scrollController: ScrollController(),
-                                              index: 1,
-                                            ),
-                                            CardRow(
-                                              data: snapshot.data.elementAt(index),
-                                              color: const Color(0x00FFFFFF),
-                                              width: 90,
-                                              height: 18,
-                                              colorText: Colors.white,
-                                              fontSize: 12,
-                                              header: 'COURSE CODE',
-                                              formatter: courseHandler.formatter,
-                                              scrollController: ScrollController(),
-                                              index: 0,
-                                            ),
-                                          ],
-                                        );
-                                      })
+                                  shrinkWrap: false,
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        CardCheckRow(
+                                          data: snapshot.data.elementAt(index),
+                                          color: const Color(0x00FFFFFF),
+                                          colorCheckBox: Colors.white,
+                                          width: 18,
+                                          height: 18,
+                                          index: index,
+                                          controller: cardCheckControllerCourse,
+                                        ),
+                                        CardRow(
+                                          data: snapshot.data.elementAt(index),
+                                          color: const Color(0x00FFFFFF),
+                                          width: 180,
+                                          height: 18,
+                                          colorText: Colors.white,
+                                          fontSize: 12,
+                                          header: 'AVAILABLE COURSE',
+                                          formatter: courseHandler.formatter,
+                                          scrollController: ScrollController(),
+                                          index: 1,
+                                        ),
+                                        CardRow(
+                                          data: snapshot.data.elementAt(index),
+                                          color: const Color(0x00FFFFFF),
+                                          width: 90,
+                                          height: 18,
+                                          colorText: Colors.white,
+                                          fontSize: 12,
+                                          header: 'COURSE CODE',
+                                          formatter: courseHandler.formatter,
+                                          scrollController: ScrollController(),
+                                          index: 0,
+                                        ),
+                                      ],
+                                    );
+                                  })
                                   : Container();
-                            }),
-                      ),
+                            }
+                            ),*/
+                      ),//////
                     ],
                   ),
                 ),
@@ -1023,17 +1116,8 @@ class _ParentRouteState extends State<ParentRoute> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    studentRepository.init();
-    courseRepository.init();
-    coursesGetList();
-    studentGetList();
-    coursesUpdateFormattedList();
-  }
-
-  @override
   void dispose() {
+    databaseService.close();
     textControllerCourse.dispose();
     textControllerStudentID.dispose();
     textControllerStudentName.dispose();
