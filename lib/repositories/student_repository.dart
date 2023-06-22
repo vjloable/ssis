@@ -5,13 +5,11 @@ import 'package:ssis/services/database_service.dart';
 class StudentRepository {
   Future<List<StudentModel>> getList() async {
     DatabaseService dbService = DatabaseService();
-    List<Map<String, Object?>> maplistStudents = await dbService.query('students');
+    List<Map<String, Object?>> mapListStudents = await dbService.query('students');
     List<StudentModel> listStudentModel = [];
     listStudentModel.add(StudentModel(studentId: 'ID NUMBER', name: 'FULL NAME', gender: 'GENDER', yearLevel: 'YEAR LEVEL', courseCode: 'COURSE CODE'));
-    if (maplistStudents.isEmpty) {
-      listStudentModel.add(StudentModel(studentId: '-', name: '-', gender: '-', yearLevel: '-', courseCode: '-'));
-    } else {
-      for (Map<String, Object?> mapStudents in maplistStudents) {
+    if (mapListStudents.isNotEmpty) {
+      for (Map<String, Object?> mapStudents in mapListStudents) {
         listStudentModel.add(StudentModel.fromMap(mapStudents));
       }
     }
@@ -23,6 +21,7 @@ class StudentRepository {
     DatabaseService dbService = DatabaseService();
     StudentModel submission = StudentModel(studentId: studentId.trim(), name: name.trim(), gender: gender.trim(), yearLevel: yearLevel.trim(), courseCode: courseCode.trim());
     isSuccess = await dbService.insert(submission, Scope.student);
+    print('StudentRepository: $isSuccess');
     return isSuccess;
   }
 
@@ -30,6 +29,7 @@ class StudentRepository {
     bool isSuccess = false;
     DatabaseService dbService = DatabaseService();
     isSuccess = await dbService.update(prevStudentID, newStudent, Scope.student);
+    print('sr: $isSuccess');
     return isSuccess;
   }
 
