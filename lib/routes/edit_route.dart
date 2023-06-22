@@ -5,6 +5,8 @@ import 'package:ssis/controllers/card_check_controller.dart';
 import 'package:ssis/handlers/course_handler.dart';
 import 'package:ssis/handlers/student_handler.dart';
 import 'package:ssis/misc/scope.dart';
+import 'package:ssis/models/course_model.dart';
+import 'package:ssis/models/student_model.dart';
 import 'package:ssis/repositories/course_repository.dart';
 import 'package:ssis/widgets/gradient_button.dart';
 import 'package:ssis/widgets/window_button.dart';
@@ -34,20 +36,17 @@ class _EditRouteState extends State<EditRoute> {
   TextEditingController textControllerCourse = TextEditingController();
   TextEditingController textControllerCourseCode = TextEditingController();
 
-  late List<String> listFormattedCourses = [];
   late List<String> listFormattedCourseCodes = [];
 
   bool enablerCancelButton = true;
   bool enablerEditButton = true;
 
-  // Future<void> coursesUpdateFormattedList() async {
-  //   Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
-  //   setState(() {
-  //     listFormattedCourseCodes = rawMap.keys.toList();
-  //     listFormattedCourses = rawMap.values.toList();
-  //   });
-  //   print('listFormattedCourses: $listFormattedCourses');
-  // }
+  Future<void> coursesUpdateFormattedList() async {
+    List<String> rawList = await courseHandler.formattedCoursesMap(await courseRepository.getList());
+    setState(() {
+      listFormattedCourseCodes = rawList;
+    });
+  }
 
   void setEditButton(bool toggle) {
     setState(() {
@@ -57,24 +56,26 @@ class _EditRouteState extends State<EditRoute> {
 
   void assignUnedited() {
     if (widget.scope == Scope.student) {
-      textControllerStudentID.text = widget.cardCheckController.getSubmissionData().elementAt(0).toString();
-      textControllerStudentFullName.text = widget.cardCheckController.getSubmissionData().elementAt(1).toString();
-      studentHandler.addIDNum(widget.cardCheckController.getSubmissionData().elementAt(0).toString());
-      studentHandler.addFullName(widget.cardCheckController.getSubmissionData().elementAt(1).toString());
-      studentHandler.addGender(widget.cardCheckController.getSubmissionData().elementAt(2).toString());
-      studentHandler.addYearLevel(widget.cardCheckController.getSubmissionData().elementAt(3).toString().split(' ').first.toString());
-      studentHandler.addCourseCode(widget.cardCheckController.getSubmissionData().elementAt(4).toString());
+      StudentModel submissionStudent = widget.cardCheckController.getSubmissionData();
+      textControllerStudentID.text = submissionStudent.studentId.toString();
+      textControllerStudentFullName.text = submissionStudent.name.toString();
+      studentHandler.addIDNum(submissionStudent.studentId.toString());
+      studentHandler.addFullName(submissionStudent.name.toString());
+      studentHandler.addGender(submissionStudent.gender.toString());
+      studentHandler.addYearLevel(submissionStudent.yearLevel.toString().split(' ').first.toString());
+      studentHandler.addCourseCode(submissionStudent.courseCode.toString());
     } else if (widget.scope == Scope.course) {
-      textControllerCourseCode.text = widget.cardCheckController.getSubmissionData().elementAt(0).toString();
-      textControllerCourse.text = widget.cardCheckController.getSubmissionData().elementAt(1).toString();
-      courseHandler.addCourseCode(widget.cardCheckController.getSubmissionData().elementAt(0).toString());
-      courseHandler.addCourse(widget.cardCheckController.getSubmissionData().elementAt(1).toString());
+      CourseModel submissionCourse = widget.cardCheckController.getSubmissionData();
+      textControllerCourseCode.text = submissionCourse.courseCode.toString();
+      textControllerCourse.text = submissionCourse.course.toString();
+      courseHandler.addCourseCode(submissionCourse.courseCode.toString());
+      courseHandler.addCourse(submissionCourse.course.toString());
     }
   }
 
   @override
   void initState() {
-    // coursesUpdateFormattedList();
+    coursesUpdateFormattedList();
     assignUnedited();
     super.initState();
   }
@@ -668,8 +669,9 @@ class _EditRouteState extends State<EditRoute> {
                                 onPressed: () {
                                   if (_editFormKey.currentState!.validate()) {
                                     setEditButton(false);
-                                    studentHandler.submitEdit(widget.cardCheckController.getSubmissionData().first.toString()).then((value) {
-                                      if(value){
+                                    StudentModel studentModel = widget.cardCheckController.getSubmissionData();
+                                    courseHandler.submitEdit(studentModel.courseCode).then((value) {
+                                       if(value){
                                         setEditButton(true);
                                         widget.callbackFunction();
                                         Navigator.pop(context);
@@ -901,16 +903,18 @@ class _EditRouteState extends State<EditRoute> {
                               GradientButton(
                                 onPressed: () {
                                   if (_editFormKey.currentState!.validate()) {
-                                    // courseHandler.submitEdit(widget.cardCheckController.getSubmissionData().first.toString()).then((value) {
-                                    //   if(value){
-                                    //     setEditButton(true);
-                                    //     widget.callbackFunction();
-                                    //     Navigator.pop(context);
-                                    //     print('exiting');
-                                    //   }else{
-                                    //     print('STUCK');
-                                    //   }
-                                    // });
+                                    setEditButton(false);
+                                    CourseModel courseModel = widget.cardCheckController.getSubmissionData();
+                                    courseHandler.submitEdit(courseModel.courseCode).then((value) {
+                                      if(value){
+                                        setEditButton(true);
+                                        widget.callbackFunction();
+                                        Navigator.pop(context);
+                                        print('exiting');
+                                      }else{
+                                        print('STUCK');
+                                      }
+                                    });
                                   }
                                 },
                                 isEnabled: enablerEditButton,
