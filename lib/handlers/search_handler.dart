@@ -2,7 +2,7 @@ import 'package:ssis/controllers/progressbar_controller.dart';
 import 'package:ssis/misc/progressbar_states.dart';
 import 'package:ssis/misc/scope.dart';
 // import 'package:ssis/repositories/course_repository.dart';
-import 'package:ssis/repositories/student_repository.dart';
+// import 'package:ssis/repositories/student_repository.dart';
 
 class SearchHandler {
   String? _searchStudentData;
@@ -36,7 +36,7 @@ class SearchHandler {
         // rawList = await CourseRepository().getList();
         break;
       case Scope.student:
-        rawList = await StudentRepository().getList();
+        // rawList = await StudentRepository().getList();
         break;
     }
     if (value == null || value.trim() == '') {
