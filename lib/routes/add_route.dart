@@ -5,6 +5,7 @@ import 'package:ssis/controllers/card_check_controller.dart';
 import 'package:ssis/handlers/course_handler.dart';
 import 'package:ssis/handlers/student_handler.dart';
 import 'package:ssis/misc/scope.dart';
+import 'package:ssis/models/course_model.dart';
 import 'package:ssis/repositories/course_repository.dart';
 import 'package:ssis/widgets/gradient_button.dart';
 import 'package:ssis/widgets/window_button.dart';
@@ -35,11 +36,28 @@ class _AddRouteState extends State<AddRoute> {
   TextEditingController textControllerCourse = TextEditingController();
   TextEditingController textControllerCourseCode = TextEditingController();
 
-  late List<String> listFormattedCourses = [];
   late List<String> listFormattedCourseCodes = [];
 
   bool enablerCancelButton = true;
   bool enablerEditButton = true;
+
+  @override
+  void initState() {
+    super.initState();
+    coursesCodeGetList();
+  }
+
+  Future<void> coursesCodeGetList() async {
+    List<CourseModel> courseList = await courseRepository.getList();
+    courseList.removeAt(0);
+    List<String> courseListString = [];
+    for (CourseModel courseModel in courseList) {
+      courseListString.add(courseModel.courseCode.toString());
+    }
+    setState(() {
+      listFormattedCourseCodes = courseListString;
+    });
+  }
 
   void clearStudentPanel() {
     setState(() {
@@ -660,6 +678,7 @@ class _AddRouteState extends State<AddRoute> {
                                   if (_addFormKey.currentState!.validate()) {
                                     setEditButton(false);
                                     studentHandler.submitAdd().then((value) {
+                                      print('$value');
                                       if(value){
                                         setEditButton(true);
                                         clearStudentPanel();
