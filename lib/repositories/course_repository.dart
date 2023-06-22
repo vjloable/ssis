@@ -5,13 +5,11 @@ import 'package:ssis/services/database_service.dart';
 class CourseRepository{
   Future<List<CourseModel>> getList() async {
     DatabaseService dbService = DatabaseService();
-    List<Map<String, Object?>> maplistCourses = await dbService.query('courses');
+    List<Map<String, Object?>> mapListCourses = await dbService.query('courses');
     List<CourseModel> listCourseModel = [];
     listCourseModel.add(CourseModel(courseCode: 'COURSE CODE', course: 'AVAILABLE COURSE'));
-    if (maplistCourses.isEmpty) {
-      listCourseModel.add(CourseModel(courseCode: '-', course: '-'));
-    } else {
-      for (Map<String, Object?> mapCourses in maplistCourses) {
+    if (mapListCourses.isNotEmpty) {
+      for (Map<String, Object?> mapCourses in mapListCourses) {
         listCourseModel.add(CourseModel.fromMap(mapCourses));
       }
     }
