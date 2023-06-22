@@ -31,7 +31,7 @@ class DatabaseService {
       onCreate: (db, version) async {
         await db.execute(
         '''
-        PRAGMA foreign_keys = 1;
+        PRAGMA foreign_keys = ON;
         PRAGMA encoding = "UTF-8";
         CREATE TABLE courses(
           course_code TEXT PRIMARY KEY ON CONFLICT IGNORE,
@@ -68,11 +68,12 @@ class DatabaseService {
           INSERT OR FAIL INTO courses(course_code, course) VALUES (
           "${courseModel.courseCode}", 
           "${courseModel.course}"
-          )
+          );
           '''
         );
       } else if (scope == Scope.student) {
         StudentModel studentModel = data as StudentModel;
+        // print('${studentModel.studentId} ${studentModel.name} ${studentModel.gender} ${studentModel.yearLevel} ${studentModel.courseCode}');
         await _instance._database.rawInsert(
           '''
           INSERT OR FAIL INTO students(student_id, name, gender, year_level, course_code) VALUES (
@@ -80,8 +81,8 @@ class DatabaseService {
           "${studentModel.name}", 
           "${studentModel.gender}", 
           "${studentModel.yearLevel}", 
-          "${studentModel.courseCode}", 
-          )
+          "${studentModel.courseCode}"
+          );
           '''
         );
       }
@@ -89,6 +90,7 @@ class DatabaseService {
     } on Exception catch (_) {
       isSuccess = false;
     }
+    print('DBService: $isSuccess');
     return isSuccess;
   }
 
@@ -125,7 +127,7 @@ class DatabaseService {
             name = "${newStudent.name}",
             gender = "${newStudent.gender}",
             year_level = "${newStudent.yearLevel}",
-            course_code = "${newStudent.courseCode}",
+            course_code = "${newStudent.courseCode}"
             WHERE student_id = "$prevId";
             '''
         );
@@ -143,13 +145,15 @@ class DatabaseService {
       if (scope == Scope.course) {
         await _instance._database.rawDelete(
             '''
-            DELETE FROM courses WHERE course_code = "$id"
+            PRAGMA foreign_keys = ON;
+            DELETE FROM courses WHERE course_code = "$id";
             '''
         );
       } else if (scope == Scope.student) {
         await _instance._database.rawDelete(
             '''
-            DELETE FROM students WHERE student_id = "$id"
+            PRAGMA foreign_keys = ON;
+            DELETE FROM students WHERE student_id = "$id";
             '''
         );
       }
