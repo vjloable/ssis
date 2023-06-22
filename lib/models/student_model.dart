@@ -41,7 +41,7 @@ class StudentModel {
       name: map['name'].toString(),
       gender: map['gender'].toString(),
       yearLevel: map['year_level'].toString(),
-      courseCode: map['course_code'].toString(),
+      courseCode: map['course_code'] == null ? '' : map['course_code'].toString(),
     );
   }
 }
