@@ -53,7 +53,7 @@ class _ParentRouteState extends State<ParentRoute> {
   late List<String> listFormattedCourseCodes = [];
   late List<String> listFormattedCourses = [];
 
-  String buildVersion = '2.0.0';
+  String buildVersion = '2.1.0';
 
   @override
   void initState() {
@@ -222,15 +222,25 @@ class _ParentRouteState extends State<ParentRoute> {
                                   child: SizedBox(
                                     height: 35,
                                     child: TextFormField(
-                                      onFieldSubmitted: (value) {
+                                      onFieldSubmitted: (value) async {
+                                        var returnable = await searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                        List<StudentModel> studentList = [];
+                                        for (StudentModel student in returnable) {
+                                          studentList.add(student);
+                                        }
                                         setState(() {
-                                          /// TODO: listStudents = searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                          listStudents = studentList;
                                         });
                                         progressBarControllerStudent.setState(ProgressBarStates.searched);
                                       },
-                                      onChanged: (value) {
+                                      onChanged: (value) async {
+                                        var returnable = await searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                        List<StudentModel> studentList = [];
+                                        for (StudentModel student in returnable) {
+                                          studentList.add(student);
+                                        }
                                         setState(() {
-                                          /// TODO: listStudents = searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                          listStudents = studentList;
                                         });
                                         progressBarControllerStudent.setState(ProgressBarStates.searching);
                                       },
@@ -379,15 +389,25 @@ class _ParentRouteState extends State<ParentRoute> {
                                 child: SizedBox(
                                   height: 35,
                                   child: TextFormField(
-                                    onFieldSubmitted: (value) {
+                                    onFieldSubmitted: (value) async {
+                                      var returnable = await searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                      List<CourseModel> courseList = [];
+                                      for (CourseModel course in returnable) {
+                                        courseList.add(course);
+                                      }
                                       setState(() {
-                                        // listCourses = searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                        listCourses = courseList;
                                       });
                                       progressBarControllerCourse.setState(ProgressBarStates.searched);
                                     },
-                                    onChanged: (value) {
+                                    onChanged: (value) async {
+                                      var returnable = await searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                      List<CourseModel> courseList = [];
+                                      for (CourseModel course in returnable) {
+                                        courseList.add(course);
+                                      }
                                       setState(() {
-                                        // listCourses = searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                        listCourses = courseList;
                                       });
                                       progressBarControllerCourse.setState(ProgressBarStates.searching);
                                     },
