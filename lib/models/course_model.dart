@@ -12,6 +12,14 @@ class CourseModel {
     return map;
   }
 
+  List<String> toList() {
+    var list = [
+      courseCode.toString(),
+      course.toString(),
+    ];
+    return list;
+  }
+
   factory CourseModel.fromMap(Map<String, Object?> map) {
     return CourseModel(
       courseCode: map['course_code'].toString(),
