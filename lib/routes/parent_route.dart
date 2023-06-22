@@ -53,7 +53,7 @@ class _ParentRouteState extends State<ParentRoute> {
   late List<String> listFormattedCourseCodes = [];
   late List<String> listFormattedCourses = [];
 
-  String buildVersion = '2.1.0';
+  String buildVersion = '2.1.1';
 
   @override
   void initState() {
