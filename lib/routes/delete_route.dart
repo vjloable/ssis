@@ -113,6 +113,7 @@ class _DeleteStudentRouteState extends State<DeleteStudentRoute> {
                             itemCount: widget.cardCheckController.getSubmissionListData().length,
                               itemBuilder: (context, index) {
                               ScrollController sc = ScrollController();
+                              var submission = widget.cardCheckController.getSubmissionListData().elementAt(index);
                               return ListTile(
                                 dense: true,
                                 contentPadding: EdgeInsets.zero,
@@ -124,7 +125,7 @@ class _DeleteStudentRouteState extends State<DeleteStudentRoute> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 20, bottom: 10),
                                       child: Text(
-                                        '[ ${widget.cardCheckController.getSubmissionListData().elementAt(index).join("   |   ")} ]',
+                                        '[ ${submission.toList().join("   |   ")} ]',
                                         textAlign: TextAlign.start,
                                         style: const TextStyle(
                                           overflow: TextOverflow.fade,
@@ -142,64 +143,6 @@ class _DeleteStudentRouteState extends State<DeleteStudentRoute> {
                       ),
                       Divider(color: Colors.white.withOpacity(0.3)),
                       const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GradientButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            isEnabled: enablerCancelButton,
-                            height: 40,
-                            width: 130,
-                            elevation: 5,
-                            borderRadius: BorderRadius.circular(20),
-                            colors: const [Color(0xFFFF0000), Color(0xFFFF2121)],
-                            child: const Center(
-                              child: Text(
-                                'CANCEL',
-                                style: TextStyle(
-                                  color: Color(0xFFFFFFFF),
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 35),
-                          GradientButton(
-                            onPressed: () {
-                              setDeleteButton(false);
-                              studentHandler.submitDelete(widget.cardCheckController.getSubmissionListData()).then((value) {
-                                if(value){
-                                  setDeleteButton(true);
-                                  widget.callbackFunction();
-                                  Navigator.pop(context);
-                                  print('exiting');
-                                }else{
-                                  print('STUCK');
-                                }
-                              });
-                            },
-                            isEnabled: enablerDeleteButton,
-                            height: 40,
-                            width: 130,
-                            elevation: 5,
-                            borderRadius: BorderRadius.circular(20),
-                            colors: const [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
-                            child: const Center(
-                              child: Text(
-                                'DELETE',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
