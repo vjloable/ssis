@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ssis/models/student_model.dart';
 import 'package:ssis/repositories/student_repository.dart';
 
 class StudentHandler{
@@ -51,10 +52,6 @@ class StudentHandler{
   Future<bool> submitAdd() async {
     bool isSuccess = false;
     StudentRepository studentRepository = StudentRepository();
-    print('_validatorIDNum != null && _validatorFullName != null = ${_validatorIDNum != null && _validatorFullName != null}');
-    print('_validatorGender != null && _validatorCourseCode != null = ${_validatorGender != null && _validatorCourseCode != null}');
-    print(_validatorGender);
-    print('_validatorYearLevel != null = ${_validatorYearLevel != null}');
     if(_validatorIDNum != null && _validatorFullName != null && _validatorGender != null && _validatorCourseCode != null && _validatorYearLevel != null){
       if(_validatorIDNum.toString().trim() != '' && _validatorFullName.toString().trim() != ''){
         isSuccess = await studentRepository.add(
@@ -78,16 +75,10 @@ class StudentHandler{
   Future<bool> submitEdit(String prevID) async {
     bool isSuccess = false;
     StudentRepository studentRepository = StudentRepository();
-    if(_validatorIDNum != null && _validatorGender != null && _validatorCourseCode != null && _validatorYearLevel != null){
-      if(_validatorIDNum.toString().trim() != ''){
-        isSuccess = await studentRepository.edit(
-          prevID.trim(),
-          _validatorIDNum.toString(),
-          _validatorFullName.toString(),
-          _validatorGender.toString(),
-          _validatorYearLevel.toString(),
-          _validatorCourseCode.toString(),
-        );
+    if(_validatorIDNum != null && _validatorFullName != null && _validatorGender != null && _validatorCourseCode != null && _validatorYearLevel != null){
+      if(_validatorIDNum.toString().trim() != '' && _validatorFullName.toString().trim() != ''){
+        StudentModel newStudent = StudentModel(studentId: _validatorIDNum.toString(), name: _validatorFullName.toString(), gender: _validatorGender.toString(), yearLevel: _validatorYearLevel.toString(), courseCode: _validatorCourseCode.toString());
+        isSuccess = await studentRepository.update(prevID, newStudent);
       }else{
         isSuccess = false;
         print("Empty fields");
@@ -99,18 +90,77 @@ class StudentHandler{
     return isSuccess;
   }
 
-  Future<bool> submitDelete(List<List<dynamic>> listData) async {
+  Future<bool> submitDelete(List<dynamic> listData) async {
     bool isSuccess = false;
     StudentRepository studentRepository = StudentRepository();
-    isSuccess = await studentRepository.delete(listData);
+    List<StudentModel> listCourses = listData.map((e) => e as StudentModel).toList();
+    isSuccess = await studentRepository.delete(listCourses);
     return isSuccess;
   }
 
-  String formatter(List<dynamic> data, String header, int index){
-    String returnString = header;
-    if(data.elementAt(index) != comparisonList[index]){
-      returnString = data.elementAt(index).toString().trim();
-    }
-    return returnString;
-  }
+  // Future<bool> submitAdd() async {
+  //   bool isSuccess = false;
+  //   StudentRepository studentRepository = StudentRepository();
+  //   print('_validatorIDNum != null && _validatorFullName != null = ${_validatorIDNum != null && _validatorFullName != null}');
+  //   print('_validatorGender != null && _validatorCourseCode != null = ${_validatorGender != null && _validatorCourseCode != null}');
+  //   print(_validatorGender);
+  //   print('_validatorYearLevel != null = ${_validatorYearLevel != null}');
+  //   if(_validatorIDNum != null && _validatorFullName != null && _validatorGender != null && _validatorCourseCode != null && _validatorYearLevel != null){
+  //     if(_validatorIDNum.toString().trim() != '' && _validatorFullName.toString().trim() != ''){
+  //       isSuccess = await studentRepository.add(
+  //         _validatorIDNum.toString(),
+  //         _validatorFullName.toString(),
+  //         _validatorGender.toString(),
+  //         _validatorYearLevel.toString(),
+  //         _validatorCourseCode.toString(),
+  //       );
+  //     }else{
+  //       isSuccess = false;
+  //       print("Empty fields");
+  //     }
+  //   }else{
+  //     isSuccess = false;
+  //     print("Null values found");
+  //   }
+  //   return isSuccess;
+  // }
+
+  // Future<bool> submitEdit(String prevID) async {
+  //   bool isSuccess = false;
+  //   StudentRepository studentRepository = StudentRepository();
+  //   if(_validatorIDNum != null && _validatorGender != null && _validatorCourseCode != null && _validatorYearLevel != null){
+  //     if(_validatorIDNum.toString().trim() != ''){
+  //       isSuccess = await studentRepository.edit(
+  //         prevID.trim(),
+  //         _validatorIDNum.toString(),
+  //         _validatorFullName.toString(),
+  //         _validatorGender.toString(),
+  //         _validatorYearLevel.toString(),
+  //         _validatorCourseCode.toString(),
+  //       );
+  //     }else{
+  //       isSuccess = false;
+  //       print("Empty fields");
+  //     }
+  //   }else{
+  //     isSuccess = false;
+  //     print("Null values found");
+  //   }
+  //   return isSuccess;
+  // }
+
+  // Future<bool> submitDelete(List<dynamic> listData) async {
+  //   bool isSuccess = false;
+  //   // StudentRepository studentRepository = StudentRepository();
+  //   // isSuccess = await studentRepository.delete(listData);
+  //   return isSuccess;
+  // }
+  //
+  // String formatter(List<dynamic> data, String header, int index){
+  //   String returnString = header;
+  //   if(data.elementAt(index) != comparisonList[index]){
+  //     returnString = data.elementAt(index).toString().trim();
+  //   }
+  //   return returnString;
+  // }
 }
