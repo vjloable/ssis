@@ -53,7 +53,7 @@ class _ParentRouteState extends State<ParentRoute> {
   late List<String> listFormattedCourseCodes = [];
   late List<String> listFormattedCourses = [];
 
-  String buildVersion = '1.1.0';
+  String buildVersion = '2.0.0';
 
   @override
   void initState() {
@@ -99,10 +99,8 @@ class _ParentRouteState extends State<ParentRoute> {
     cardCheckControllerCourse.uncheckAll();
     cardCheckControllerCourse.resetSubmission();
     Timer(const Duration(milliseconds: 100), () {
-      setState(() {
-        studentGetList();
-        coursesGetList();
-      });
+      studentGetList();
+      coursesGetList();
     });
   }
 
@@ -307,6 +305,7 @@ class _ParentRouteState extends State<ParentRoute> {
                                   scrollController: ScrollController(),
                                   index: index,
                                   controller: cardCheckControllerStudent,
+                                  length: listStudents.length,
                                 )
                               ],
                             );
@@ -462,12 +461,13 @@ class _ParentRouteState extends State<ParentRoute> {
                                   scrollController: ScrollController(),
                                   index: index,
                                   controller: cardCheckControllerCourse,
+                                  length: listCourses.length,
                                 )
                               ],
                             );
                           },
                         )
-                      ),//////
+                      ),
                     ],
                   ),
                 ),
