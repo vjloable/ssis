@@ -188,7 +188,7 @@ class DatabaseService {
           SELECT * FROM students 
           WHERE student_id LIKE '%$search%'
           OR name LIKE '%$search%'
-          OR gender LIKE '%$search%'
+          OR gender LIKE '$search%'
           OR year_level LIKE '%$search%'
           OR course_code LIKE '%$search%'
           ORDER BY student_id;
