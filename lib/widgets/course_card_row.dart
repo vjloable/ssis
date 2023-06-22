@@ -9,25 +9,19 @@ class CourseCardRow extends StatelessWidget {
   final double height;
   final double? width;
   final double fontSize;
-  // final Widget? child;
   final CourseModel data;
-  // final String header;
-  // final String Function(List<dynamic>, String, int) formatter;
   final ScrollController scrollController;
   final int index;
   final CardCheckController controller;
   const CourseCardRow({
     Key? key,
     required this.data,
-    // required this.header,
-    // required this.formatter,
     required this.scrollController,
     required this.index,
     this.color = Colors.white,
     this.colorText = Colors.black,
     this.height = 25.0,
     this.width,
-    // this.child,
     this.fontSize = 12,
     required this.controller,
   }) : super(key: key);
@@ -132,7 +126,6 @@ class CourseCardRow extends StatelessWidget {
           ),
         ),
       ],
-    )
-    ;
+    );
   }
 }
