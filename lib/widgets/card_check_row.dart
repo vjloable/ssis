@@ -1,8 +1,5 @@
-/// TODO: Depecrating in version 2.1
 import 'package:flutter/material.dart';
 import 'package:ssis/controllers/card_check_controller.dart';
-// import 'package:ssis/models/course_model.dart';
-// import 'package:ssis/models/student_model.dart';
 
 class CardCheckRow extends StatefulWidget {
   final Color color;
@@ -41,7 +38,6 @@ class _CardCheckRowState extends State<CardCheckRow> {
       }
     });
   }
-
   @override
   void didUpdateWidget(covariant CardCheckRow oldWidget) {
     widget.controller.initInstance(widget.index, widget.data);

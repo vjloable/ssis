@@ -22,7 +22,6 @@ class StudentCardRow extends StatelessWidget {
     this.colorText = Colors.black,
     this.height = 25.0,
     this.width,
-    // this.child,
     this.fontSize = 12,
     required this.controller,
   }) : super(key: key);

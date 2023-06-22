@@ -90,41 +90,6 @@ class DatabaseService {
       isSuccess = false;
     }
     return isSuccess;
-    /*
-    await _instance._database.transaction((txn) async {
-      int courseID = await txn.rawInsert(
-        '''
-        INSERT INTO courses(course_code, course) VALUES(
-          "BSCS",
-          "BS in Computer Science"
-        );
-        '''
-      );
-
-      await txn.rawInsert(
-          '''
-        INSERT INTO courses(course_code, course) VALUES(
-          "BSIT",
-          "BS in Information Technology"
-        );
-        '''
-      );
-      print('inserted1: $courseID');
-
-      int studentID = await txn.rawInsert(
-          '''
-          INSERT INTO students(student_id, name, gender, year_level, course_code) VALUES(
-            "2021-1910",
-            "Vince Japheth F. Loable",
-            "Male",
-            "2nd Year",
-            "BSCS"
-          );
-          '''
-      );
-      print('inserted2: $studentID');
-    });
-    */
   }
 
   Future<int> count() async {
@@ -140,7 +105,6 @@ class DatabaseService {
   Future<bool> update(String prevId, dynamic submission, Scope scope) async {
     print('----update');
     bool isSuccess = true;
-    CourseModel newCourse = submission as CourseModel;
     try {
       if (scope == Scope.course) {
         CourseModel newCourse = submission as CourseModel;
@@ -193,41 +157,6 @@ class DatabaseService {
       isSuccess = false;
     }
     return isSuccess;
-    /*
-    await _instance._database.transaction((txn) async {
-      int courseID = await txn.rawInsert(
-        '''
-        INSERT INTO courses(course_code, course) VALUES(
-          "BSCS",
-          "BS in Computer Science"
-        );
-        '''
-      );
-
-      await txn.rawInsert(
-          '''
-        INSERT INTO courses(course_code, course) VALUES(
-          "BSIT",
-          "BS in Information Technology"
-        );
-        '''
-      );
-      print('inserted1: $courseID');
-
-      int studentID = await txn.rawInsert(
-          '''
-          INSERT INTO students(student_id, name, gender, year_level, course_code) VALUES(
-            "2021-1910",
-            "Vince Japheth F. Loable",
-            "Male",
-            "2nd Year",
-            "BSCS"
-          );
-          '''
-      );
-      print('inserted2: $studentID');
-    });
-    */
   }
 
   Future<List<Map<String, Object?>>> query(String table) async {

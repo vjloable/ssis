@@ -44,5 +44,4 @@ class StudentModel {
       courseCode: map['course_code'].toString(),
     );
   }
-
 }

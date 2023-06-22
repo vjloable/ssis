@@ -26,5 +26,4 @@ class CourseModel {
       course: map['course'].toString(),
     );
   }
-
 }

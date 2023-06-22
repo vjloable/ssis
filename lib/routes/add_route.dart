@@ -41,16 +41,6 @@ class _AddRouteState extends State<AddRoute> {
   bool enablerCancelButton = true;
   bool enablerEditButton = true;
 
-
-  // Future<void> coursesUpdateFormattedList() async {
-  //   Map<String,String> rawMap = await courseHandler.formattedCoursesMap(courseRepository.getList());
-  //   setState(() {
-  //     listFormattedCourseCodes = rawMap.keys.toList();
-  //     listFormattedCourses = rawMap.values.toList();
-  //   });
-  //   print('listFormattedCourses: $listFormattedCourses');
-  // }
-
   void clearStudentPanel() {
     setState(() {
       studentHandler.addGender(null);
@@ -65,12 +55,6 @@ class _AddRouteState extends State<AddRoute> {
     setState(() {
       enablerEditButton = toggle;
     });
-  }
-
-  @override
-  void initState() {
-    // coursesUpdateFormattedList();
-    super.initState();
   }
 
   @override

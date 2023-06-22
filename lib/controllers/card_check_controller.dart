@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-// import 'package:ssis/models/course_model.dart';
 
 class CardCheckController extends ChangeNotifier {
   final Map<int, bool> _mapCardCheckSubHeads = {};
@@ -134,5 +133,4 @@ class CardCheckController extends ChangeNotifier {
     }
     notifyListeners();
   }
-
 }
