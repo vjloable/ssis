@@ -13,22 +13,26 @@ class StudentCardRow extends StatelessWidget {
   final ScrollController scrollController;
   final int index;
   final CardCheckController controller;
+  final int length;
   const StudentCardRow({
     Key? key,
     required this.data,
     required this.scrollController,
     required this.index,
+    required this.controller,
+    required this.length,
     this.color = Colors.white,
     this.colorText = Colors.black,
     this.height = 25.0,
     this.width,
     this.fontSize = 12,
-    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return index > 0
+    return length > 1
+        ?
+      index > 0
         ?
     Row(mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -219,7 +223,7 @@ class StudentCardRow extends StatelessWidget {
               width: 90,
               child: Center(
                 child: Text(
-                  data.courseCode.toString(),
+                  data.courseCode == 'null' ? '--NO COURSE--' : data.courseCode.toString(),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: Colors.white, fontSize: fontSize, fontWeight: FontWeight.bold),
                 ),
@@ -229,6 +233,105 @@ class StudentCardRow extends StatelessWidget {
         ),
       ],
     )
-    ;
+        :
+    Row(mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(
+          width: 48,
+          height: 18,
+        ),
+        Card(
+          color: const Color(0x55FFFFFF),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              height: 18,
+              width: 90,
+              child: Center(
+                child: Text(
+                  data.studentId.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white, fontSize: fontSize, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Card(
+          color: const Color(0x55FFFFFF),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              height: 18,
+              width: 200,
+              child: Center(
+                child: Text(
+                  data.name.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white, fontSize: fontSize, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Card(
+          color: const Color(0x55FFFFFF),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              height: 18,
+              width: 50,
+              child: Center(
+                child: Text(
+                  data.gender.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white, fontSize: fontSize, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Card(
+          color: const Color(0x55FFFFFF),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              height: 18,
+              width: 70,
+              child: Center(
+                child: Text(
+                  data.yearLevel.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white, fontSize: fontSize, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Card(
+          color: const Color(0x55FFFFFF),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              height: 18,
+              width: 90,
+              child: Center(
+                child: Text(
+                  data.courseCode.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white, fontSize: fontSize, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
