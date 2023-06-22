@@ -165,9 +165,37 @@ class DatabaseService {
 
   Future<List<Map<String, Object?>>> query(String table) async {
     print('----query');
-    List<Map<String, Object?>> c = await _instance._database.query(table);
-    print('c: ${c.runtimeType}');
+    List<Map<String, Object?>> returnable = await _instance._database.query(table);
     print('----end query');
-    return c;
+    return returnable;
+  }
+
+  Future<List<Map<String, Object?>>> search(String search, Scope scope) async {
+    print('----search');
+    List<Map<String, Object?>> returnable = [];
+    if (scope == Scope.course) {
+      returnable = await _instance._database.rawQuery(
+          '''
+          SELECT * FROM courses
+          WHERE course_code LIKE '%$search%' 
+          OR course LIKE '%$search%' 
+          ORDER BY course_code;
+          '''
+      );
+    } else if (scope == Scope.student) {
+      returnable = await _instance._database.rawQuery(
+          '''
+          SELECT * FROM students 
+          WHERE student_id LIKE '%$search%'
+          OR name LIKE '%$search%'
+          OR gender LIKE '%$search%'
+          OR year_level LIKE '%$search%'
+          OR course_code LIKE '%$search%'
+          ORDER BY student_id;
+          '''
+      );
+    }
+    print('----end search');
+    return returnable;
   }
 }
