@@ -9,9 +9,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sqfliteFfiInit();
   await DatabaseService().open();
-  // await DatabaseService().insert();
-  // await db.query();
-  // await db.close();
   runApp(const MyApp());
   doWhenWindowReady(() {
     final window = appWindow;
