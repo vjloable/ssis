@@ -24,6 +24,17 @@ class StudentModel {
     return map;
   }
 
+  List<String> toList() {
+    var list = [
+      studentId.toString(),
+      name.toString(),
+      gender.toString(),
+      yearLevel.toString(),
+      courseCode.toString(),
+    ];
+    return list;
+  }
+
   factory StudentModel.fromMap(Map<String, Object?> map) {
     return StudentModel(
       studentId: map['student_id'].toString(),
