@@ -16,7 +16,7 @@ class StudentHandler{
   }
 
   String? getCourseCode() {
-    return _validatorCourseCode;
+    return _validatorCourseCode.toString().trim() == '' ? null : _validatorCourseCode;
   }
 
   String? getYearLevel() {
@@ -68,6 +68,7 @@ class StudentHandler{
       isSuccess = false;
       print("Null values found");
     }
+    print('StudentHandler: $isSuccess');
     return isSuccess;
   }
 
@@ -86,6 +87,7 @@ class StudentHandler{
       isSuccess = false;
       print("Null values found");
     }
+    print('sh: $isSuccess');
     return isSuccess;
   }
 
