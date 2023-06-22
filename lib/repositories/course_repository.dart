@@ -1,21 +1,58 @@
-import 'package:ssis/handlers/file_handler.dart';
+// import 'package:ssis/handlers/file_handler.dart';
+import 'package:ssis/misc/scope.dart';
+import 'package:ssis/models/course_model.dart';
+import 'package:ssis/services/database_service.dart';
 
 class CourseRepository{
-  void init() async{
-    FileHandler handler = FileHandler();
-    List<List<String>> coursesData = [
-      ["CourseCode", "Course"],
-    ];
-    handler.initData(coursesData, "courses");
-    print('Course Service initialized!');
-  }
+  // void init() async{
+  //   FileHandler handler = FileHandler();
+  //   List<List<String>> coursesData = [
+  //     ["CourseCode", "Course"],
+  //   ];
+  //   handler.initData(coursesData, "courses");
+  //   print('Course Service initialized!');
+  // }
   
-  Future<List<List<dynamic>>> getList() async {
-    FileHandler handler = FileHandler();
-    return await handler.loadCSVFile("courses");
+  Future<List<CourseModel>> getList() async {
+    DatabaseService dbService = DatabaseService();
+    List<Map<String, Object?>> maplistCourses = await dbService.query('courses');
+    List<CourseModel> listCourseModel = [];
+    listCourseModel.add(CourseModel(courseCode: 'COURSE CODE', course: 'AVAILABLE COURSE'));
+    if (maplistCourses.isEmpty) {
+      listCourseModel.add(CourseModel(courseCode: '-', course: '-'));
+    } else {
+      for (Map<String, Object?> mapCourses in maplistCourses) {
+        listCourseModel.add(CourseModel.fromMap(mapCourses));
+      }
+    }
+    return listCourseModel;
   }
 
-  Future<bool> add(String courseCode, String course) async{
+  Future<bool> add(String courseCode, String course) async {
+    bool isSuccess = false;
+    DatabaseService dbService = DatabaseService();
+    CourseModel submission = CourseModel(courseCode: courseCode.trim(), course: course.trim());
+    isSuccess = await dbService.insert(submission, Scope.course);
+    return isSuccess;
+  }
+
+  Future<bool> update(String prevCourseCode, CourseModel newCourse) async {
+    bool isSuccess = false;
+    DatabaseService dbService = DatabaseService();
+    isSuccess = await dbService.update(prevCourseCode, newCourse, Scope.course);
+    return isSuccess;
+  }
+
+  Future<bool> delete(List<CourseModel> listData) async {
+    bool isSuccess = false;
+    DatabaseService dbService = DatabaseService();
+    for (final listItem in listData) {
+      isSuccess = await dbService.delete(listItem.courseCode, Scope.course);
+    }
+    return isSuccess;
+  }
+
+  /*Future<bool> add(String courseCode, String course) async{
     bool isSuccess = false;
     List<List<dynamic>> dataList = await getList();
     List<List<String>> coursesData = [];
@@ -68,9 +105,9 @@ class CourseRepository{
       print(x);
     }
     return isSuccess;
-  }
+  }*/
 
-  Future<bool> edit(String prevCourseCode, String courseCode, String course) async{
+  /*Future<bool> edit(String prevCourseCode, String courseCode, String course) async{
     bool isSuccess = false;
     List<List<dynamic>> dataList = await getList();
     List<List<String>> coursesData = [];
@@ -110,9 +147,9 @@ class CourseRepository{
       print('Unable to edit.');
     }
     return isSuccess;
-  }
+  }*/
 
-  Future<bool> delete(List<List<dynamic>> listData) async {
+  /*Future<bool> delete(List<List<dynamic>> listData) async {
     bool isSuccess = false;
     List<List<dynamic>> dataList = await getList();
     List<List<String>> coursesData = [];
@@ -129,5 +166,5 @@ class CourseRepository{
     handler.appendData(coursesData, "courses");
     isSuccess = true;
     return isSuccess;
-  }
+  }*/
 }
