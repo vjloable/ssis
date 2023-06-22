@@ -41,10 +41,24 @@ class _EditRouteState extends State<EditRoute> {
   bool enablerCancelButton = true;
   bool enablerEditButton = true;
 
-  Future<void> coursesUpdateFormattedList() async {
-    List<String> rawList = await courseHandler.formattedCoursesMap(await courseRepository.getList());
+  @override
+  void initState() {
+    super.initState();
+    assignUnedited();
+    coursesCodeGetList();
+  }
+
+  Future<void> coursesCodeGetList() async {
+    List<CourseModel> courseList = await courseRepository.getList();
+    courseList.removeAt(0);
+    List<String> courseListString = [];
+    for (CourseModel courseModel in courseList) {
+      if (courseModel.courseCode != 'null') {
+        courseListString.add(courseModel.courseCode.toString());
+      }
+    }
     setState(() {
-      listFormattedCourseCodes = rawList;
+      listFormattedCourseCodes = courseListString;
     });
   }
 
@@ -72,14 +86,6 @@ class _EditRouteState extends State<EditRoute> {
       courseHandler.addCourse(submissionCourse.course.toString());
     }
   }
-
-  @override
-  void initState() {
-    coursesUpdateFormattedList();
-    assignUnedited();
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -670,7 +676,7 @@ class _EditRouteState extends State<EditRoute> {
                                   if (_editFormKey.currentState!.validate()) {
                                     setEditButton(false);
                                     StudentModel studentModel = widget.cardCheckController.getSubmissionData();
-                                    courseHandler.submitEdit(studentModel.courseCode).then((value) {
+                                    studentHandler.submitEdit(studentModel.studentId).then((value) {
                                        if(value){
                                         setEditButton(true);
                                         widget.callbackFunction();
