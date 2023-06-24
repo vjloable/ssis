@@ -684,6 +684,12 @@ class _AddRouteState extends State<AddRoute> {
                                         clearStudentPanel();
                                         widget.callbackFunction();
                                         Navigator.pop(context);
+                                      } else {
+                                        String? invalidInput = studentHandler.getStudentId();
+                                        textControllerStudentID.clear();
+                                        _addFormKey.currentState!.validate();
+                                        textControllerStudentID.text = invalidInput!;
+                                        setEditButton(true);
                                       }
                                     });
                                   }
@@ -917,7 +923,11 @@ class _AddRouteState extends State<AddRoute> {
                                         widget.callbackFunction();
                                         Navigator.pop(context);
                                       }else{
-                                        print('STUCK');
+                                        String? invalidInput = courseHandler.getCourseCode();
+                                        textControllerCourseCode.clear();
+                                        _addFormKey.currentState!.validate();
+                                        textControllerCourseCode.text = invalidInput!;
+                                        setEditButton(true);
                                       }
                                     });
                                   }

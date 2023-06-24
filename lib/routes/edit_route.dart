@@ -681,9 +681,12 @@ class _EditRouteState extends State<EditRoute> {
                                         setEditButton(true);
                                         widget.callbackFunction();
                                         Navigator.pop(context);
-                                        print('exiting');
                                       }else{
-                                        print('STUCK');
+                                       String? invalidInput = studentHandler.getStudentId();
+                                       textControllerStudentID.clear();
+                                       _editFormKey.currentState!.validate();
+                                       textControllerStudentID.text = invalidInput!;
+                                       setEditButton(true);
                                       }
                                     });
                                   }
@@ -916,9 +919,12 @@ class _EditRouteState extends State<EditRoute> {
                                         setEditButton(true);
                                         widget.callbackFunction();
                                         Navigator.pop(context);
-                                        print('exiting');
                                       }else{
-                                        print('STUCK');
+                                        String? invalidInput = courseHandler.getCourseCode();
+                                        textControllerCourseCode.clear();
+                                        _editFormKey.currentState!.validate();
+                                        textControllerCourseCode.text = invalidInput!;
+                                        setEditButton(true);
                                       }
                                     });
                                   }
