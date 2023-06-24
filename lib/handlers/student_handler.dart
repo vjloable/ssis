@@ -11,6 +11,10 @@ class StudentHandler{
   String? _validatorYearLevel;
   List<String> comparisonList = ["IDNum", "FullN", "Gender", "Year Level",  "CourseCode"];
 
+  String? getStudentId() {
+    return _validatorIDNum;
+  }
+
   String? getGender() {
     return _validatorGender;
   }
