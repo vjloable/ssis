@@ -47,6 +47,8 @@ class _ParentRouteState extends State<ParentRoute> {
   CardCheckController cardCheckControllerCourse = CardCheckController();
   ProgressBarController progressBarControllerStudent = ProgressBarController();
   ProgressBarController progressBarControllerCourse = ProgressBarController();
+  ScrollController scrollControllerStudent = ScrollController();
+  ScrollController scrollControllerCourse = ScrollController();
 
   late List<CourseModel> listCourses = [CourseModel(courseCode: 'COURSE CODE', course: 'AVAILABLE COURSE')];
   late List<StudentModel> listStudents = [StudentModel(studentId: 'ID NUMBER', name: 'FULL NAME', gender: 'GENDER', yearLevel: 'YEAR LEVEL', courseCode: 'COURSE CODE')];
@@ -155,338 +157,458 @@ class _ParentRouteState extends State<ParentRoute> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ListPanel(
-                        elevation: 6,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(5),
-                          topLeft: Radius.circular(5),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(0),
-                        ),
-                        width: 740,
-                        headHeight: 40,
-                        bodyHeight: 410,
-                        headerColor: const Color(0xFF6325E8),
-                        bodyColor: const Color(0xFF303134),
-                        headerChild: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          child: Form(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 35,
-                                  height: 35,
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(50),
-                                      bottomLeft: Radius.circular(50),
+                      Stack(
+                        children: [
+                          ListPanel(
+                            elevation: 6,
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(5),
+                              topLeft: Radius.circular(5),
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0),
+                            ),
+                            width: 740,
+                            headHeight: 40,
+                            bodyHeight: 410,
+                            headerColor: const Color(0xFF6325E8),
+                            bodyColor: const Color(0xFF303134),
+                            headerChild: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                              child: Form(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 35,
+                                      height: 35,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(50),
+                                          bottomLeft: Radius.circular(50),
+                                        ),
+                                        color: Color(0xFF202124),
+                                      ),
+                                      child: AnimatedBuilder(
+                                        animation: progressBarControllerStudent,
+                                        builder: (context, child) {
+                                          switch (progressBarControllerStudent.getState()) {
+                                            case ProgressBarStates.idle:
+                                              return const Icon(
+                                                  Icons.search,
+                                                  size: 16,
+                                                  color: Colors.white
+                                              );
+                                            case ProgressBarStates.searching:
+                                              return const Padding(
+                                                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                                                child: SizedBox(
+                                                  width: 5,
+                                                  height: 5,
+                                                  child: CircularProgressIndicator(
+                                                    value: null,
+                                                    color: Colors.white,
+                                                    strokeWidth: 2,
+                                                  ),
+                                                ),
+                                              );
+                                            case ProgressBarStates.searched:
+                                              return const Icon(
+                                                  Icons.search,
+                                                  size: 16,
+                                                  color: Colors.deepPurple
+                                              );
+                                          }
+                                        }
+                                      ),
                                     ),
-                                    color: Color(0xFF202124),
-                                  ),
-                                  child: AnimatedBuilder(
-                                    animation: progressBarControllerStudent,
-                                    builder: (context, child) {
-                                      switch (progressBarControllerStudent.getState()) {
-                                        case ProgressBarStates.idle:
-                                          return const Icon(
-                                              Icons.search,
-                                              size: 16,
-                                              color: Colors.white
-                                          );
-                                        case ProgressBarStates.searching:
-                                          return const Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                                            child: SizedBox(
-                                              width: 5,
-                                              height: 5,
-                                              child: CircularProgressIndicator(
-                                                value: null,
-                                                color: Colors.white,
-                                                strokeWidth: 2,
-                                              ),
+                                    Flexible(
+                                      fit: FlexFit.loose,
+                                      child: SizedBox(
+                                        height: 35,
+                                        child: TextFormField(
+                                          onFieldSubmitted: (value) async {
+                                            var returnable = await searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                            List<StudentModel> studentList = [];
+                                            for (StudentModel student in returnable) {
+                                              studentList.add(student);
+                                            }
+                                            setState(() {
+                                              listStudents = studentList;
+                                            });
+                                            progressBarControllerStudent.setState(ProgressBarStates.searched);
+                                          },
+                                          onChanged: (value) async {
+                                            var returnable = await searchHandler.search(value, Scope.student, progressBarControllerStudent);
+                                            List<StudentModel> studentList = [];
+                                            for (StudentModel student in returnable) {
+                                              studentList.add(student);
+                                            }
+                                            setState(() {
+                                              listStudents = studentList;
+                                            });
+                                            progressBarControllerStudent.setState(ProgressBarStates.searching);
+                                          },
+                                          controller: searchControllerStudent,
+                                          decoration: InputDecoration(
+                                            focusedBorder: const OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(Radius.zero),
+                                                borderSide: BorderSide(
+                                                  color: Colors.white,
+                                                  width: 1,
+                                                ),
                                             ),
-                                          );
-                                        case ProgressBarStates.searched:
-                                          return const Icon(
-                                              Icons.search,
-                                              size: 16,
-                                              color: Colors.deepPurple
-                                          );
-                                      }
-                                    }
+                                            contentPadding:
+                                            const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                            filled: true,
+                                            fillColor: const Color(0xDE2A2B2E),
+                                            hintText: 'Search',
+                                            hintStyle: TextStyle(
+                                              color: Colors.white.withOpacity(0.4),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                            border: const OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius: BorderRadius.all(Radius.zero),
+                                              gapPadding: 0,
+                                            ),
+                                          ),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    GradientButton(
+                                      onPressed: () {
+
+                                      },
+                                      isEnabled: true,
+                                      height: 35,
+                                      width: 70,
+                                      elevation: 5,
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.zero,
+                                        topRight: Radius.circular(50),
+                                        bottomRight: Radius.circular(50),
+                                        bottomLeft: Radius.zero,
+                                      ),
+                                      colors: const [Color(0xFF202124), Color(0xFF1A1C1E)],
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                        child: FittedBox(
+                                          fit: BoxFit.fitHeight,
+                                          child: Text('Search', style: TextStyle(fontWeight: FontWeight.w600)),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            child: ListView.builder(
+                              controller: scrollControllerStudent,
+                              itemCount: listStudents.length,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    StudentCardRow(
+                                      data: listStudents.elementAt(index),
+                                      scrollController: ScrollController(),
+                                      index: index,
+                                      controller: cardCheckControllerStudent,
+                                      length: listStudents.length,
+                                    )
+                                  ],
+                                );
+                              },
+                            )
+                          ),
+                          AnimatedBuilder(
+                            animation: scrollControllerStudent,
+                            builder: (context, child) {
+                              var scrollPos = scrollControllerStudent.position.pixels;
+                              var scrollMax = scrollControllerStudent.position.maxScrollExtent;
+                              var scrollMin = scrollControllerStudent.position.minScrollExtent;
+                              return scrollPos >= 0 && scrollPos < scrollMax && listStudents.length > 10
+                                  ?
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [Colors.transparent, Color(0xFF202124)],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    )
+                                  ),
+                                  width: 740,
+                                  height: 30,
+                                  child: Center(
+                                    child: Text(
+                                        '. . .',
+                                        style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 10)
+                                    ),
                                   ),
                                 ),
-                                Flexible(
-                                  fit: FlexFit.loose,
-                                  child: SizedBox(
+                              )
+                                  :
+                              scrollPos <= scrollMax && scrollPos > scrollMin && listStudents.length > 10
+                                  ?
+                              Positioned(
+                                top: 40,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [Colors.transparent, Color(0xFF202124)],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      )
+                                  ),
+                                  width: 740,
+                                  height: 30,
+                                  child: Center(
+                                    child: Text(
+                                        '. . .',
+                                        style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 10)
+                                    ),
+                                  ),
+                                ),
+                              )
+                                  :
+                              Container();
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 10),
+                      Stack(
+                        children: [
+                          ListPanel(
+                            elevation: 6,
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(5),
+                              topLeft: Radius.circular(5),
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0),
+                            ),
+                            headHeight: 40,
+                            bodyHeight: 410,
+                            width: 395,
+                            headerColor: const Color(0xff6325e8),
+                            bodyColor: const Color(0xFF303134),
+                            headerChild: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 35,
                                     height: 35,
-                                    child: TextFormField(
-                                      onFieldSubmitted: (value) async {
-                                        var returnable = await searchHandler.search(value, Scope.student, progressBarControllerStudent);
-                                        List<StudentModel> studentList = [];
-                                        for (StudentModel student in returnable) {
-                                          studentList.add(student);
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(50),
+                                        bottomLeft: Radius.circular(50),
+                                      ),
+                                      color: Color(0xFF202124),
+                                    ),
+                                    child: AnimatedBuilder(
+                                        animation: progressBarControllerCourse,
+                                        builder: (context, child) {
+                                          switch (progressBarControllerCourse.getState()) {
+                                            case ProgressBarStates.idle:
+                                              return const Icon(
+                                                  Icons.search,
+                                                  size: 16,
+                                                  color: Colors.white
+                                              );
+                                            case ProgressBarStates.searching:
+                                              return const Padding(
+                                                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                                                child: SizedBox(
+                                                  width: 5,
+                                                  height: 5,
+                                                  child: CircularProgressIndicator(
+                                                    value: null,
+                                                    color: Colors.white,
+                                                    strokeWidth: 2,
+                                                  ),
+                                                ),
+                                              );
+                                            case ProgressBarStates.searched:
+                                              return const Icon(
+                                                  Icons.search,
+                                                  size: 16,
+                                                  color: Colors.deepPurple
+                                              );
+                                          }
                                         }
-                                        setState(() {
-                                          listStudents = studentList;
-                                        });
-                                        progressBarControllerStudent.setState(ProgressBarStates.searched);
-                                      },
-                                      onChanged: (value) async {
-                                        var returnable = await searchHandler.search(value, Scope.student, progressBarControllerStudent);
-                                        List<StudentModel> studentList = [];
-                                        for (StudentModel student in returnable) {
-                                          studentList.add(student);
-                                        }
-                                        setState(() {
-                                          listStudents = studentList;
-                                        });
-                                        progressBarControllerStudent.setState(ProgressBarStates.searching);
-                                      },
-                                      controller: searchControllerStudent,
-                                      decoration: InputDecoration(
-                                        focusedBorder: const OutlineInputBorder(
+                                    ),
+                                  ),
+                                  Flexible(
+                                    fit: FlexFit.loose,
+                                    child: SizedBox(
+                                      height: 35,
+                                      child: TextFormField(
+                                        onFieldSubmitted: (value) async {
+                                          var returnable = await searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                          List<CourseModel> courseList = [];
+                                          for (CourseModel course in returnable) {
+                                            courseList.add(course);
+                                          }
+                                          setState(() {
+                                            listCourses = courseList;
+                                          });
+                                          progressBarControllerCourse.setState(ProgressBarStates.searched);
+                                        },
+                                        onChanged: (value) async {
+                                          var returnable = await searchHandler.search(value, Scope.course, progressBarControllerCourse);
+                                          List<CourseModel> courseList = [];
+                                          for (CourseModel course in returnable) {
+                                            courseList.add(course);
+                                          }
+                                          setState(() {
+                                            listCourses = courseList;
+                                          });
+                                          progressBarControllerCourse.setState(ProgressBarStates.searching);
+                                        },
+                                        controller: searchControllerCourse,
+                                        decoration: InputDecoration(
+                                          focusedBorder: const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(Radius.zero),
                                             borderSide: BorderSide(
                                               color: Colors.white,
                                               width: 1,
                                             ),
+                                          ),
+                                          contentPadding:
+                                          const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                                          filled: true,
+                                          fillColor: const Color(0xDE2A2B2E),
+                                          hintText: 'Search',
+                                          hintStyle: TextStyle(
+                                            color: Colors.white.withOpacity(0.4),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                          border: const OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius: BorderRadius.all(Radius.zero),
+                                            gapPadding: 0,
+                                          ),
                                         ),
-                                        contentPadding:
-                                        const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                                        filled: true,
-                                        fillColor: const Color(0xDE2A2B2E),
-                                        hintText: 'Search',
-                                        hintStyle: TextStyle(
-                                          color: Colors.white.withOpacity(0.4),
+                                        style: const TextStyle(
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.normal,
                                         ),
-                                        border: const OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.all(Radius.zero),
-                                          gapPadding: 0,
-                                        ),
-                                      ),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.normal,
                                       ),
                                     ),
                                   ),
-                                ),
-                                GradientButton(
-                                  onPressed: () {
+                                  GradientButton(
+                                    onPressed: () {
 
-                                  },
-                                  isEnabled: true,
-                                  height: 35,
-                                  width: 70,
-                                  elevation: 5,
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.zero,
-                                    topRight: Radius.circular(50),
-                                    bottomRight: Radius.circular(50),
-                                    bottomLeft: Radius.zero,
-                                  ),
-                                  colors: const [Color(0xFF202124), Color(0xFF1A1C1E)],
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                                    child: FittedBox(
-                                      fit: BoxFit.fitHeight,
-                                      child: Text('Search', style: TextStyle(fontWeight: FontWeight.w600)),
+                                    },
+                                    isEnabled: true,
+                                    height: 35,
+                                    width: 70,
+                                    elevation: 5,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.zero,
+                                      topRight: Radius.circular(50),
+                                      bottomRight: Radius.circular(50),
+                                      bottomLeft: Radius.zero,
+                                    ),
+                                    colors: const [Color(0xFF202124), Color(0xFF1A1C1E)],
+                                    child: const Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                      child: FittedBox(
+                                        fit: BoxFit.fitHeight,
+                                        child: Text('Search', style: TextStyle(fontWeight: FontWeight.w600)),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
+                            child: ListView.builder(
+                              controller: scrollControllerCourse,
+                              itemCount: listCourses.length,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CourseCardRow(
+                                      data: listCourses.elementAt(index),
+                                      scrollController: ScrollController(),
+                                      index: index,
+                                      controller: cardCheckControllerCourse,
+                                      length: listCourses.length,
+                                    )
+                                  ],
+                                );
+                              },
+                            )
                           ),
-                        ),
-                        child: ListView.builder(
-                          itemCount: listStudents.length,
-                          itemBuilder: (context, index) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                StudentCardRow(
-                                  data: listStudents.elementAt(index),
-                                  scrollController: ScrollController(),
-                                  index: index,
-                                  controller: cardCheckControllerStudent,
-                                  length: listStudents.length,
-                                )
-                              ],
-                            );
-                          },
-                        )
-                      ),
-                      const SizedBox(width: 10),
-                      ListPanel(
-                        elevation: 6,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(5),
-                          topLeft: Radius.circular(5),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(0),
-                        ),
-                        headHeight: 40,
-                        bodyHeight: 410,
-                        width: 395,
-                        headerColor: const Color(0xff6325e8),
-                        bodyColor: const Color(0xFF303134),
-                        headerChild: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 35,
-                                height: 35,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(50),
-                                    bottomLeft: Radius.circular(50),
+                          AnimatedBuilder(
+                            animation: scrollControllerCourse,
+                            builder: (context, child) {
+                              var scrollPos = scrollControllerCourse.position.pixels;
+                              var scrollMax = scrollControllerCourse.position.maxScrollExtent;
+                              var scrollMin = scrollControllerCourse.position.minScrollExtent;
+                              return scrollPos >= 0 && scrollPos < scrollMax && listCourses.length > 10
+                                  ?
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [Colors.transparent, Color(0xFF202124)],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                      )
                                   ),
-                                  color: Color(0xFF202124),
-                                ),
-                                child: AnimatedBuilder(
-                                    animation: progressBarControllerCourse,
-                                    builder: (context, child) {
-                                      switch (progressBarControllerCourse.getState()) {
-                                        case ProgressBarStates.idle:
-                                          return const Icon(
-                                              Icons.search,
-                                              size: 16,
-                                              color: Colors.white
-                                          );
-                                        case ProgressBarStates.searching:
-                                          return const Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                                            child: SizedBox(
-                                              width: 5,
-                                              height: 5,
-                                              child: CircularProgressIndicator(
-                                                value: null,
-                                                color: Colors.white,
-                                                strokeWidth: 2,
-                                              ),
-                                            ),
-                                          );
-                                        case ProgressBarStates.searched:
-                                          return const Icon(
-                                              Icons.search,
-                                              size: 16,
-                                              color: Colors.deepPurple
-                                          );
-                                      }
-                                    }
-                                ),
-                              ),
-                              Flexible(
-                                fit: FlexFit.loose,
-                                child: SizedBox(
-                                  height: 35,
-                                  child: TextFormField(
-                                    onFieldSubmitted: (value) async {
-                                      var returnable = await searchHandler.search(value, Scope.course, progressBarControllerCourse);
-                                      List<CourseModel> courseList = [];
-                                      for (CourseModel course in returnable) {
-                                        courseList.add(course);
-                                      }
-                                      setState(() {
-                                        listCourses = courseList;
-                                      });
-                                      progressBarControllerCourse.setState(ProgressBarStates.searched);
-                                    },
-                                    onChanged: (value) async {
-                                      var returnable = await searchHandler.search(value, Scope.course, progressBarControllerCourse);
-                                      List<CourseModel> courseList = [];
-                                      for (CourseModel course in returnable) {
-                                        courseList.add(course);
-                                      }
-                                      setState(() {
-                                        listCourses = courseList;
-                                      });
-                                      progressBarControllerCourse.setState(ProgressBarStates.searching);
-                                    },
-                                    controller: searchControllerCourse,
-                                    decoration: InputDecoration(
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.zero),
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: 1,
-                                        ),
-                                      ),
-                                      contentPadding:
-                                      const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                                      filled: true,
-                                      fillColor: const Color(0xDE2A2B2E),
-                                      hintText: 'Search',
-                                      hintStyle: TextStyle(
-                                        color: Colors.white.withOpacity(0.4),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                      border: const OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.all(Radius.zero),
-                                        gapPadding: 0,
-                                      ),
-                                    ),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
+                                  width: 395,
+                                  height: 30,
+                                  child: Center(
+                                    child: Text(
+                                        '. . .',
+                                        style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 10)
                                     ),
                                   ),
                                 ),
-                              ),
-                              GradientButton(
-                                onPressed: () {
-
-                                },
-                                isEnabled: true,
-                                height: 35,
-                                width: 70,
-                                elevation: 5,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.zero,
-                                  topRight: Radius.circular(50),
-                                  bottomRight: Radius.circular(50),
-                                  bottomLeft: Radius.zero,
-                                ),
-                                colors: const [Color(0xFF202124), Color(0xFF1A1C1E)],
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 15.0),
-                                  child: FittedBox(
-                                    fit: BoxFit.fitHeight,
-                                    child: Text('Search', style: TextStyle(fontWeight: FontWeight.w600)),
+                              )
+                                  :
+                              scrollPos <= scrollMax && scrollPos > scrollMin && listCourses.length > 10
+                                  ?
+                              Positioned(
+                                top: 40,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [Colors.transparent, Color(0xFF202124)],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      )
+                                  ),
+                                  width: 395,
+                                  height: 30,
+                                  child: Center(
+                                    child: Text(
+                                        '. . .',
+                                        style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 10)
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        child: ListView.builder(
-                          itemCount: listCourses.length,
-                          itemBuilder: (context, index) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CourseCardRow(
-                                  data: listCourses.elementAt(index),
-                                  scrollController: ScrollController(),
-                                  index: index,
-                                  controller: cardCheckControllerCourse,
-                                  length: listCourses.length,
-                                )
-                              ],
-                            );
-                          },
-                        )
+                              )
+                                  :
+                              Container();
+                            },
+                          )
+                        ],
                       ),
                     ],
                   ),
@@ -528,10 +650,10 @@ class _ParentRouteState extends State<ParentRoute> {
                                                     cardCheckControllerStudent.countChecks() > 1
                                                         ?
                                                     cardCheckControllerStudent.countChecks() == cardCheckControllerStudent.maxCheck()
-                                                        ?  'ALL ITEMS SELECTED'
+                                                        ?  'ALL ITEMS SELECTED ( ${cardCheckControllerStudent.countChecks()} )'
                                                         : '${cardCheckControllerStudent.countChecks()} ITEMS SELECTED'
                                                         : cardCheckControllerStudent.countChecks() == 1 && cardCheckControllerStudent.maxCheck() == 1
-                                                        ? 'ALL ITEMS SELECTED' : '1 ITEM SELECTED',
+                                                        ? 'ALL ITEMS SELECTED ( ${cardCheckControllerStudent.countChecks()} )' : '1 ITEM SELECTED',
                                                     style: const TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 12,
@@ -725,18 +847,21 @@ class _ParentRouteState extends State<ParentRoute> {
                                                 alignment: Alignment.centerLeft,
                                                 child: Padding(
                                                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                  child: Text(
-                                                      cardCheckControllerCourse.countChecks() > 0
-                                                          ?
-                                                      cardCheckControllerCourse.countChecks() == cardCheckControllerCourse.maxCheck()
-                                                          ?  'ALL ITEMS SELECTED'
-                                                          : '${cardCheckControllerCourse.countChecks()} ITEMS SELECTED'
-                                                          : cardCheckControllerStudent.countChecks() == 1 && cardCheckControllerStudent.maxCheck() == 1
-                                                          ? 'ALL ITEMS SELECTED' : '1 ITEM SELECTED',
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.bold)
+                                                  child: FittedBox(
+                                                    fit: BoxFit.scaleDown,
+                                                    child: Text(
+                                                        cardCheckControllerCourse.countChecks() > 0
+                                                            ?
+                                                        cardCheckControllerCourse.countChecks() == cardCheckControllerCourse.maxCheck()
+                                                            ?  'ALL ITEMS SELECTED ( ${cardCheckControllerCourse.countChecks()} )'
+                                                            : '${cardCheckControllerCourse.countChecks()} ITEMS SELECTED'
+                                                            : cardCheckControllerCourse.countChecks() == 1 && cardCheckControllerCourse.maxCheck() == 1
+                                                            ? 'ALL ITEMS SELECTED ( ${cardCheckControllerCourse.countChecks()} )' : '1 ITEM SELECTED',
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.bold)
+                                                    ),
                                                   ),
                                                 ),
                                               )
