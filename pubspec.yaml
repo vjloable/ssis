@@ -2,7 +2,7 @@ name: ssis
 description: A Simple Student Information System Project
 
 publish_to: 'none'
-version: 2.1.1
+version: 2.2.0
 
 environment:
   sdk: '>=2.18.6 <3.0.0'
