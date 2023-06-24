@@ -53,7 +53,10 @@ class ListPanel extends StatelessWidget {
                 bottomLeft: borderRadius.bottomLeft,
             ),
           ),
-          child: SizedBox(height: bodyHeight, width: width, child: child),
+          child: SizedBox(height: bodyHeight, width: width, child: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: child,
+          )),
         ),
       ],
     );
